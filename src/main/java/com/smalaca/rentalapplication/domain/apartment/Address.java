@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
-public class Address {
+class Address {
     private final String street;
     private final String postalCode;
     private final String houseNumber;
@@ -8,7 +8,7 @@ public class Address {
     private final String city;
     private final String country;
 
-    public Address(String street, String postalCode, String houseNumber, String apartmentNumber, String city, String country) {
+    Address(String street, String postalCode, String houseNumber, String apartmentNumber, String city, String country) {
         this.street = street;
         this.postalCode = postalCode;
         this.houseNumber = houseNumber;
