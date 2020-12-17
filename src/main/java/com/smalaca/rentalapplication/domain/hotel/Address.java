@@ -1,5 +1,8 @@
 package com.smalaca.rentalapplication.domain.hotel;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 class Address {
     private final String street;
     private final String postalCode;
