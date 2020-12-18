@@ -31,6 +31,6 @@ public class Apartment {
     }
 
     public void book(String tenantId, Period period) {
-        // publish an event
+        ApartmentBooked apartmentBooked = ApartmentBooked.create(id, ownerId, tenantId, period);
     }
 }
