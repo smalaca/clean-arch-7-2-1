@@ -10,4 +10,12 @@ public class Period {
         this.start = start;
         this.end = end;
     }
+
+    LocalDate getStart() {
+        return start;
+    }
+
+    LocalDate getEnd() {
+        return end;
+    }
 }
