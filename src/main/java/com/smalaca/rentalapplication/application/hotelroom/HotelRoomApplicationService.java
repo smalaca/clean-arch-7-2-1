@@ -4,6 +4,8 @@ import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomFactory;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 public class HotelRoomApplicationService {
@@ -17,5 +19,9 @@ public class HotelRoomApplicationService {
         HotelRoom hotelRoom = new HotelRoomFactory().create(hotelId, number, spacesDefinition, description);
 
         hotelRoomRepository.save(hotelRoom);
+    }
+
+    public void book(String id, String tenantId, List<LocalDate> days) {
+
     }
 }
