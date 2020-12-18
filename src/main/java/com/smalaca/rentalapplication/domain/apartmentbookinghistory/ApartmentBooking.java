@@ -1,9 +1,19 @@
 package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
 
-import java.time.LocalDate;
-
 public class ApartmentBooking {
-    public static ApartmentBooking start(String ownerId, String tenantId, LocalDate periodStart, LocalDate periodEnd) {
-        return null;
+    private final BookingStep bookingStep;
+    private final String ownerId;
+    private final String tenantId;
+    private final BookingPeriod bookingPeriod;
+
+    private ApartmentBooking(BookingStep bookingStep, String ownerId, String tenantId, BookingPeriod bookingPeriod) {
+        this.bookingStep = bookingStep;
+        this.ownerId = ownerId;
+        this.tenantId = tenantId;
+        this.bookingPeriod = bookingPeriod;
+    }
+
+    public static ApartmentBooking start(String ownerId, String tenantId, BookingPeriod bookingPeriod) {
+        return new ApartmentBooking(BookingStep.START, ownerId, tenantId, bookingPeriod);
     }
 }
