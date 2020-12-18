@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.application.apartment;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentFactory;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
+import com.smalaca.rentalapplication.domain.apartment.Period;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -25,6 +26,9 @@ public class ApartmentApplicationService {
     }
 
     public void book(String id, String tenantId, LocalDate start, LocalDate end) {
+        Apartment apartment = apartmentRepository.findById(id);
+        Period period = new Period(start, end);
 
+        apartment.book(tenantId, period);
     }
 }
