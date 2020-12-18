@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +32,8 @@ public class Apartment {
         this.description = description;
     }
 
-    public void book(String tenantId, Period period) {
+    public void book(String tenantId, Period period, EventChannel eventChannel) {
         ApartmentBooked apartmentBooked = ApartmentBooked.create(id, ownerId, tenantId, period);
+        eventChannel.publish(apartmentBooked);
     }
 }
