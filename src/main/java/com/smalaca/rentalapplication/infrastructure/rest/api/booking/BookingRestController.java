@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.booking;
 
+import com.smalaca.rentalapplication.application.booking.BookingAccept;
 import com.smalaca.rentalapplication.application.booking.BookingReject;
 import com.smalaca.rentalapplication.application.commandregistry.CommandRegistry;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,5 +19,10 @@ public class BookingRestController {
     @PutMapping("/reject/{id}")
     public void reject(String id) {
         commandRegistry.register(new BookingReject(id));
+    }
+
+    @PutMapping("/accept/{id}")
+    public void accept(String id) {
+        commandRegistry.register(new BookingAccept(id));
     }
 }
