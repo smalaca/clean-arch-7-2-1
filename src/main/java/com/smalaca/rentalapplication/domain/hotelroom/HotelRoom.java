@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.domain.hotelroom;
 
+import com.smalaca.rentalapplication.domain.apartment.Booking;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 
 import javax.persistence.Entity;
@@ -29,8 +30,10 @@ public class HotelRoom {
         this.description = description;
     }
 
-    public void book(String tenantId, List<LocalDate> days, EventChannel eventChannel) {
+    public Booking book(String tenantId, List<LocalDate> days, EventChannel eventChannel) {
         HotelRoomBooked hotelRoomBooked = HotelRoomBooked.create(hotelRoomId, hotelId, tenantId, days);
         eventChannel.publish(hotelRoomBooked);
+
+        return Booking.hotelRoom(hotelRoomId, tenantId, days);
     }
 }

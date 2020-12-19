@@ -1,9 +1,9 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
-import javax.persistence.Embeddable;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Embeddable
 public class Period {
     private final LocalDate start;
     private final LocalDate end;
@@ -19,5 +19,9 @@ public class Period {
 
     LocalDate getEnd() {
         return end;
+    }
+
+    List<LocalDate> asDays() {
+        return start.datesUntil(end).collect(Collectors.toList());
     }
 }
