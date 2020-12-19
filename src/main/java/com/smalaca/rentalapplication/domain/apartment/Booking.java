@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -37,5 +39,12 @@ public class Booking {
 
     public void reject() {
         bookingStatus = BookingStatus.REJECTED;
+    }
+
+    public void accept(EventChannel eventChannel) {
+        bookingStatus = BookingStatus.ACCEPTED;
+
+        BookingAccepted bookingAccepted = BookingAccepted.create(rentalType, rentalPlaceId, tenantId, days);
+        eventChannel.publish(bookingAccepted);
     }
 }

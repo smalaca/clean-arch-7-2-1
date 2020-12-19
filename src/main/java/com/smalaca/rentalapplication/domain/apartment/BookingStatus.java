@@ -1,5 +1,5 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
 enum BookingStatus {
-    REJECTED, OPEN
+    REJECTED, ACCEPTED, OPEN
 }
