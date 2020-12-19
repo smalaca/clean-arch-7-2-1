@@ -1,6 +1,7 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.apartment;
 
 import com.smalaca.rentalapplication.application.apartment.ApartmentApplicationService;
+import com.smalaca.rentalapplication.query.apartment.ApartmentDetails;
 import com.smalaca.rentalapplication.query.apartment.ApartmentReadModel;
 import com.smalaca.rentalapplication.query.apartment.QueryApartmentRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,5 +41,10 @@ public class ApartmentRestController {
     @GetMapping
     public Iterable<ApartmentReadModel> findAll() {
         return queryApartmentRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ApartmentDetails findById(@PathVariable String id) {
+        return queryApartmentRepository.findById(id);
     }
 }

@@ -2,9 +2,11 @@ package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "APARTMENT_BOOKING")
 public class ApartmentBooking {
     private final BookingStep bookingStep;
     private final LocalDateTime bookingDateTime;
