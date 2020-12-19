@@ -16,6 +16,7 @@ public class Booking {
     private final String rentalPlaceId;
     private final String tenantId;
     private final List<LocalDate> days;
+    private BookingStatus bookingStatus = BookingStatus.OPEN;
 
     private Booking(RentalType rentalType, String rentalPlaceId, String tenantId, List<LocalDate> days) {
         this.rentalType = rentalType;
@@ -32,5 +33,9 @@ public class Booking {
 
     public static Booking hotelRoom(String rentalPlaceId, String tenantId, List<LocalDate> days) {
         return new Booking(RentalType.HOTEL_ROOM, rentalPlaceId, tenantId, days);
+    }
+
+    public void reject() {
+        bookingStatus = BookingStatus.REJECTED;
     }
 }
