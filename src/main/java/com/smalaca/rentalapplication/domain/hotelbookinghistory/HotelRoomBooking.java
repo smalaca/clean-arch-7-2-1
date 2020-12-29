@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
+//@Entity
 class HotelRoomBooking {
     private final LocalDateTime bookingDateTime;
     private final String tenantId;

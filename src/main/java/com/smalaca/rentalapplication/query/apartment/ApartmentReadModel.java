@@ -7,7 +7,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
-@Entity
+//@Entity
 @Table(name = "APARTMENT")
 public class ApartmentReadModel {
     @Id

@@ -5,7 +5,7 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
+//@Entity
 @Table(name = "APARTMENT_BOOKING")
 public class ApartmentBookingReadModel {
     private final String bookingStep;

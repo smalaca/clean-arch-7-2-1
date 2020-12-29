@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+//@Entity
 @Table(name = "APARTMENT_BOOKING_HISTORY")
 public class ApartmentBookingHistory {
     @Id

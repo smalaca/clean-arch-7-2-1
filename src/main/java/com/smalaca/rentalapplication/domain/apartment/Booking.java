@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
+//@Entity
 public class Booking {
     @Id
     @GeneratedValue

@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
+//@Entity
 @Table(name = "HOTEL_ROOM")
 public class HotelRoom {
     @Id

@@ -3,14 +3,13 @@ package com.smalaca.rentalapplication.domain.apartment;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 
 import javax.persistence.Embedded;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
-@Entity
+//@Entity
 @Table(name = "APARTMENT")
 public class Apartment {
     @Id

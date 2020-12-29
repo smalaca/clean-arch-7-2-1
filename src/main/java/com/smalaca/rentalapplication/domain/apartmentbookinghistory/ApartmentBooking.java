@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-@Entity
+//@Entity
 @Table(name = "APARTMENT_BOOKING")
 public class ApartmentBooking {
     private final BookingStep bookingStep;
