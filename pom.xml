@@ -14,8 +14,10 @@
 
         <guava.version>28.2-jre</guava.version>
         <commons-lang3.version>3.10</commons-lang3.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <h2.version>1.4.200</h2.version>
+
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
     </properties>
 
     <parent>
@@ -63,4 +65,36 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>static-analysis</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>${maven-checkstyle-plugin.version}</version>
+
+                        <executions>
+                            <execution>
+                                <id>validate</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+
+                                <configuration>
+                                    <configLocation>config/static-analysis/checkstyle.xml</configLocation>
+                                    <violationSeverity>warning</violationSeverity>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
