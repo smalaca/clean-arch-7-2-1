@@ -12,16 +12,16 @@ class JpaHotelBookingHistoryRepository implements HotelBookingHistoryRepository 
 
     @Override
     public boolean existsFor(String hotelId) {
-        return springJpaHotelBookingHistoryRepository.existsById(hotelId);
+        return false;
     }
 
     @Override
     public HotelBookingHistory findFor(String hotelId) {
-        return springJpaHotelBookingHistoryRepository.findById(hotelId).get();
+        return null;
     }
 
     @Override
     public void save(HotelBookingHistory hotelBookingHistory) {
-        springJpaHotelBookingHistoryRepository.save(hotelBookingHistory);
+
     }
 }

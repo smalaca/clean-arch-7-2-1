@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.query.apartment;
 
+import static java.util.Collections.emptyList;
+
 public class QueryApartmentRepository {
     private final SpringQueryApartmentRepository springQueryApartmentRepository;
     private final SpringQueryApartmentBookingHistoryRepository springQueryApartmentBookingHistoryRepository;
@@ -11,13 +13,10 @@ public class QueryApartmentRepository {
     }
 
     public Iterable<ApartmentReadModel> findAll() {
-        return springQueryApartmentRepository.findAll();
+        return emptyList();
     }
 
     public ApartmentDetails findById(String id) {
-        ApartmentReadModel apartmentReadModel = springQueryApartmentRepository.findById(id).get();
-        ApartmentBookingHistoryReadModel apartmentBookingHistoryReadModel = springQueryApartmentBookingHistoryRepository.findById(id).get();
-
-        return new ApartmentDetails(apartmentReadModel, apartmentBookingHistoryReadModel);
+        return null;
     }
 }

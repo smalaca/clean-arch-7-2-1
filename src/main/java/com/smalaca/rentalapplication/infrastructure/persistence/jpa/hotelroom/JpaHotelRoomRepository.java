@@ -12,11 +12,11 @@ class JpaHotelRoomRepository implements HotelRoomRepository {
 
     @Override
     public void save(HotelRoom hotelRoom) {
-        hotelRoomRepository.save(hotelRoom);
+
     }
 
     @Override
     public HotelRoom findById(String id) {
-        return hotelRoomRepository.findById(id).get();
+        return null;
     }
 }

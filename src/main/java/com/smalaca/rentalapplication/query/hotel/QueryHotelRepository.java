@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.query.hotel;
 
+import static java.util.Collections.emptyList;
+
 public class QueryHotelRepository {
     private final SpringJpaQueryHotelRepository repository;
 
@@ -8,6 +10,6 @@ public class QueryHotelRepository {
     }
 
     public Iterable<HotelReadModel> findAll() {
-        return repository.findAll();
+        return emptyList();
     }
 }

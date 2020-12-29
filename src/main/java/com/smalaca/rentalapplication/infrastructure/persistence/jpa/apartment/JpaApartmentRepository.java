@@ -12,11 +12,11 @@ class JpaApartmentRepository implements ApartmentRepository {
 
     @Override
     public void save(Apartment apartment) {
-        springJpaApartmentRepository.save(apartment);
+
     }
 
     @Override
     public Apartment findById(String id) {
-        return springJpaApartmentRepository.findById(id).get();
+        return null;
     }
 }
