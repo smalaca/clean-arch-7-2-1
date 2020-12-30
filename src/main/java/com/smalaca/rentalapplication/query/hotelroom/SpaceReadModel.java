@@ -1,13 +1,13 @@
 package com.smalaca.rentalapplication.query.hotelroom;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 
-//@Entity
-@Table(name = "HOTEL_ROOM_SPACE")
+@Embeddable
 public class SpaceReadModel {
-    private final String name;
-    private final Double value;
+    private String name;
+    private Double value;
+
+    private SpaceReadModel() {}
 
     public SpaceReadModel(String name, Double value) {
         this.name = name;

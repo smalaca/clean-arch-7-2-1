@@ -1,5 +1,8 @@
 package com.smalaca.rentalapplication.query.hotelroom;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public class QueryHotelRoomRepository {
     private final SpringJpaQueryHotelRoomRepository repository;
 
