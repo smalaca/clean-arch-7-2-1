@@ -1,20 +1,23 @@
 package com.smalaca.rentalapplication.query.apartment;
 
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Entity
+@Entity
 @Table(name = "APARTMENT_BOOKING_HISTORY")
 public class ApartmentBookingHistoryReadModel {
     @Id
-    private final String apartmentId;
-    @OneToMany
-    private final List<ApartmentBookingReadModel> bookings = new ArrayList<>();
+    private String apartmentId;
+
+    @ElementCollection
+    private List<ApartmentBookingReadModel> bookings = new ArrayList<>();
+
+    private ApartmentBookingHistoryReadModel() {}
 
     public ApartmentBookingHistoryReadModel(String apartmentId) {
         this.apartmentId = apartmentId;

@@ -1,19 +1,19 @@
 package com.smalaca.rentalapplication.query.apartment;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-//@Entity
-@Table(name = "APARTMENT_BOOKING")
+@Embeddable
 public class ApartmentBookingReadModel {
-    private final String bookingStep;
-    private final LocalDateTime bookingDateTime;
-    private final String ownerId;
-    private final String tenantId;
-    private final LocalDate periodStart;
-    private final LocalDate periodEnd;
+    private String bookingStep;
+    private LocalDateTime bookingDateTime;
+    private String ownerId;
+    private String tenantId;
+    private LocalDate periodStart;
+    private LocalDate periodEnd;
+
+    private ApartmentBookingReadModel() {}
 
     ApartmentBookingReadModel(String bookingStep, LocalDateTime bookingDateTime, String ownerId, String tenantId, LocalDate periodStart, LocalDate periodEnd) {
         this.bookingStep = bookingStep;

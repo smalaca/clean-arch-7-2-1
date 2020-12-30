@@ -1,35 +1,37 @@
 package com.smalaca.rentalapplication.query.apartment;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
+import java.util.UUID;
 
-//@Entity
+@Entity
 @Table(name = "APARTMENT")
 public class ApartmentReadModel {
     @Id
     @GeneratedValue
-    private String id;
+    private UUID id;
 
-    private final String ownerId;
-    private final String street;
-    private final String postalCode;
-    private final String houseNumber;
-    private final String apartmentNumber;
-    private final String city;
-    private final String country;
-    private final String description;
+    private String ownerId;
+    private String street;
+    private String postalCode;
+    private String houseNumber;
+    private String apartmentNumber;
+    private String city;
+    private String country;
+    private String description;
 
-    @OneToMany
-    private final List<RoomReadModel> rooms;
+    @ElementCollection
+    private List<RoomReadModel> rooms;
+
+    private ApartmentReadModel() {}
 
     public ApartmentReadModel(
-            String id, String ownerId, String street, String postalCode, String houseNumber, String apartmentNumber, String city,
+            String ownerId, String street, String postalCode, String houseNumber, String apartmentNumber, String city,
             String country, List<RoomReadModel> rooms, String description) {
-        this.id = id;
         this.ownerId = ownerId;
         this.street = street;
         this.postalCode = postalCode;
@@ -42,7 +44,7 @@ public class ApartmentReadModel {
     }
 
     public String getId() {
-        return id;
+        return id.toString();
     }
 
     public String getOwnerId() {

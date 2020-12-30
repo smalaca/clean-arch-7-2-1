@@ -1,6 +1,10 @@
 package com.smalaca.rentalapplication.query.apartment;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-interface SpringQueryApartmentRepository { //extends CrudRepository<ApartmentReadModel, String> {
+import java.util.UUID;
+
+@Repository
+interface SpringQueryApartmentRepository extends CrudRepository<ApartmentReadModel, UUID> {
 }
