@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.apartment;
 import com.google.common.collect.ImmutableMap;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,6 +52,17 @@ class ApartmentTest {
     }
 
     private void assertThatHasRooms(Apartment actual, Map<String, Double> roomsDefinition) {
+        assertThat(actual).extracting("rooms").satisfies(roomsActual -> {
+            List<Room> rooms = (List<Room>) roomsActual;
+            assertThat(rooms).hasSize(roomsDefinition.size());
 
+            roomsDefinition.forEach((name, squareMeter) -> {
+                assertThat(rooms).anySatisfy(room -> {
+                    assertThat(room)
+                            .hasFieldOrPropertyWithValue("name", name)
+                            .hasFieldOrPropertyWithValue("squareMeter.size", squareMeter);
+                });
+            });
+        });
     }
 }
