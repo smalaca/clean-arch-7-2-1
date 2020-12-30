@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.apartment;
 import org.assertj.core.api.Assertions;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 
@@ -23,7 +24,15 @@ class BookingAssertion {
     }
 
     BookingAssertion isApartment() {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("rentalType", RentalType.APARTMENT);
+        return hasRentalTypeEqualTo(RentalType.APARTMENT);
+    }
+
+    BookingAssertion isHotelRoom() {
+        return hasRentalTypeEqualTo(RentalType.HOTEL_ROOM);
+    }
+
+    private BookingAssertion hasRentalTypeEqualTo(RentalType rentalType) {
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("rentalType", rentalType);
         return this;
     }
 
@@ -38,7 +47,11 @@ class BookingAssertion {
     }
 
     BookingAssertion containsAllDays(LocalDate... expected) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("days", asList(expected));
+        return containsAllDays(asList(expected));
+    }
+
+    BookingAssertion containsAllDays(List<LocalDate> expected) {
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("days", expected);
         return this;
     }
 }
