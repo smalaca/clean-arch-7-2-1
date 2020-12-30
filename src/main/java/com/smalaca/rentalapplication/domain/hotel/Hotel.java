@@ -5,18 +5,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.UUID;
 
-//@Entity
+@Entity
 @Table(name = "HOTEL")
 public class Hotel {
     @Id
     @GeneratedValue
-    private String id;
+    private UUID id;
 
-    private final String name;
+    private String name;
 
     @Embedded
-    private final Address address;
+    private Address address;
+
+    private Hotel() {}
 
     Hotel(String name, Address address) {
         this.name = name;
