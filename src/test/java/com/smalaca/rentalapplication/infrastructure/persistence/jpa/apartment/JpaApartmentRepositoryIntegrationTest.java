@@ -59,6 +59,26 @@ class JpaApartmentRepositoryIntegrationTest {
                 .hasRoomsEqualsTo(ROOMS_DEFINITION);
     }
 
+    @Test
+    @Transactional
+    void shouldReturnExistingApartmentWeWant() {
+        Apartment apartment1 = apartmentFactory.create("1234", "Florianska", "98-765", "12", "34", "Krakow", "Poland", "The greatest apartment", ImmutableMap.of("Room1", 50.0));
+        apartmentRepository.save(apartment1);
+        String existingId = apartmentRepository.save(createApartment());
+        Apartment apartment2 = apartmentFactory.create("5692", "Florianska", "98-999", "10", "42", "Krakow", "Poland", "Great apartment", ImmutableMap.of("Room42", 100.0));
+        apartmentRepository.save(apartment2);
+        Apartment apartment3 = apartmentFactory.create("2083", "Florianska", "98-123", "11", "13", "Krakow", "Poland", "Not so bad apartment", ImmutableMap.of("Room13", 30.0));
+        apartmentRepository.save(apartment3);
+
+        Apartment actual = apartmentRepository.findById(existingId);
+
+        ApartmentAssertion.assertThat(actual)
+                .hasOwnerIdEqualsTo(OWNER_ID)
+                .hasDescriptionEqualsTo(DESCRIPTION)
+                .hasAddressEqualsTo(STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY)
+                .hasRoomsEqualsTo(ROOMS_DEFINITION);
+    }
+
     private Apartment createApartment() {
         return apartmentFactory.create(
                 OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY,
