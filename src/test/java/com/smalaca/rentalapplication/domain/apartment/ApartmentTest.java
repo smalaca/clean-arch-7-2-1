@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class ApartmentTest {
     @Test
     void shouldCreateApartmentWithAllRequiredFields() {
@@ -29,17 +31,23 @@ class ApartmentTest {
     }
 
     private void assertThatHasOwnerId(Apartment actual, String ownerId) {
-
+        assertThat(actual).hasFieldOrPropertyWithValue("ownerId", ownerId);
     }
 
     private void assertThatHasDescription(Apartment actual, String description) {
-
+        assertThat(actual).hasFieldOrPropertyWithValue("description", description);
     }
 
     private void assertThatHasAddress(
             Apartment actual, String street, String postalCode, String houseNumber,
             String apartmentNumber, String city, String country) {
-
+        assertThat(actual).extracting("address")
+                .hasFieldOrPropertyWithValue("street", street)
+                .hasFieldOrPropertyWithValue("postalCode", postalCode)
+                .hasFieldOrPropertyWithValue("houseNumber", houseNumber)
+                .hasFieldOrPropertyWithValue("apartmentNumber", apartmentNumber)
+                .hasFieldOrPropertyWithValue("city", city)
+                .hasFieldOrPropertyWithValue("country", country);
     }
 
     private void assertThatHasRooms(Apartment actual, Map<String, Double> roomsDefinition) {
