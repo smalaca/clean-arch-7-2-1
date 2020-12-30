@@ -4,6 +4,8 @@ import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-interface SpringJpaApartmentRepository extends CrudRepository<Apartment, String> {
+interface SpringJpaApartmentRepository extends CrudRepository<Apartment, UUID> {
 }

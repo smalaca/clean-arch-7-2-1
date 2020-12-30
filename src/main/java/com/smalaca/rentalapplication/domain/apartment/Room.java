@@ -5,10 +5,12 @@ import javax.persistence.Embedded;
 
 @Embeddable
 class Room {
-    private final String name;
+    private String name;
 
     @Embedded
-    private final SquareMeter squareMeter;
+    private SquareMeter squareMeter;
+
+    private Room() {}
 
     Room(String name, SquareMeter squareMeter) {
         this.name = name;

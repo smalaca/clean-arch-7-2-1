@@ -4,6 +4,8 @@ import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
 class JpaApartmentRepository implements ApartmentRepository {
     private final SpringJpaApartmentRepository springJpaApartmentRepository;
@@ -13,12 +15,13 @@ class JpaApartmentRepository implements ApartmentRepository {
     }
 
     @Override
-    public void save(Apartment apartment) {
-
+    public String save(Apartment apartment) {
+        return springJpaApartmentRepository.save(apartment).id();
     }
 
     @Override
     public Apartment findById(String id) {
-        throw new ApartmentDoesNotExistException(id);
+        return springJpaApartmentRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new ApartmentDoesNotExistException(id));
     }
 }
