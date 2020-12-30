@@ -2,7 +2,9 @@ package com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment;
 
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 class JpaApartmentRepository implements ApartmentRepository {
     private final SpringJpaApartmentRepository springJpaApartmentRepository;
 
@@ -17,6 +19,6 @@ class JpaApartmentRepository implements ApartmentRepository {
 
     @Override
     public Apartment findById(String id) {
-        return null;
+        throw new ApartmentDoesNotExistException(id);
     }
 }
