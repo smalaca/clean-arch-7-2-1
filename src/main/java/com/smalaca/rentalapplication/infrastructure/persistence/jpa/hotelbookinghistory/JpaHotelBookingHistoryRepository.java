@@ -2,7 +2,9 @@ package com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelbookin
 
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistory;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 class JpaHotelBookingHistoryRepository implements HotelBookingHistoryRepository {
     private final SpringJpaHotelBookingHistoryRepository springJpaHotelBookingHistoryRepository;
 
@@ -12,16 +14,16 @@ class JpaHotelBookingHistoryRepository implements HotelBookingHistoryRepository 
 
     @Override
     public boolean existsFor(String hotelId) {
-        return false;
+        return springJpaHotelBookingHistoryRepository.existsById(hotelId);
     }
 
     @Override
     public HotelBookingHistory findFor(String hotelId) {
-        return null;
+        return springJpaHotelBookingHistoryRepository.findById(hotelId).get();
     }
 
     @Override
     public void save(HotelBookingHistory hotelBookingHistory) {
-
+        springJpaHotelBookingHistoryRepository.save(hotelBookingHistory);
     }
 }

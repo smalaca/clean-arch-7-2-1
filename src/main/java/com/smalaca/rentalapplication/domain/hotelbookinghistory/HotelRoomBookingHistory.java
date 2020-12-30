@@ -8,13 +8,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Entity
+@Entity
 class HotelRoomBookingHistory {
     @Id
-    private final String hotelRoomId;
+    private String hotelRoomId;
 
     @OneToMany
-    private final List<HotelRoomBooking> bookings = new ArrayList<>();
+    private List<HotelRoomBooking> bookings = new ArrayList<>();
+
+    private HotelRoomBookingHistory() {}
 
     HotelRoomBookingHistory(String hotelRoomId) {
         this.hotelRoomId = hotelRoomId;

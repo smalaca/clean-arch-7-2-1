@@ -1,15 +1,25 @@
 package com.smalaca.rentalapplication.domain.hotelbookinghistory;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-//@Entity
+@Entity
 class HotelRoomBooking {
-    private final LocalDateTime bookingDateTime;
-    private final String tenantId;
-    private final List<LocalDate> days;
+    @Id @GeneratedValue
+    private UUID id;
+    private LocalDateTime bookingDateTime;
+    private String tenantId;
+
+    @ElementCollection
+    private List<LocalDate> days;
+
+    private HotelRoomBooking() {}
 
     HotelRoomBooking(LocalDateTime bookingDateTime, String tenantId, List<LocalDate> days) {
         this.bookingDateTime = bookingDateTime;

@@ -9,13 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//@Entity
+@Entity
 public class HotelBookingHistory {
     @Id
-    private final String hotelId;
+    private String hotelId;
 
     @OneToMany
-    private final List<HotelRoomBookingHistory> hotelRoomBookingHistories = new ArrayList<>();
+    private List<HotelRoomBookingHistory> hotelRoomBookingHistories = new ArrayList<>();
+
+    private HotelBookingHistory() {}
 
     public HotelBookingHistory(String hotelId) {
         this.hotelId = hotelId;
