@@ -2,27 +2,32 @@ package com.smalaca.rentalapplication.domain.apartment;
 
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
-//@Entity
+@Entity
 public class Booking {
     @Id
     @GeneratedValue
-    private String id;
+    private UUID id;
 
     @Enumerated(EnumType.STRING)
-    private final RentalType rentalType;
-    private final String rentalPlaceId;
-    private final String tenantId;
-    private final List<LocalDate> days;
-
+    private RentalType rentalType;
+    private String rentalPlaceId;
+    private String tenantId;
+    @ElementCollection
+    private List<LocalDate> days;
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus = BookingStatus.OPEN;
+
+    private Booking() {}
 
     private Booking(RentalType rentalType, String rentalPlaceId, String tenantId, List<LocalDate> days) {
         this.rentalType = rentalType;
