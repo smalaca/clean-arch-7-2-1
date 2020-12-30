@@ -16,12 +16,7 @@ class ApartmentTest {
         String city = "Cracow";
         String country = "Poland";
         String description = "Nice place to stay";
-        String room1Name = "Toilet";
-        Double room1Size = 10.0;
-        String room2Name = "Bedroom";
-        Double room2Size = 30.0;
-        Map<String, Double> roomsDefinition = ImmutableMap.of(
-                room1Name, room1Size, room2Name, room2Size);
+        Map<String, Double> roomsDefinition = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
 
         Apartment actual = new ApartmentFactory().create(
                 ownerId, street, postalCode, houseNumber, apartmentNumber, city, country,
