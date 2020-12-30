@@ -2,7 +2,8 @@ package com.smalaca.rentalapplication.domain.apartment;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class Period {
     private final LocalDate start;
@@ -22,6 +23,9 @@ public class Period {
     }
 
     List<LocalDate> asDays() {
-        return start.datesUntil(end).collect(Collectors.toList());
+        List<LocalDate> dates = start.datesUntil(end).collect(toList());
+        dates.add(end);
+
+        return dates;
     }
 }
