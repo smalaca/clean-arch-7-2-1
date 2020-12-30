@@ -10,26 +10,26 @@ import java.util.function.Consumer;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ApartmentTest {
+    private static final String OWNER_ID = "1234";
+    private static final String STREET = "Florianska";
+    private static final String POSTAL_CODE = "12-345";
+    private static final String HOUSE_NUMBER = "1";
+    private static final String APARTMENT_NUMBER = "13";
+    private static final String CITY = "Cracow";
+    private static final String COUNTRY = "Poland";
+    private static final String DESCRIPTION = "Nice place to stay";
+    private static final Map<String, Double> ROOMS_DEFINITION = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
+
     @Test
     void shouldCreateApartmentWithAllRequiredFields() {
-        String ownerId = "1234";
-        String street = "Florianska";
-        String postalCode = "12-345";
-        String houseNumber = "1";
-        String apartmentNumber = "13";
-        String city = "Cracow";
-        String country = "Poland";
-        String description = "Nice place to stay";
-        Map<String, Double> roomsDefinition = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
-
         Apartment actual = new ApartmentFactory().create(
-                ownerId, street, postalCode, houseNumber, apartmentNumber, city, country,
-                description, roomsDefinition);
+                OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY,
+                DESCRIPTION, ROOMS_DEFINITION);
 
-        assertThatHasOwnerId(actual, ownerId);
-        assertThatHasDescription(actual, description);
-        assertThatHasAddress(actual, street, postalCode, houseNumber, apartmentNumber, city, country);
-        assertThatHasRooms(actual, roomsDefinition);
+        assertThatHasOwnerId(actual, OWNER_ID);
+        assertThatHasDescription(actual, DESCRIPTION);
+        assertThatHasAddress(actual, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY);
+        assertThatHasRooms(actual, ROOMS_DEFINITION);
     }
 
     private void assertThatHasOwnerId(Apartment actual, String ownerId) {
