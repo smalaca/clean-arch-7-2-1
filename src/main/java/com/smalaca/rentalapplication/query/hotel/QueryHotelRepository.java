@@ -1,7 +1,8 @@
 package com.smalaca.rentalapplication.query.hotel;
 
-import static java.util.Collections.emptyList;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class QueryHotelRepository {
     private final SpringJpaQueryHotelRepository repository;
 
@@ -10,6 +11,6 @@ public class QueryHotelRepository {
     }
 
     public Iterable<HotelReadModel> findAll() {
-        return emptyList();
+        return repository.findAll();
     }
 }

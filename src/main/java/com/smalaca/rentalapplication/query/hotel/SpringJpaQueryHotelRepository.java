@@ -1,6 +1,8 @@
 package com.smalaca.rentalapplication.query.hotel;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-interface SpringJpaQueryHotelRepository { //extends CrudRepository<HotelReadModel, String> {
+@Repository
+interface SpringJpaQueryHotelRepository extends CrudRepository<HotelReadModel, String> {
 }

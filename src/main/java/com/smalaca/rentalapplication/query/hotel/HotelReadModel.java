@@ -4,23 +4,24 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.UUID;
 
-//@Entity
+@Entity
 @Table(name = "HOTEL")
 public class HotelReadModel {
     @Id
     @GeneratedValue
-    private String id;
+    private UUID id;
 
-    private final String street;
-    private final String postalCode;
-    private final String buildingNumber;
-    private final String city;
-    private final String country;
+    private String street;
+    private String postalCode;
+    private String buildingNumber;
+    private String city;
+    private String country;
 
-    public HotelReadModel(
-            String id, String street, String postalCode, String buildingNumber, String city, String country) {
-        this.id = id;
+    private HotelReadModel() {}
+
+    public HotelReadModel(String street, String postalCode, String buildingNumber, String city, String country) {
         this.street = street;
         this.postalCode = postalCode;
         this.buildingNumber = buildingNumber;
@@ -29,7 +30,7 @@ public class HotelReadModel {
     }
 
     public String getId() {
-        return id;
+        return id.toString();
     }
 
     public String getStreet() {
