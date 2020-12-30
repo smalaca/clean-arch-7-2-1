@@ -19,7 +19,15 @@ class BookingAssertion {
     }
 
     BookingAssertion isOpen() {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("bookingStatus", BookingStatus.OPEN);
+        return hasBookingStatusEqualTo(BookingStatus.OPEN);
+    }
+
+    BookingAssertion isAccepted() {
+        return hasBookingStatusEqualTo(BookingStatus.ACCEPTED);
+    }
+
+    private BookingAssertion hasBookingStatusEqualTo(BookingStatus expected) {
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("bookingStatus", expected);
         return this;
     }
 
