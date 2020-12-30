@@ -1,19 +1,22 @@
 package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Entity
+@Entity
 @Table(name = "APARTMENT_BOOKING_HISTORY")
 public class ApartmentBookingHistory {
     @Id
-    private final String apartmentId;
-    @OneToMany
-    private final List<ApartmentBooking> bookings = new ArrayList<>();
+    private String apartmentId;
+
+    @ElementCollection
+    private List<ApartmentBooking> bookings = new ArrayList<>();
+
+    private ApartmentBookingHistory() {}
 
     public ApartmentBookingHistory(String apartmentId) {
         this.apartmentId = apartmentId;

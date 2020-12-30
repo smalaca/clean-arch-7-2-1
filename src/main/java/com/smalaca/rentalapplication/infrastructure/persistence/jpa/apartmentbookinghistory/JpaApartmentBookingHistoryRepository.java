@@ -2,7 +2,9 @@ package com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentbo
 
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 class JpaApartmentBookingHistoryRepository implements ApartmentBookingHistoryRepository {
     private final SpringJpaApartmentBookingHistoryRepository springJpaApartmentBookingHistoryRepository;
 
@@ -12,16 +14,16 @@ class JpaApartmentBookingHistoryRepository implements ApartmentBookingHistoryRep
 
     @Override
     public boolean existsFor(String apartmentId) {
-        return false;
+        return springJpaApartmentBookingHistoryRepository.existsById(apartmentId);
     }
 
     @Override
     public ApartmentBookingHistory findFor(String apartmentId) {
-        return null;
+        return springJpaApartmentBookingHistoryRepository.findById(apartmentId).get();
     }
 
     @Override
     public void save(ApartmentBookingHistory apartmentBookingHistory) {
-
+        springJpaApartmentBookingHistoryRepository.save(apartmentBookingHistory);
     }
 }

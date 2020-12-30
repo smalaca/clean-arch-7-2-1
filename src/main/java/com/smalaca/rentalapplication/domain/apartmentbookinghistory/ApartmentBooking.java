@@ -1,19 +1,23 @@
 package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
-//@Entity
-@Table(name = "APARTMENT_BOOKING")
+@Embeddable
 public class ApartmentBooking {
-    private final BookingStep bookingStep;
-    private final LocalDateTime bookingDateTime;
-    private final String ownerId;
-    private final String tenantId;
+    @Enumerated(EnumType.STRING)
+    private BookingStep bookingStep;
+    private LocalDateTime bookingDateTime;
+    private String ownerId;
+    private String tenantId;
+
     @Embedded
-    private final BookingPeriod bookingPeriod;
+    private BookingPeriod bookingPeriod;
+
+    private ApartmentBooking() {}
 
     private ApartmentBooking(BookingStep bookingStep, LocalDateTime bookingDateTime, String ownerId, String tenantId, BookingPeriod bookingPeriod) {
         this.bookingStep = bookingStep;

@@ -2,7 +2,8 @@ package com.smalaca.rentalapplication.domain.apartment;
 
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 
-import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
@@ -14,10 +15,13 @@ public class Booking {
     @GeneratedValue
     private String id;
 
+    @Enumerated(EnumType.STRING)
     private final RentalType rentalType;
     private final String rentalPlaceId;
     private final String tenantId;
     private final List<LocalDate> days;
+
+    @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus = BookingStatus.OPEN;
 
     private Booking(RentalType rentalType, String rentalPlaceId, String tenantId, List<LocalDate> days) {
