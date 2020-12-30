@@ -2,9 +2,9 @@ package com.smalaca.rentalapplication.domain.apartment;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
@@ -55,12 +55,17 @@ class ApartmentTest {
 
     @Test
     void shouldPublishApartmentBooked() {
-        ArgumentCaptor captor = ArgumentCaptor.forClass(ApartmentBooked.class);
+        ArgumentCaptor<ApartmentBooked> captor = ArgumentCaptor.forClass(ApartmentBooked.class);
         Apartment apartment = createApartment();
 
         apartment.book(TENANT_IT, PERIOD, eventChannel);
 
-        BDDMockito.then(eventChannel).should().publish(ArgumentMatchers.any(ApartmentBooked.class));
+        BDDMockito.then(eventChannel).should().publish(captor.capture());
+        ApartmentBooked actual = captor.getValue();
+        Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_IT);
+        Assertions.assertThat(actual.getOwnerId()).isEqualTo(OWNER_ID);
+        Assertions.assertThat(actual.getPeriodStart()).isEqualTo(START);
+        Assertions.assertThat(actual.getPeriodEnd()).isEqualTo(END);
     }
 
     private Apartment createApartment() {
