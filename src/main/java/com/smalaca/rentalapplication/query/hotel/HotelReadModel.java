@@ -13,6 +13,7 @@ public class HotelReadModel {
     @GeneratedValue
     private UUID id;
 
+    private String name;
     private String street;
     private String postalCode;
     private String buildingNumber;
@@ -21,7 +22,8 @@ public class HotelReadModel {
 
     private HotelReadModel() {}
 
-    public HotelReadModel(String street, String postalCode, String buildingNumber, String city, String country) {
+    public HotelReadModel(String name, String street, String postalCode, String buildingNumber, String city, String country) {
+        this.name = name;
         this.street = street;
         this.postalCode = postalCode;
         this.buildingNumber = buildingNumber;
@@ -31,6 +33,10 @@ public class HotelReadModel {
 
     public String getId() {
         return id.toString();
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getStreet() {

@@ -4,11 +4,13 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 class Address {
-    private final String street;
-    private final String postalCode;
-    private final String buildingNumber;
-    private final String city;
-    private final String country;
+    private String street;
+    private String postalCode;
+    private String buildingNumber;
+    private String city;
+    private String country;
+
+    private Address() {}
 
     Address(String street, String postalCode, String buildingNumber, String city, String country) {
         this.street = street;
