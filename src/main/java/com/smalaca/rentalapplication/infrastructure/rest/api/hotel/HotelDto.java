@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.hotel;
 
-class HotelDto {
+public class HotelDto {
     private final String name;
     private final String street;
     private final String postalCode;
@@ -8,7 +8,7 @@ class HotelDto {
     private final String city;
     private final String country;
 
-    HotelDto(String name, String street, String postalCode, String buildingNumber, String city, String country) {
+    public HotelDto(String name, String street, String postalCode, String buildingNumber, String city, String country) {
         this.name = name;
         this.street = street;
         this.postalCode = postalCode;
@@ -17,27 +17,27 @@ class HotelDto {
         this.country = country;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    String getStreet() {
+    public String getStreet() {
         return street;
     }
 
-    String getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    String getBuildingNumber() {
+    public String getBuildingNumber() {
         return buildingNumber;
     }
 
-    String getCity() {
+    public String getCity() {
         return city;
     }
 
-    String getCountry() {
+    public String getCountry() {
         return country;
     }
 }
