@@ -6,7 +6,9 @@ import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBoo
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.BookingPeriod;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ApartmentBookingHistoryEventListener {
     private final ApartmentBookingHistoryRepository apartmentBookingHistoryRepository;
 

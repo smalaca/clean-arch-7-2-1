@@ -7,10 +7,12 @@ import com.smalaca.rentalapplication.domain.apartment.Booking;
 import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
 import com.smalaca.rentalapplication.domain.apartment.Period;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Map;
 
+@Service
 public class ApartmentApplicationService {
     private final ApartmentRepository apartmentRepository;
     private final EventChannel eventChannel;
