@@ -22,8 +22,12 @@ public class BookingAssertion {
         return hasBookingStatusEqualTo(BookingStatus.OPEN);
     }
 
-    BookingAssertion isAccepted() {
+    public BookingAssertion isAccepted() {
         return hasBookingStatusEqualTo(BookingStatus.ACCEPTED);
+    }
+
+    public BookingAssertion isRejected() {
+        return hasBookingStatusEqualTo(BookingStatus.REJECTED);
     }
 
     private BookingAssertion hasBookingStatusEqualTo(BookingStatus expected) {

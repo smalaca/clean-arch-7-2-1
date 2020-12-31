@@ -4,7 +4,9 @@ import com.smalaca.rentalapplication.application.booking.BookingAccept;
 import com.smalaca.rentalapplication.application.booking.BookingReject;
 import com.smalaca.rentalapplication.application.commandregistry.CommandRegistry;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Component;
 
+@Component
 class SpringCommandRegistry implements CommandRegistry {
     private final ApplicationEventPublisher publisher;
 

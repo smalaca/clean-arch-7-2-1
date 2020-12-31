@@ -4,7 +4,9 @@ import com.smalaca.rentalapplication.domain.apartment.Booking;
 import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BookingCommandHandler {
     private final BookingRepository bookingRepository;
     private final EventChannel eventChannel;

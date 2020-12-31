@@ -56,4 +56,8 @@ public class Booking {
         BookingAccepted bookingAccepted = BookingAccepted.create(rentalType, rentalPlaceId, tenantId, days);
         eventChannel.publish(bookingAccepted);
     }
+
+    public String id() {
+        return id.toString();
+    }
 }
