@@ -1,8 +1,7 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.apartment;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
+import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,6 +32,7 @@ class ApartmentRestControllerSystemTest {
     private static final String DESCRIPTION = "Nice place to stay";
     private static final Map<String, Double> ROOMS_DEFINITION = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
 
+    private final JsonFactory jsonFactory = new JsonFactory();
     @Autowired private MockMvc mockMvc;
 
     @Test
@@ -51,7 +51,7 @@ class ApartmentRestControllerSystemTest {
     void shouldReturnExistingApartment() throws Exception {
         ApartmentDto apartmentDto = new ApartmentDto(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, ROOMS_DEFINITION);
 
-        MvcResult mvcResult = mockMvc.perform(post("/apartment").contentType(MediaType.APPLICATION_JSON).content(asJson(apartmentDto)))
+        MvcResult mvcResult = mockMvc.perform(post("/apartment").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentDto)))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -62,13 +62,5 @@ class ApartmentRestControllerSystemTest {
                 .andExpect(jsonPath("$.apartment.postalCode").value(POSTAL_CODE))
                 .andExpect(jsonPath("$.apartment.houseNumber").value(HOUSE_NUMBER))
                 .andExpect(jsonPath("$.bookingHistory").isEmpty());
-    }
-
-    private String asJson(ApartmentDto apartmentDto) {
-        try {
-            return new ObjectMapper().writeValueAsString(apartmentDto);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
