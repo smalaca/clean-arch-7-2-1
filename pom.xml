@@ -24,6 +24,7 @@
         <assertj-core.version>3.16.1</assertj-core.version>
         <jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
         <mockito-junit-jupiter.version>3.3.3</mockito-junit-jupiter.version>
+        <archunit-junit5-engine.version>0.15.0</archunit-junit5-engine.version>
     </properties>
 
     <parent>
@@ -99,6 +100,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-engine</artifactId>
+            <version>${archunit-junit5-engine.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
