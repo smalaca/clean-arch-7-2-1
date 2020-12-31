@@ -2,7 +2,7 @@ package com.smalaca.rentalapplication.infrastructure.rest.api.apartment;
 
 import java.util.Map;
 
-class ApartmentDto {
+public class ApartmentDto {
     private final String ownerId;
     private final String street;
     private final String postalCode;
@@ -13,7 +13,7 @@ class ApartmentDto {
     private final String description;
     private final Map<String, Double> roomsDefinition;
 
-    ApartmentDto(
+    public ApartmentDto(
             String ownerId, String street, String postalCode, String houseNumber, String apartmentNumber,
             String city, String country, String description, Map<String, Double> roomsDefinition) {
         this.ownerId = ownerId;
@@ -27,39 +27,39 @@ class ApartmentDto {
         this.roomsDefinition = roomsDefinition;
     }
 
-    String getOwnerId() {
+    public String getOwnerId() {
         return ownerId;
     }
 
-    String getStreet() {
+    public String getStreet() {
         return street;
     }
 
-    String getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    String getHouseNumber() {
+    public String getHouseNumber() {
         return houseNumber;
     }
 
-    String getApartmentNumber() {
+    public String getApartmentNumber() {
         return apartmentNumber;
     }
 
-    String getCity() {
+    public String getCity() {
         return city;
     }
 
-    String getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    Map<String, Double> getRoomsDefinition() {
+    public Map<String, Double> getRoomsDefinition() {
         return roomsDefinition;
     }
 }

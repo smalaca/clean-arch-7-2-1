@@ -25,14 +25,14 @@ public class ApartmentApplicationService {
         this.bookingRepository = bookingRepository;
     }
 
-    public void add(
+    public String add(
             String ownerId, String street, String postalCode, String houseNumber, String apartmentNumber,
             String city, String country, String description, Map<String, Double> roomsDefinition) {
 
         Apartment apartment = new ApartmentFactory().create(
                 ownerId, street, postalCode, houseNumber, apartmentNumber, city, country, description, roomsDefinition);
 
-        apartmentRepository.save(apartment);
+        return apartmentRepository.save(apartment);
     }
 
     public void book(String id, String tenantId, LocalDate start, LocalDate end) {
