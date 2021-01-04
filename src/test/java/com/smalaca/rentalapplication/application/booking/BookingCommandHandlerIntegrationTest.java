@@ -3,7 +3,9 @@ package com.smalaca.rentalapplication.application.booking;
 import com.smalaca.rentalapplication.domain.apartment.Booking;
 import com.smalaca.rentalapplication.domain.apartment.BookingAssertion;
 import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
+import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
 import com.smalaca.rentalapplication.infrastructure.rest.api.booking.BookingRestController;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,10 +18,18 @@ import static java.util.Arrays.asList;
 class BookingCommandHandlerIntegrationTest {
     @Autowired private BookingRestController controller;
     @Autowired private BookingRepository bookingRepository;
+    @Autowired private SpringJpaBookingTestRepository springJpaBookingTestRepository;
+
+    private String bookingId;
+
+    @AfterEach
+    void removeBookings() {
+        springJpaBookingTestRepository.deleteById(bookingId);
+    }
 
     @Test
     void shouldAcceptBooking() {
-        String bookingId = givenOpenBooking();
+        givenOpenBooking();
 
         controller.accept(bookingId);
         Booking actual = bookingRepository.findById(bookingId);
@@ -29,7 +39,7 @@ class BookingCommandHandlerIntegrationTest {
 
     @Test
     void shouldRejectBooking() {
-        String bookingId = givenOpenBooking();
+        givenOpenBooking();
 
         controller.reject(bookingId);
         Booking actual = bookingRepository.findById(bookingId);
@@ -37,8 +47,8 @@ class BookingCommandHandlerIntegrationTest {
         BookingAssertion.assertThat(actual).isRejected();
     }
 
-    private String givenOpenBooking() {
+    private void givenOpenBooking() {
         Booking booking = Booking.hotelRoom("1234", "5678", asList(LocalDate.now(), LocalDate.now().plusDays(1)));
-        return bookingRepository.save(booking);
+        bookingId = bookingRepository.save(booking);
     }
 }
