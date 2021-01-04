@@ -6,16 +6,15 @@ import com.smalaca.rentalapplication.domain.apartment.Period;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBooking;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
+import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.BookingPeriod;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.BDDMockito;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -60,17 +59,14 @@ class ApartmentBookingHistoryEventListenerTest {
     }
 
     private void thenApartmentBookingHistoryShouldHaveApartmentBookings(ApartmentBookingHistory actual, int bookingsSize) {
-        Assertions.assertThat(actual).extracting("bookings").satisfies(actualBookings -> {
-            List<ApartmentBooking> bookings = (List<ApartmentBooking>) actualBookings;
-            Assertions.assertThat(bookings)
-                    .hasSize(bookingsSize)
-                    .anySatisfy(actualBooking -> {
+        ApartmentBookingHistoryAssertion.assertThat(actual)
+                .hasApartmentBookingsAmount(bookingsSize)
+                .hasApartmentBookingThatSatisfies(actualBooking -> {
                         ApartmentBookingAssertion.assertThat(actualBooking)
                                 .hasOwnerIdEqualTo(OWNER_ID)
                                 .hasTenantIdEqualTo(TENANT_ID)
                                 .hasBookingPeriodThatHas(START, END);
-                    });
-        });
+                });
     }
 
     private void givenExistingApartmentBookingHistory() {

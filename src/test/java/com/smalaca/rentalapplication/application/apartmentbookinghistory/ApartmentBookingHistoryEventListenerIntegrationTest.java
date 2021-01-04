@@ -5,12 +5,11 @@ import com.smalaca.rentalapplication.application.apartment.ApartmentApplicationS
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentFactory;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
-import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBooking;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
+import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
@@ -56,18 +54,14 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
         apartmentApplicationService.book(apartmentId, tenantId, start, end);
         ApartmentBookingHistory actual = apartmentBookingHistoryRepository.findFor(apartmentId);
 
-        Assertions.assertThat(actual).extracting("bookings").satisfies(actualBookings -> {
-            List<ApartmentBooking> bookings = (List<ApartmentBooking>) actualBookings;
-
-            Assertions.assertThat(bookings).hasSize(1)
-                    .allSatisfy(booking -> {
-                        ApartmentBookingAssertion.assertThat(booking)
-                                .isStart()
-                                .hasOwnerIdEqualTo(OWNER_ID)
-                                .hasTenantIdEqualTo(tenantId)
-                                .hasBookingPeriodThatHas(start, end);
-                    });
-        });
+        ApartmentBookingHistoryAssertion.assertThat(actual)
+                .hasOneApartmentBooking()
+                .hasApartmentBookingThatSatisfies(actualBooking -> {
+                    ApartmentBookingAssertion.assertThat(actualBooking)
+                            .hasOwnerIdEqualTo(OWNER_ID)
+                            .hasTenantIdEqualTo(tenantId)
+                            .hasBookingPeriodThatHas(start, end);
+                });
     }
 
     private void givenExistingApartment() {
