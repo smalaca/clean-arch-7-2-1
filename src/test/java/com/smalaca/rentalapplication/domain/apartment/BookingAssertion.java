@@ -18,7 +18,7 @@ public class BookingAssertion {
         return new BookingAssertion(actual);
     }
 
-    BookingAssertion isOpen() {
+    public BookingAssertion isOpen() {
         return hasBookingStatusEqualTo(BookingStatus.OPEN);
     }
 
@@ -48,7 +48,7 @@ public class BookingAssertion {
         return this;
     }
 
-    BookingAssertion hasRentalPlaceIdEqualTo(String expected) {
+    public BookingAssertion hasRentalPlaceIdEqualTo(String expected) {
         Assertions.assertThat(actual).hasFieldOrPropertyWithValue("rentalPlaceId", expected);
         return this;
     }
@@ -63,7 +63,10 @@ public class BookingAssertion {
     }
 
     public BookingAssertion containsAllDays(List<LocalDate> expected) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("days", expected);
+        Assertions.assertThat(actual).extracting("days").satisfies(days -> {
+            List<LocalDate> actualDays = (List<LocalDate>) days;
+            Assertions.assertThat(actualDays).containsExactlyElementsOf(expected);
+        });
         return this;
     }
 }
