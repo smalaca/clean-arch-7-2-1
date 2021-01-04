@@ -9,7 +9,9 @@ import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBoo
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
+import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,14 +33,17 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
     private static final String DESCRIPTION = "Nice place to stay";
     private static final Map<String, Double> ROOMS_DEFINITION = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
 
-    @Autowired
-    private ApartmentApplicationService apartmentApplicationService;
+    @Autowired private ApartmentApplicationService apartmentApplicationService;
+    @Autowired private ApartmentBookingHistoryRepository apartmentBookingHistoryRepository;
+    @Autowired private ApartmentRepository apartmentRepository;
+    @Autowired private SpringJpaApartmentTestRepository springJpaApartmentTestRepository;
 
-    @Autowired
-    private ApartmentBookingHistoryRepository apartmentBookingHistoryRepository;
+    private String apartmentId;
 
-    @Autowired
-    private ApartmentRepository apartmentRepository;
+    @AfterEach
+    void removeApartment() {
+        springJpaApartmentTestRepository.deleteById(apartmentId);
+    }
 
     @Test
     @Transactional
@@ -46,7 +51,7 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
         String tenantId = "11223344";
         LocalDate start = LocalDate.of(2020, 1, 13);
         LocalDate end = LocalDate.of(2020, 1, 14);
-        String apartmentId = givenExistingApartment();
+        givenExistingApartment();
 
         apartmentApplicationService.book(apartmentId, tenantId, start, end);
         ApartmentBookingHistory actual = apartmentBookingHistoryRepository.findFor(apartmentId);
@@ -65,8 +70,8 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
         });
     }
 
-    private String givenExistingApartment() {
-        return apartmentRepository.save(createApartment());
+    private void givenExistingApartment() {
+        apartmentId = apartmentRepository.save(createApartment());
     }
 
     private Apartment createApartment() {
