@@ -25,4 +25,8 @@ public class Hotel {
         this.name = name;
         this.address = address;
     }
+
+    public String id() {
+        return id.toString();
+    }
 }
