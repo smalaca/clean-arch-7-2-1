@@ -5,6 +5,7 @@ import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomAssertion;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomFactory;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +24,15 @@ class JpaHotelRoomRepositoryIntegrationTest {
     private static final String DESCRIPTION = "This is very nice place";
 
     @Autowired private HotelRoomRepository hotelRoomRepository;
+    @Autowired private SpringJpaHotelRoomTestRepository springJpaHotelRoomTestRepository;
+    private String hotelRoomId;
+
+    @AfterEach
+    void deleteHotelRoom() {
+        if (hotelRoomId != null) {
+            springJpaHotelRoomTestRepository.deleteById(hotelRoomId);
+        }
+    }
 
     @Test
     void shouldThrowExceptionWhenNoHotelRoomFound() {
@@ -37,7 +47,7 @@ class JpaHotelRoomRepositoryIntegrationTest {
     @Transactional
     void shouldFindExistingHotelRoom() {
         HotelRoom hotelRoom = createHotelRoom();
-        String hotelRoomId = hotelRoomRepository.save(hotelRoom);
+        hotelRoomId = hotelRoomRepository.save(hotelRoom);
 
         HotelRoom actual = hotelRoomRepository.findById(hotelRoomId);
 
