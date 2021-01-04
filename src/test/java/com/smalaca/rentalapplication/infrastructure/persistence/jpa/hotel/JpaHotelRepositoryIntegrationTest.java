@@ -13,7 +13,7 @@ import java.util.UUID;
 import static com.smalaca.rentalapplication.domain.hotel.HotelAssertion.assertThat;
 
 @SpringBootTest
-class JpaHotelRepositoryTest {
+class JpaHotelRepositoryIntegrationTest {
     private static final String NAME = "Great hotel";
     private static final String STREET = "Unknown";
     private static final String POSTAL_CODE = "12-345";
