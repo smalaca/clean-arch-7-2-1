@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.domain.hotelbookinghistory;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -13,7 +14,7 @@ class HotelRoomBookingHistory {
     @Id
     private String hotelRoomId;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<HotelRoomBooking> bookings = new ArrayList<>();
 
     private HotelRoomBookingHistory() {}
