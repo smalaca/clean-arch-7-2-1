@@ -36,11 +36,8 @@ class HotelRestControllerSystemTest {
 
         mockMvc.perform(get("/hotel"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[*]", hasSize(2)))
-                .andExpect(jsonPath("$.[0].name").value("Big Hotel"))
-                .andExpect(jsonPath("$.[0].buildingNumber").value("13"))
-                .andExpect(jsonPath("$.[1].name").value("Bigger Hotel"))
-                .andExpect(jsonPath("$.[1].buildingNumber").value("42"));
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$").isArray());
     }
 
     private void addHotel(HotelDto hotelDto) throws Exception {
