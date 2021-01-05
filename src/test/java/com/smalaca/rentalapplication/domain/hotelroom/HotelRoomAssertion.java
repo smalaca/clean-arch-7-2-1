@@ -1,9 +1,9 @@
 package com.smalaca.rentalapplication.domain.hotelroom;
 
-import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.Assertions;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class HotelRoomAssertion {
@@ -27,7 +27,7 @@ public class HotelRoomAssertion {
         return this;
     }
 
-    public HotelRoomAssertion hasSpacesDefinitionEqualTo(ImmutableMap<String, Double> expected) {
+    public HotelRoomAssertion hasSpacesDefinitionEqualTo(Map<String, Double> expected) {
         Assertions.assertThat(actual).extracting("spaces").satisfies(spacesActual -> {
             List<Space> spaces = (List<Space>) spacesActual;
             Assertions.assertThat(spaces).hasSize(expected.size());
