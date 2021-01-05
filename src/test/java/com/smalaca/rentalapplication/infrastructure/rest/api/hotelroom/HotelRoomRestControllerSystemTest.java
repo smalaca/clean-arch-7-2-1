@@ -58,7 +58,7 @@ class HotelRoomRestControllerSystemTest {
         String url = save(givenHotelRoom1()).getResponse().getRedirectedUrl();
 
         mockMvc.perform(put(url.replace("hotelroom/", "hotelroom/book/")).contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelBookingDto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     private HotelRoomDto givenHotelRoom1() {

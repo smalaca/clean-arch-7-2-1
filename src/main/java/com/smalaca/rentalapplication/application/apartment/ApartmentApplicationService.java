@@ -35,12 +35,12 @@ public class ApartmentApplicationService {
         return apartmentRepository.save(apartment);
     }
 
-    public void book(String id, String tenantId, LocalDate start, LocalDate end) {
+    public String book(String id, String tenantId, LocalDate start, LocalDate end) {
         Apartment apartment = apartmentRepository.findById(id);
         Period period = new Period(start, end);
 
         Booking booking = apartment.book(tenantId, period, eventChannel);
 
-        bookingRepository.save(booking);
+        return bookingRepository.save(booking);
     }
 }

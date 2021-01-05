@@ -35,8 +35,10 @@ public class HotelRoomRestController {
     }
 
     @PutMapping("/book/{id}")
-    public void book(@PathVariable String id, @RequestBody HotelBookingDto hotelBookingDto) {
-        hotelRoomApplicationService.book(id, hotelBookingDto.getTenantId(), hotelBookingDto.getDays());
+    public ResponseEntity<String> book(@PathVariable String id, @RequestBody HotelBookingDto hotelBookingDto) {
+        String bookingId = hotelRoomApplicationService.book(id, hotelBookingDto.getTenantId(), hotelBookingDto.getDays());
+
+        return ResponseEntity.created(URI.create("/booking/" + bookingId)).build();
     }
 
     @GetMapping("/hotel/{hotelId}")

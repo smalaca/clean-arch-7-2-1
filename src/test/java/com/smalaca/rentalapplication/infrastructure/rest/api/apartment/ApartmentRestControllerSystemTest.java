@@ -82,7 +82,7 @@ class ApartmentRestControllerSystemTest {
         String url = save(givenApartment1()).getResponse().getRedirectedUrl();
 
         mockMvc.perform(put(url.replace("apartment/", "apartment/book/")).contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentBookingDto)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         mockMvc.perform(get(url))
