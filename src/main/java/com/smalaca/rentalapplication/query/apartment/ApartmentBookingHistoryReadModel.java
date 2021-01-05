@@ -22,10 +22,6 @@ public class ApartmentBookingHistoryReadModel {
 
     private ApartmentBookingHistoryReadModel() {}
 
-    public ApartmentBookingHistoryReadModel(String apartmentId) {
-        this.apartmentId = apartmentId;
-    }
-
     public String getApartmentId() {
         return apartmentId;
     }

@@ -9,11 +9,6 @@ public class RoomReadModel {
 
     private RoomReadModel() {}
 
-    RoomReadModel(String name, Double size) {
-        this.name = name;
-        this.size = size;
-    }
-
     public String getName() {
         return name;
     }

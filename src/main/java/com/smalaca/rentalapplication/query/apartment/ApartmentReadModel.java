@@ -32,20 +32,6 @@ public class ApartmentReadModel {
 
     private ApartmentReadModel() {}
 
-    public ApartmentReadModel(
-            String ownerId, String street, String postalCode, String houseNumber, String apartmentNumber, String city,
-            String country, List<RoomReadModel> rooms, String description) {
-        this.ownerId = ownerId;
-        this.street = street;
-        this.postalCode = postalCode;
-        this.houseNumber = houseNumber;
-        this.apartmentNumber = apartmentNumber;
-        this.city = city;
-        this.country = country;
-        this.rooms = rooms;
-        this.description = description;
-    }
-
     public String getId() {
         return id.toString();
     }

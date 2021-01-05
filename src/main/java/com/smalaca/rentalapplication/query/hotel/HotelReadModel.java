@@ -22,15 +22,6 @@ public class HotelReadModel {
 
     private HotelReadModel() {}
 
-    public HotelReadModel(String name, String street, String postalCode, String buildingNumber, String city, String country) {
-        this.name = name;
-        this.street = street;
-        this.postalCode = postalCode;
-        this.buildingNumber = buildingNumber;
-        this.city = city;
-        this.country = country;
-    }
-
     public String getId() {
         return id.toString();
     }

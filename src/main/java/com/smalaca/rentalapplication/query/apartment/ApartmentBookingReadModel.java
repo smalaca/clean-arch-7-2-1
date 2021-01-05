@@ -15,15 +15,6 @@ public class ApartmentBookingReadModel {
 
     private ApartmentBookingReadModel() {}
 
-    ApartmentBookingReadModel(String bookingStep, LocalDateTime bookingDateTime, String ownerId, String tenantId, LocalDate periodStart, LocalDate periodEnd) {
-        this.bookingStep = bookingStep;
-        this.bookingDateTime = bookingDateTime;
-        this.ownerId = ownerId;
-        this.tenantId = tenantId;
-        this.periodStart = periodStart;
-        this.periodEnd = periodEnd;
-    }
-
     public String getBookingStep() {
         return bookingStep;
     }

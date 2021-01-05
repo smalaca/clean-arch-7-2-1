@@ -27,13 +27,6 @@ public class HotelRoomReadModel {
 
     private HotelRoomReadModel() {}
 
-    public HotelRoomReadModel(String hotelId, int number, List<SpaceReadModel> spaces, String description) {
-        this.hotelId = hotelId;
-        this.number = number;
-        this.spaces = spaces;
-        this.description = description;
-    }
-
     public String getId() {
         return id.toString();
     }

@@ -9,11 +9,6 @@ public class SpaceReadModel {
 
     private SpaceReadModel() {}
 
-    public SpaceReadModel(String name, Double value) {
-        this.name = name;
-        this.value = value;
-    }
-
     public String getName() {
         return name;
     }
