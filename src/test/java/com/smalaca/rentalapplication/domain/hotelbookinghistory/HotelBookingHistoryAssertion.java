@@ -35,9 +35,25 @@ public class HotelBookingHistoryAssertion {
         });
     }
 
+    HotelBookingHistoryAssertion hasInformationAboutHistoryOfHotelRoom(String hotelRoomId, int size) {
+        return hasHotelRoomBookingHistoryFor(hotelRoomBookingHistory -> {
+            HotelRoomBookingHistoryAssertion.assertThat(hotelRoomBookingHistory)
+                    .hasHotelRoomIdEqualTo(hotelRoomId)
+                    .hasInformationAboutBookings(size);
+        });
+    }
+
     private HotelBookingHistoryAssertion hasHotelRoomBookingHistoryFor(Consumer<HotelRoomBookingHistory> consumer) {
         hasHotelRoomBookingHistories().satisfies(actualBookings -> {
             Assertions.assertThat(asHotelRoomHistories(actualBookings)).anySatisfy(consumer);
+        });
+
+        return this;
+    }
+
+    HotelBookingHistoryAssertion hasInformationAboutHistoryOfHotelRooms(int size) {
+        hasHotelRoomBookingHistories().satisfies(actualBookings -> {
+            Assertions.assertThat(asHotelRoomHistories(actualBookings)).hasSize(size);
         });
 
         return this;

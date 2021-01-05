@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.domain.hotelbookinghistory;
 
+import org.assertj.core.api.AbstractObjectAssert;
 import org.assertj.core.api.Assertions;
 
 import java.time.LocalDate;
@@ -41,11 +42,26 @@ class HotelRoomBookingHistoryAssertion {
     }
 
     private HotelRoomBookingHistoryAssertion hasHotelRoomBookingFor(Consumer<HotelRoomBooking> consumer) {
-        Assertions.assertThat(actual).extracting("bookings").satisfies(bookings -> {
-            List<HotelRoomBooking> actualBookings = (List<HotelRoomBooking>) bookings;
-            Assertions.assertThat(actualBookings)
-                    .anySatisfy(consumer);
+        hasHotelRoomBookings().satisfies(bookings -> {
+            Assertions.assertThat(asHotelRoomBookings(bookings)).anySatisfy(consumer);
         });
+
         return this;
+    }
+
+    HotelRoomBookingHistoryAssertion hasInformationAboutBookings(int size) {
+        hasHotelRoomBookings().satisfies(bookings -> {
+            Assertions.assertThat(asHotelRoomBookings(bookings)).hasSize(size);
+        });
+
+        return this;
+    }
+
+    private AbstractObjectAssert<?, ?> hasHotelRoomBookings() {
+        return Assertions.assertThat(actual).extracting("bookings");
+    }
+
+    private List<HotelRoomBooking> asHotelRoomBookings(Object actualBookings) {
+        return (List<HotelRoomBooking>) actualBookings;
     }
 }
