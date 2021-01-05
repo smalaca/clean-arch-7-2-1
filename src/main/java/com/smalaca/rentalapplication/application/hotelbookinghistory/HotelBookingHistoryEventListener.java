@@ -4,7 +4,9 @@ import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHist
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryRepository;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomBooked;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
+@Component
 public class HotelBookingHistoryEventListener {
     private final HotelBookingHistoryRepository hotelBookingHistoryRepository;
 

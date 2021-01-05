@@ -12,7 +12,7 @@ public class SpringJpaHotelRoomTestRepository {
         this.repository = repository;
     }
 
-    void deleteById(String hotelRoomId) {
+    public void deleteById(String hotelRoomId) {
         repository.deleteById(UUID.fromString(hotelRoomId));
     }
 }
