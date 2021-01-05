@@ -21,7 +21,7 @@ class ApartmentTest {
     private static final String COUNTRY = "Poland";
     private static final String DESCRIPTION = "Nice place to stay";
     private static final Map<String, Double> ROOMS_DEFINITION = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
-    private static final String TENANT_IT = "137";
+    private static final String TENANT_ID = "137";
     private static final LocalDate START = LocalDate.of(2020, 3, 4);
     private static final LocalDate MIDDLE = LocalDate.of(2020, 3, 5);
     private static final LocalDate END = LocalDate.of(2020, 3, 6);
@@ -45,11 +45,11 @@ class ApartmentTest {
     void shouldCreateBookingOnceBooked() {
         Apartment apartment = createApartment();
 
-        Booking actual = apartment.book(TENANT_IT, PERIOD, eventChannel);
+        Booking actual = apartment.book(TENANT_ID, PERIOD, eventChannel);
 
         BookingAssertion.assertThat(actual)
                 .isApartment()
-                .hasTenantIdEqualTo(TENANT_IT)
+                .hasTenantIdEqualTo(TENANT_ID)
                 .containsAllDays(START, MIDDLE, END);
     }
 
@@ -58,11 +58,11 @@ class ApartmentTest {
         ArgumentCaptor<ApartmentBooked> captor = ArgumentCaptor.forClass(ApartmentBooked.class);
         Apartment apartment = createApartment();
 
-        apartment.book(TENANT_IT, PERIOD, eventChannel);
+        apartment.book(TENANT_ID, PERIOD, eventChannel);
 
         BDDMockito.then(eventChannel).should().publish(captor.capture());
         ApartmentBooked actual = captor.getValue();
-        Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_IT);
+        Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
         Assertions.assertThat(actual.getOwnerId()).isEqualTo(OWNER_ID);
         Assertions.assertThat(actual.getPeriodStart()).isEqualTo(START);
         Assertions.assertThat(actual.getPeriodEnd()).isEqualTo(END);

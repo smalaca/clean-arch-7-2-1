@@ -35,7 +35,7 @@ public class BookingAssertion {
         return this;
     }
 
-    BookingAssertion isApartment() {
+    public BookingAssertion isApartment() {
         return hasRentalTypeEqualTo(RentalType.APARTMENT);
     }
 
@@ -58,7 +58,7 @@ public class BookingAssertion {
         return this;
     }
 
-    BookingAssertion containsAllDays(LocalDate... expected) {
+    public BookingAssertion containsAllDays(LocalDate... expected) {
         return containsAllDays(asList(expected));
     }
 
