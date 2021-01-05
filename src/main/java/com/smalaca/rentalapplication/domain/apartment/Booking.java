@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Booking {
     @Id
     @GeneratedValue

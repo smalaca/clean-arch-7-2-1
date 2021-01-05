@@ -15,6 +15,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "APARTMENT")
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Apartment {
     @Id
     @GeneratedValue

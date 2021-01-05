@@ -4,6 +4,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 
 @Embeddable
+@SuppressWarnings("PMD.UnusedPrivateField")
 class Room {
     private String name;
 

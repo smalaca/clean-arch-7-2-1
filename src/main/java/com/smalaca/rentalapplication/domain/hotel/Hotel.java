@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "HOTEL")
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Hotel {
     @Id
     @GeneratedValue

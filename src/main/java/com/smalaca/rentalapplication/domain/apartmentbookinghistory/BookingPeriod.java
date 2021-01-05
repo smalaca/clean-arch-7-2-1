@@ -4,6 +4,7 @@ import javax.persistence.Embeddable;
 import java.time.LocalDate;
 
 @Embeddable
+@SuppressWarnings("PMD.UnusedPrivateMethod")
 public class BookingPeriod {
     private LocalDate periodStart;
     private LocalDate periodEnd;

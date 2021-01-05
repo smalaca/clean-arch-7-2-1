@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.hotelroom;
 import javax.persistence.Embeddable;
 
 @Embeddable
+@SuppressWarnings("PMD.UnusedPrivateMethod")
 class SquareMeter {
     private Double value;
 

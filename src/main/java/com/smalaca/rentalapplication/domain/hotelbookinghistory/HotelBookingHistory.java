@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Entity
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class HotelBookingHistory {
     @Id
     private String hotelId;
