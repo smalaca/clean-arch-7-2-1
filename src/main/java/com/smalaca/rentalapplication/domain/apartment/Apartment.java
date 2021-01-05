@@ -2,11 +2,13 @@ package com.smalaca.rentalapplication.domain.apartment;
 
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +26,7 @@ public class Apartment {
     private Address address;
 
     @ElementCollection
+    @CollectionTable(name = "APARTMENT_ROOM", joinColumns = @JoinColumn(name = "APARTMENT_ID"))
     private List<Room> rooms;
 
     private String description;

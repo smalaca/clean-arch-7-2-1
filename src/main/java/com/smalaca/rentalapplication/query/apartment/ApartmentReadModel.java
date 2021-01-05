@@ -1,9 +1,11 @@
 package com.smalaca.rentalapplication.query.apartment;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +27,7 @@ public class ApartmentReadModel {
     private String description;
 
     @ElementCollection
+    @CollectionTable(name = "APARTMENT_ROOM", joinColumns = @JoinColumn(name = "APARTMENT_ID"))
     private List<RoomReadModel> rooms;
 
     private ApartmentReadModel() {}

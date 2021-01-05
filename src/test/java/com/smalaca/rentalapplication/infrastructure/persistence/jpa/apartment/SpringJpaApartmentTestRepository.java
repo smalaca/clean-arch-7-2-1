@@ -17,7 +17,7 @@ public class SpringJpaApartmentTestRepository {
         repository.deleteById(UUID.fromString(apartmentId));
     }
 
-    void deleteAll(List<String> apartmentIds) {
+    public void deleteAll(List<String> apartmentIds) {
         apartmentIds.forEach(this::deleteById);
     }
 }
