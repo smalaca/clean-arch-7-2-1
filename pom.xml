@@ -206,6 +206,9 @@
                                     <goal>check</goal>
                                 </goals>
                                 <configuration>
+                                    <excludes>
+                                        <exclude>com/smalaca/rentalapplication/RentalApplication.class</exclude>
+                                    </excludes>
                                     <rules>
                                         <rule>
                                             <element>BUNDLE</element>
