@@ -8,6 +8,7 @@ import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHist
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomFactory;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
+import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelbookinghistory.SpringJpaHotelBookingHistoryTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelroom.SpringJpaHotelRoomTestRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,7 @@ class HotelBookingHistoryEventListenerIntegrationTest {
 
     @Autowired private HotelRoomApplicationService hotelRoomApplicationService;
     @Autowired private HotelBookingHistoryRepository hotelBookingHistoryRepository;
+    @Autowired private SpringJpaHotelBookingHistoryTestRepository springJpaHotelBookingHistoryTestRepository;
     @Autowired private HotelRoomRepository hotelRoomRepository;
     @Autowired private SpringJpaHotelRoomTestRepository springJpaHotelRoomTestRepository;
 
@@ -39,6 +41,7 @@ class HotelBookingHistoryEventListenerIntegrationTest {
     @AfterEach
     void removeHotelRoom() {
         springJpaHotelRoomTestRepository.deleteById(hotelRoomId);
+        springJpaHotelBookingHistoryTestRepository.deleteById(HOTEL_ID);
     }
 
     @Test

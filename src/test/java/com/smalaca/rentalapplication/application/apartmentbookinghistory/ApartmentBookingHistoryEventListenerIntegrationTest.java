@@ -10,6 +10,7 @@ import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBoo
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
+import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentbookinghistory.SpringJpaApartmentBookingHistoryTestRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
 
     @Autowired private ApartmentApplicationService apartmentApplicationService;
     @Autowired private ApartmentBookingHistoryRepository apartmentBookingHistoryRepository;
+    @Autowired private SpringJpaApartmentBookingHistoryTestRepository springJpaApartmentBookingHistoryTestRepository;
     @Autowired private ApartmentRepository apartmentRepository;
     @Autowired private SpringJpaApartmentTestRepository springJpaApartmentTestRepository;
 
@@ -41,6 +43,7 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
     @AfterEach
     void removeApartment() {
         springJpaApartmentTestRepository.deleteById(apartmentId);
+        springJpaApartmentBookingHistoryTestRepository.deleteById(apartmentId);
     }
 
     @Test
