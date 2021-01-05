@@ -25,6 +25,7 @@ public class ApartmentApplicationService {
         this.bookingRepository = bookingRepository;
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public String add(
             String ownerId, String street, String postalCode, String houseNumber, String apartmentNumber,
             String city, String country, String description, Map<String, Double> roomsDefinition) {
@@ -35,6 +36,7 @@ public class ApartmentApplicationService {
         return apartmentRepository.save(apartment);
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public String book(String apartmentId, String tenantId, LocalDate start, LocalDate end) {
         Apartment apartment = apartmentRepository.findById(apartmentId);
         Period period = new Period(start, end);

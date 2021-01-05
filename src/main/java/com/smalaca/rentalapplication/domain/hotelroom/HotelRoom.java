@@ -46,6 +46,10 @@ public class HotelRoom {
     }
 
     public String id() {
-        return id == null ? null : id.toString();
+        if (id == null) {
+            return null;
+        }
+
+        return id.toString();
     }
 }

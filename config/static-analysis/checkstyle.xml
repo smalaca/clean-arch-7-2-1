@@ -30,7 +30,7 @@
             <property name="max" value="5"/>
         </module>
         <module name="ClassFanOutComplexity">
-            <property name="max" value="10"/>
+            <property name="max" value="20"/>
         </module>
         <module name="ClassTypeParameterName"/>
         <module name="ConstantName"/>
@@ -47,7 +47,6 @@
         <module name="EqualsAvoidNull"/>
         <module name="EqualsHashCode"/>
         <module name="ExplicitInitialization"/>
-        <module name="FinalClass"/>
         <module name="GenericWhitespace"/>
         <module name="HideUtilityClassConstructor"/>
         <module name="IllegalCatch"/>
@@ -118,7 +117,7 @@
     <module name="SuppressWarningsFilter"/>
 
     <module name="LineLength">
-        <property name="max" value="150"/>
+        <property name="max" value="180"/>
     </module>
 
     <module name="FileLength">

@@ -11,7 +11,8 @@ import java.util.UUID;
 
 @Entity
 class HotelRoomBooking {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private UUID id;
     private LocalDateTime bookingDateTime;
     private String tenantId;
