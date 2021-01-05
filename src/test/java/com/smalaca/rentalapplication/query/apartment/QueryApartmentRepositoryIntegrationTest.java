@@ -90,6 +90,7 @@ class QueryApartmentRepositoryIntegrationTest {
                 .hasSize(2)
                 .anySatisfy(apartmentReadModel -> {
                     ApartmentReadModelAssertion.assertThat(apartmentReadModel)
+                            .hasIdEqualsTo(apartmentId1)
                             .hasOwnerIdEqualsTo(OWNER_ID_1)
                             .hasDescriptionEqualsTo(DESCRIPTION_1)
                             .hasAddressEqualsTo(STREET_1, POSTAL_CODE_1, HOUSE_NUMBER_1, APARTMENT_NUMBER_1, CITY_1, COUNTRY_1)
@@ -97,6 +98,7 @@ class QueryApartmentRepositoryIntegrationTest {
                 })
                 .anySatisfy(apartmentReadModel -> {
                     ApartmentReadModelAssertion.assertThat(apartmentReadModel)
+                            .hasIdEqualsTo(apartmentId2)
                             .hasOwnerIdEqualsTo(OWNER_ID_2)
                             .hasDescriptionEqualsTo(DESCRIPTION_2)
                             .hasAddressEqualsTo(STREET_2, POSTAL_CODE_2, HOUSE_NUMBER_2, APARTMENT_NUMBER_2, CITY_2, COUNTRY_2)
@@ -118,6 +120,7 @@ class QueryApartmentRepositoryIntegrationTest {
         ApartmentDetails actual = queryApartmentRepository.findById(apartmentId2);
 
         ApartmentReadModelAssertion.assertThat(actual.getApartment())
+                .hasIdEqualsTo(apartmentId2)
                 .hasOwnerIdEqualsTo(OWNER_ID_2)
                 .hasDescriptionEqualsTo(DESCRIPTION_2)
                 .hasAddressEqualsTo(STREET_2, POSTAL_CODE_2, HOUSE_NUMBER_2, APARTMENT_NUMBER_2, CITY_2, COUNTRY_2)
@@ -131,6 +134,7 @@ class QueryApartmentRepositoryIntegrationTest {
         ApartmentDetails actual = queryApartmentRepository.findById(apartmentId1);
 
         ApartmentReadModelAssertion.assertThat(actual.getApartment())
+                .hasIdEqualsTo(apartmentId1)
                 .hasOwnerIdEqualsTo(OWNER_ID_1)
                 .hasDescriptionEqualsTo(DESCRIPTION_1)
                 .hasAddressEqualsTo(STREET_1, POSTAL_CODE_1, HOUSE_NUMBER_1, APARTMENT_NUMBER_1, CITY_1, COUNTRY_1)

@@ -16,6 +16,11 @@ class ApartmentReadModelAssertion {
         return new ApartmentReadModelAssertion(actual);
     }
 
+    ApartmentReadModelAssertion hasIdEqualsTo(String expected) {
+        Assertions.assertThat(actual.getId()).isEqualTo(expected);
+        return this;
+    }
+
     ApartmentReadModelAssertion hasOwnerIdEqualsTo(String expected) {
         Assertions.assertThat(actual.getOwnerId()).isEqualTo(expected);
         return this;
