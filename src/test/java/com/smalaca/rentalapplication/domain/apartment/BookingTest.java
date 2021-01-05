@@ -71,4 +71,13 @@ class BookingTest {
         Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
         Assertions.assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
     }
+
+    @Test
+    void shouldChangeStatusOfBookingOnceRejected() {
+        Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS);
+
+        booking.reject();
+
+        assertThat(booking).isRejected();
+    }
 }
