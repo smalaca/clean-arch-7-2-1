@@ -35,7 +35,7 @@ public class HotelBookingHistoryAssertion {
         });
     }
 
-    HotelBookingHistoryAssertion hasInformationAboutHistoryOfHotelRoom(String hotelRoomId, int size) {
+    public HotelBookingHistoryAssertion hasInformationAboutHistoryOfHotelRoom(String hotelRoomId, int size) {
         return hasHotelRoomBookingHistoryFor(hotelRoomBookingHistory -> {
             HotelRoomBookingHistoryAssertion.assertThat(hotelRoomBookingHistory)
                     .hasHotelRoomIdEqualTo(hotelRoomId)
@@ -51,7 +51,7 @@ public class HotelBookingHistoryAssertion {
         return this;
     }
 
-    HotelBookingHistoryAssertion hasInformationAboutHistoryOfHotelRooms(int size) {
+    public HotelBookingHistoryAssertion hasInformationAboutHistoryOfHotelRooms(int size) {
         hasHotelRoomBookingHistories().satisfies(actualBookings -> {
             Assertions.assertThat(asHotelRoomHistories(actualBookings)).hasSize(size);
         });
