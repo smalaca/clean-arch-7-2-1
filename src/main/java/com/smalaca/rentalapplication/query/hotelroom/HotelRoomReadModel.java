@@ -1,9 +1,11 @@
 package com.smalaca.rentalapplication.query.hotelroom;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.UUID;
@@ -13,11 +15,12 @@ import java.util.UUID;
 public class HotelRoomReadModel {
     @Id
     @GeneratedValue
-    private UUID hotelRoomId;
+    private UUID id;
     private String hotelId;
     private int number;
 
     @ElementCollection
+    @CollectionTable(name = "HOTEL_ROOM_SPACE", joinColumns = @JoinColumn(name = "HOTEL_ROOM_ID"))
     private List<SpaceReadModel> spaces;
 
     private String description;
@@ -31,8 +34,8 @@ public class HotelRoomReadModel {
         this.description = description;
     }
 
-    public String getHotelRoomId() {
-        return hotelRoomId.toString();
+    public String getId() {
+        return id.toString();
     }
 
     public String getHotelId() {
