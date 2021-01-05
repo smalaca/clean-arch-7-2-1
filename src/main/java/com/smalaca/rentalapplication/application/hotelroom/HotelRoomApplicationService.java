@@ -25,10 +25,10 @@ public class HotelRoomApplicationService {
         this.eventChannel = eventChannel;
     }
 
-    public void add(String hotelId, int number, Map<String, Double> spacesDefinition, String description) {
+    public String add(String hotelId, int number, Map<String, Double> spacesDefinition, String description) {
         HotelRoom hotelRoom = new HotelRoomFactory().create(hotelId, number, spacesDefinition, description);
 
-        hotelRoomRepository.save(hotelRoom);
+        return hotelRoomRepository.save(hotelRoom);
     }
 
     public void book(String id, String tenantId, List<LocalDate> days) {

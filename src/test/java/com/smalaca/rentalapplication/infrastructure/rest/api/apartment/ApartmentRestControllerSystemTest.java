@@ -118,7 +118,7 @@ class ApartmentRestControllerSystemTest {
         return new ApartmentDto(OWNER_ID_2, STREET_2, POSTAL_CODE_2, HOUSE_NUMBER_2, APARTMENT_NUMBER_2, CITY_2, COUNTRY_2, DESCRIPTION_2, ROOMS_DEFINITION_2);
     }
 
-    private MvcResult save(ApartmentDto apartmentDto1) throws Exception {
-        return mockMvc.perform(post("/apartment").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentDto1))).andReturn();
+    private MvcResult save(ApartmentDto apartmentDto) throws Exception {
+        return mockMvc.perform(post("/apartment").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentDto))).andReturn();
     }
 }
