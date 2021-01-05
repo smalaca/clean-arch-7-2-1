@@ -17,6 +17,11 @@ public class ApartmentBookingHistoryAssertion {
         return new ApartmentBookingHistoryAssertion(actual);
     }
 
+    ApartmentBookingHistoryAssertion hasApartmentIdEqualsTo(String expected) {
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("apartmentId", expected);
+        return this;
+    }
+
     public ApartmentBookingHistoryAssertion hasOneApartmentBooking() {
         return hasApartmentBookingsAmount(1);
     }
