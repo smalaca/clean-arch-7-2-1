@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking;
 
 import com.smalaca.rentalapplication.domain.apartment.Booking;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ import static com.smalaca.rentalapplication.domain.apartment.BookingAssertion.as
 import static java.util.Arrays.asList;
 
 @SpringBootTest
+@Tag("IntegrationTest")
 class JpaBookingRepositoryIntegrationTest {
     @Autowired private JpaBookingRepository repository;
     @Autowired private SpringJpaBookingRepository jpaRepository;

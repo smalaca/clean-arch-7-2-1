@@ -6,6 +6,7 @@ import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
 import com.smalaca.rentalapplication.infrastructure.rest.api.booking.BookingRestController;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import static java.util.Arrays.asList;
 
 @SpringBootTest
+@Tag("IntegrationTest")
 class BookingCommandHandlerIntegrationTest {
     @Autowired private BookingRestController controller;
     @Autowired private BookingRepository bookingRepository;
