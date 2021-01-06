@@ -14,7 +14,7 @@ import java.util.UUID;
 import static com.smalaca.rentalapplication.domain.hotel.HotelAssertion.assertThat;
 
 @SpringBootTest
-@Tag("IntegrationTest")
+@Tag("DomainRepositoryIntegrationTest")
 class JpaHotelRepositoryIntegrationTest {
     private static final String NAME = "Great hotel";
     private static final String STREET = "Unknown";

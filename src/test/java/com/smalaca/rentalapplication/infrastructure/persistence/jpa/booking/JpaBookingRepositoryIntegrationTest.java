@@ -16,7 +16,7 @@ import static com.smalaca.rentalapplication.domain.apartment.BookingAssertion.as
 import static java.util.Arrays.asList;
 
 @SpringBootTest
-@Tag("IntegrationTest")
+@Tag("DomainRepositoryIntegrationTest")
 class JpaBookingRepositoryIntegrationTest {
     @Autowired private JpaBookingRepository repository;
     @Autowired private SpringJpaBookingRepository jpaRepository;
