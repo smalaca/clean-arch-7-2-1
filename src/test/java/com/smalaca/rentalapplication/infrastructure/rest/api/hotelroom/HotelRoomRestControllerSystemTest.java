@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.infrastructure.rest.api.hotelroom;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Tag("SystemTest")
 class HotelRoomRestControllerSystemTest {
     private static final String HOTEL_ID = "5678";
     private static final int ROOM_NUMBER_1 = 42;
