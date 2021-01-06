@@ -235,12 +235,6 @@
                                     <goal>check</goal>
                                 </goals>
                                 <configuration>
-                                    <excludes>
-                                        <exclude>com/smalaca/rentalapplication/RentalApplication.class</exclude>
-                                        <exclude>com/smalaca/rentalapplication/infrastructure/**/*</exclude>
-                                        <exclude>com/smalaca/rentalapplication/query/**/*</exclude>
-                                    </excludes>
-
                                     <includes>
                                         <include>com/smalaca/rentalapplication/domain/**/*</include>
                                         <include>com/smalaca/rentalapplication/application/**/*</include>
@@ -356,7 +350,7 @@
         </profile>
 
         <profile>
-            <id>runtime-analysis</id>
+            <id>system-tests</id>
 
             <build>
                 <plugins>
@@ -366,7 +360,7 @@
                         <version>${maven-surefire-plugin.version}</version>
 
                         <configuration>
-                            <excludedGroups>ArchitectureTest</excludedGroups>
+                            <groups>SystemTest</groups>
                         </configuration>
                     </plugin>
 
@@ -400,9 +394,9 @@
                                     <goal>check</goal>
                                 </goals>
                                 <configuration>
-                                    <excludes>
-                                        <exclude>com/smalaca/rentalapplication/RentalApplication.class</exclude>
-                                    </excludes>
+                                    <includes>
+                                        <include>com/smalaca/rentalapplication/infrastructure/rest/api/**/*</include>
+                                    </includes>
                                     <rules>
                                         <rule>
                                             <element>BUNDLE</element>
