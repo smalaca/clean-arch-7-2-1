@@ -3,7 +3,6 @@ package com.smalaca.rentalapplication.application.apartmentbookinghistory;
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.application.apartment.ApartmentApplicationService;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
-import com.smalaca.rentalapplication.domain.apartment.ApartmentFactory;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
@@ -20,6 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Map;
+
+import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
 
 @SpringBootTest
 @Tag("IntegrationTest")
@@ -74,8 +75,16 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
     }
 
     private Apartment createApartment() {
-        return new ApartmentFactory().create(
-                OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY,
-                DESCRIPTION, ROOMS_DEFINITION);
+        return apartment()
+                .withOwnerId(OWNER_ID)
+                .withStreet(STREET)
+                .withPostalCode(POSTAL_CODE)
+                .withHouseNumber(HOUSE_NUMBER)
+                .withApartmentNumber(APARTMENT_NUMBER)
+                .withCity(CITY)
+                .withCountry(COUNTRY)
+                .withDescription(DESCRIPTION)
+                .withRoomsDefinition(ROOMS_DEFINITION)
+                .build();
     }
 }

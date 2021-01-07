@@ -2,7 +2,6 @@ package com.smalaca.rentalapplication.query.apartment;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
-import com.smalaca.rentalapplication.domain.apartment.ApartmentFactory;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBooking;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
@@ -24,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,19 +59,38 @@ class QueryApartmentRepositoryIntegrationTest {
     @Autowired private ApartmentBookingHistoryRepository apartmentBookingHistoryRepository;
     @Autowired private SpringJpaApartmentBookingHistoryTestRepository springJpaApartmentBookingHistoryTestRepository;
 
-    private final ApartmentFactory factory = new ApartmentFactory();
     private String apartmentId1;
     private String apartmentId2;
 
     @BeforeEach
     void givenApartments() {
-        Apartment apartment1 = factory.create(OWNER_ID_1, STREET_1, POSTAL_CODE_1, HOUSE_NUMBER_1, APARTMENT_NUMBER_1, CITY_1, COUNTRY_1, DESCRIPTION_1, ROOMS_DEFINITION_1);
+        Apartment apartment1 = apartment()
+                .withOwnerId(OWNER_ID_1)
+                .withStreet(STREET_1)
+                .withPostalCode(POSTAL_CODE_1)
+                .withHouseNumber(HOUSE_NUMBER_1)
+                .withApartmentNumber(APARTMENT_NUMBER_1)
+                .withCity(CITY_1)
+                .withCountry(COUNTRY_1)
+                .withDescription(DESCRIPTION_1)
+                .withRoomsDefinition(ROOMS_DEFINITION_1)
+                .build();
         apartmentId1 = apartmentRepository.save(apartment1);
         ApartmentBookingHistory apartmentBookingHistory = new ApartmentBookingHistory(apartmentId1);
         apartmentBookingHistory.add(ApartmentBooking.start(BOOKING_DATE_TIME_1, OWNER_ID_1, TENANT_ID_1, new BookingPeriod(BOOKING_START_1, BOOKING_END_1)));
         apartmentBookingHistoryRepository.save(apartmentBookingHistory);
 
-        Apartment apartment2 = factory.create(OWNER_ID_2, STREET_2, POSTAL_CODE_2, HOUSE_NUMBER_2, APARTMENT_NUMBER_2, CITY_2, COUNTRY_2, DESCRIPTION_2, ROOMS_DEFINITION_2);
+        Apartment apartment2 = apartment()
+                .withOwnerId(OWNER_ID_2)
+                .withStreet(STREET_2)
+                .withPostalCode(POSTAL_CODE_2)
+                .withHouseNumber(HOUSE_NUMBER_2)
+                .withApartmentNumber(APARTMENT_NUMBER_2)
+                .withCity(CITY_2)
+                .withCountry(COUNTRY_2)
+                .withDescription(DESCRIPTION_2)
+                .withRoomsDefinition(ROOMS_DEFINITION_2)
+                .build();
         apartmentId2 = apartmentRepository.save(apartment2);
 
         queryApartmentRepository.findAll();
