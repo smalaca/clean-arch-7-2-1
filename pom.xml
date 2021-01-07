@@ -25,6 +25,7 @@
         <jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
         <mockito-junit-jupiter.version>3.3.3</mockito-junit-jupiter.version>
         <archunit-junit5-engine.version>0.15.0</archunit-junit5-engine.version>
+        <lombok.version>1.18.16</lombok.version>
     </properties>
 
     <parent>
@@ -60,6 +61,12 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
         </dependency>
 
         <dependency>
