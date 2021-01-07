@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.infrastructure.rest.api.apartment;
+package com.smalaca.rentalapplication.application.apartment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

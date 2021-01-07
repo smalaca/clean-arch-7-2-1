@@ -3,7 +3,6 @@ package com.smalaca.rentalapplication.application.apartment;
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentAssertion;
-import com.smalaca.rentalapplication.domain.apartment.ApartmentFactory;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartment.Booking;
 import com.smalaca.rentalapplication.domain.apartment.BookingAssertion;
@@ -16,6 +15,7 @@ import org.mockito.ArgumentCaptor;
 import java.time.LocalDate;
 import java.util.Map;
 
+import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -42,13 +42,12 @@ class ApartmentApplicationServiceTest {
     private final EventChannel eventChannel = mock(EventChannel.class);
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
     private final ApartmentApplicationService service = new ApartmentApplicationService(apartmentRepository, eventChannel, bookingRepository);
-    private final ApartmentFactory apartmentFactory = new ApartmentFactory();
 
     @Test
     void shouldAddNewApartment() {
         ArgumentCaptor<Apartment> captor = ArgumentCaptor.forClass(Apartment.class);
 
-        service.add(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, ROOMS_DEFINITION);
+        service.add(givenApartmentDto());
 
         then(apartmentRepository).should().save(captor.capture());
         ApartmentAssertion.assertThat(captor.getValue())
@@ -62,9 +61,13 @@ class ApartmentApplicationServiceTest {
     void shouldReturnIdOfNewApartment() {
         given(apartmentRepository.save(any())).willReturn(APARTMENT_ID);
 
-        String actual = service.add(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, ROOMS_DEFINITION);
+        String actual = service.add(givenApartmentDto());
 
         Assertions.assertThat(actual).isEqualTo(APARTMENT_ID);
+    }
+
+    private ApartmentDto givenApartmentDto() {
+        return new ApartmentDto(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, ROOMS_DEFINITION);
     }
 
     @Test
@@ -92,7 +95,18 @@ class ApartmentApplicationServiceTest {
     }
 
     private void givenApartment() {
-        Apartment apartment = apartmentFactory.create(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, ROOMS_DEFINITION);
+        Apartment apartment = apartment()
+                .withOwnerId(OWNER_ID)
+                .withStreet(STREET)
+                .withPostalCode(POSTAL_CODE)
+                .withHouseNumber(HOUSE_NUMBER)
+                .withApartmentNumber(APARTMENT_NUMBER)
+                .withCity(CITY)
+                .withCountry(COUNTRY)
+                .withDescription(DESCRIPTION)
+                .withRoomsDefinition(ROOMS_DEFINITION)
+                .build();
+
         given(apartmentRepository.findById(APARTMENT_ID)).willReturn(apartment);
     }
 }

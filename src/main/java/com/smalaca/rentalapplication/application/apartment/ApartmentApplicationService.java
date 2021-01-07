@@ -1,7 +1,6 @@
 package com.smalaca.rentalapplication.application.apartment;
 
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
-import com.smalaca.rentalapplication.domain.apartment.ApartmentFactory;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartment.Booking;
 import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
@@ -10,7 +9,8 @@ import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Map;
+
+import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
 
 @Service
 public class ApartmentApplicationService {
@@ -25,13 +25,18 @@ public class ApartmentApplicationService {
         this.bookingRepository = bookingRepository;
     }
 
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public String add(
-            String ownerId, String street, String postalCode, String houseNumber, String apartmentNumber,
-            String city, String country, String description, Map<String, Double> roomsDefinition) {
-
-        Apartment apartment = new ApartmentFactory().create(
-                ownerId, street, postalCode, houseNumber, apartmentNumber, city, country, description, roomsDefinition);
+    public String add(ApartmentDto apartmentDto) {
+        Apartment apartment = apartment()
+                .withOwnerId(apartmentDto.getOwnerId())
+                .withStreet(apartmentDto.getStreet())
+                .withPostalCode(apartmentDto.getPostalCode())
+                .withHouseNumber(apartmentDto.getHouseNumber())
+                .withApartmentNumber(apartmentDto.getApartmentNumber())
+                .withCity(apartmentDto.getCity())
+                .withCountry(apartmentDto.getCountry())
+                .withDescription(apartmentDto.getDescription())
+                .withRoomsDefinition(apartmentDto.getRoomsDefinition())
+                .build();
 
         return apartmentRepository.save(apartment);
     }
