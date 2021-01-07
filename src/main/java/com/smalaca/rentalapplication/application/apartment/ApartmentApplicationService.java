@@ -1,7 +1,6 @@
 package com.smalaca.rentalapplication.application.apartment;
 
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
-import com.smalaca.rentalapplication.domain.apartment.ApartmentFactory;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartment.Booking;
 import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
@@ -10,6 +9,8 @@ import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+
+import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
 
 @Service
 public class ApartmentApplicationService {
@@ -25,10 +26,17 @@ public class ApartmentApplicationService {
     }
 
     public String add(ApartmentDto apartmentDto) {
-        Apartment apartment = new ApartmentFactory().create(
-                apartmentDto.getOwnerId(), apartmentDto.getStreet(), apartmentDto.getPostalCode(), apartmentDto.getHouseNumber(),
-                apartmentDto.getApartmentNumber(), apartmentDto.getCity(), apartmentDto.getCountry(), apartmentDto.getDescription(),
-                apartmentDto.getRoomsDefinition());
+        Apartment apartment = apartment()
+                .withOwnerId(apartmentDto.getOwnerId())
+                .withStreet(apartmentDto.getStreet())
+                .withPostalCode(apartmentDto.getPostalCode())
+                .withHouseNumber(apartmentDto.getHouseNumber())
+                .withApartmentNumber(apartmentDto.getApartmentNumber())
+                .withCity(apartmentDto.getCity())
+                .withCountry(apartmentDto.getCountry())
+                .withDescription(apartmentDto.getDescription())
+                .withRoomsDefinition(apartmentDto.getRoomsDefinition())
+                .build();
 
         return apartmentRepository.save(apartment);
     }
