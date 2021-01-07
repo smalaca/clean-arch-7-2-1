@@ -25,7 +25,6 @@ public class ApartmentApplicationService {
         this.bookingRepository = bookingRepository;
     }
 
-    @SuppressWarnings("checkstyle:ParameterNumber")
     public String add(
             String ownerId, String street, String postalCode, String houseNumber, String apartmentNumber,
             String city, String country, String description, Map<String, Double> roomsDefinition) {
