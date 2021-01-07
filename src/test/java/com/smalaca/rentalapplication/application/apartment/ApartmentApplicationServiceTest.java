@@ -48,7 +48,7 @@ class ApartmentApplicationServiceTest {
     void shouldAddNewApartment() {
         ArgumentCaptor<Apartment> captor = ArgumentCaptor.forClass(Apartment.class);
 
-        service.add(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, ROOMS_DEFINITION);
+        service.add(givenApartmentDto());
 
         then(apartmentRepository).should().save(captor.capture());
         ApartmentAssertion.assertThat(captor.getValue())
@@ -62,9 +62,13 @@ class ApartmentApplicationServiceTest {
     void shouldReturnIdOfNewApartment() {
         given(apartmentRepository.save(any())).willReturn(APARTMENT_ID);
 
-        String actual = service.add(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, ROOMS_DEFINITION);
+        String actual = service.add(givenApartmentDto());
 
         Assertions.assertThat(actual).isEqualTo(APARTMENT_ID);
+    }
+
+    private ApartmentDto givenApartmentDto() {
+        return new ApartmentDto(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, ROOMS_DEFINITION);
     }
 
     @Test
