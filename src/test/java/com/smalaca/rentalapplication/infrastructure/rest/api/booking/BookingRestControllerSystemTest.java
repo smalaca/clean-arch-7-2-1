@@ -3,7 +3,7 @@ package com.smalaca.rentalapplication.infrastructure.rest.api.booking;
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import com.smalaca.rentalapplication.infrastructure.rest.api.apartment.ApartmentBookingDto;
-import com.smalaca.rentalapplication.infrastructure.rest.api.apartment.ApartmentDto;
+import com.smalaca.rentalapplication.application.apartment.ApartmentDto;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
