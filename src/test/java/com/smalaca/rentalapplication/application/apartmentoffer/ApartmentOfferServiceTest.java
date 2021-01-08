@@ -44,6 +44,20 @@ class ApartmentOfferServiceTest {
     }
 
     @Test
+    void shouldCreateApartmentOfferWithZeroPrice() {
+        givenExistingApartment();
+        ArgumentCaptor<ApartmentOffer> captor = ArgumentCaptor.forClass(ApartmentOffer.class);
+
+        service.add(new ApartmentOfferDto(APARTMENT_ID, BigDecimal.ZERO, START, END));
+
+        then(apartmentOfferRepository).should().save(captor.capture());
+        ApartmentOfferAssertion.assertThat(captor.getValue())
+                .hasApartmentIdEqualTo(APARTMENT_ID)
+                .hasPriceEqualTo(BigDecimal.ZERO)
+                .hasAvailabilityEqualTo(START, END);
+    }
+
+    @Test
     void shouldRecognizeApartmentDoesNotExist() {
         givenNonExistingApartment();
 
