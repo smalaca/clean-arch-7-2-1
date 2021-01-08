@@ -7,6 +7,7 @@ import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomAssertion;
+import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomBooked;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomFactory;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 import org.assertj.core.api.Assertions;
@@ -16,11 +17,14 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -71,6 +75,26 @@ class HotelRoomApplicationServiceTest {
         service.book(hotelRoomId, TENANT_ID, DAYS);
 
         thenBookingShouldBeCreated();
+    }
+
+    @Test
+    void shouldPublishHotelRoomBookedEvent() {
+        ArgumentCaptor<HotelRoomBooked> captor = ArgumentCaptor.forClass(HotelRoomBooked.class);
+        LocalDateTime beforeNow = LocalDateTime.now().minusNanos(1);
+        String hotelRoomId = "1234";
+        givenHotelRoom(hotelRoomId);
+
+        service.book(hotelRoomId, TENANT_ID, DAYS);
+
+        then(eventChannel).should().publish(captor.capture());
+        HotelRoomBooked actual = captor.getValue();
+        assertThat(actual.getEventId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
+        assertThat(actual.getEventCreationDateTime())
+                .isAfter(beforeNow)
+                .isBefore(LocalDateTime.now().plusNanos(1));
+        assertThat(actual.getHotelId()).isEqualTo(HOTEL_ID);
+        assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
+        assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
     }
 
     private void thenBookingShouldBeCreated() {
