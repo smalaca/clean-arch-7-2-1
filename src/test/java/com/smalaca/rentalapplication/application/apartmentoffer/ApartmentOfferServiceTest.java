@@ -5,6 +5,7 @@ import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferAssertion;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
+import com.smalaca.rentalapplication.domain.apartmentoffer.NotAllowedMoneyValueException;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -48,6 +49,16 @@ class ApartmentOfferServiceTest {
         ApartmentNotFoundException actual = assertThrows(ApartmentNotFoundException.class, () -> service.add(givenApartmentOfferDto()));
 
         assertThat(actual).hasMessage("Apartment with id: " + APARTMENT_ID + " does not exist.");
+    }
+
+    @Test
+    void shouldRecognizePriceLowerThanZero() {
+        givenExistingApartment();
+        ApartmentOfferDto dto = new ApartmentOfferDto(APARTMENT_ID, BigDecimal.valueOf(-13), START, END);
+
+        NotAllowedMoneyValueException actual = assertThrows(NotAllowedMoneyValueException.class, () -> service.add(dto));
+
+        assertThat(actual).hasMessage("Price -13 is lower than zero.");
     }
 
     private ApartmentOfferDto givenApartmentOfferDto() {
