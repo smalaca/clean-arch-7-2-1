@@ -1,8 +1,9 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.event.EventIdFactory;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class ApartmentBooked {
     private final String eventId;
@@ -25,7 +26,7 @@ public class ApartmentBooked {
     }
 
     static ApartmentBooked create(String apartmentId, String ownerId, String tenantId, Period period) {
-        String eventId = UUID.randomUUID().toString();
+        String eventId = new EventIdFactory().create();
         LocalDateTime eventCreationDateTime = LocalDateTime.now();
 
         return new ApartmentBooked(eventId, eventCreationDateTime, apartmentId, ownerId, tenantId, period);
