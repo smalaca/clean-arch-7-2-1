@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.application.hotelroomoffer;
 
+import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferRepository;
 
@@ -8,7 +9,7 @@ import static com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer
 class HotelRoomOfferApplicationService {
     private final HotelRoomOfferRepository repository;
 
-    HotelRoomOfferApplicationService(HotelRoomOfferRepository repository) {
+    HotelRoomOfferApplicationService(HotelRoomOfferRepository repository, HotelRoomRepository hotelRoomRepository) {
         this.repository = repository;
     }
 
