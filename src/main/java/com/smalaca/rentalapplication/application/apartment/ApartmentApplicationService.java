@@ -6,8 +6,6 @@ import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartment.Booking;
 import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
 import com.smalaca.rentalapplication.domain.apartment.Period;
-import com.smalaca.rentalapplication.domain.event.EventIdFactory;
-import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 
 import java.time.LocalDate;
 
@@ -16,13 +14,12 @@ import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.a
 public class ApartmentApplicationService {
     private final ApartmentRepository apartmentRepository;
     private final BookingRepository bookingRepository;
-    private final ApartmentEventsPublisher publisher;
+    private final ApartmentEventsPublisher apartmentEventsPublisher;
 
-    ApartmentApplicationService(
-            ApartmentRepository apartmentRepository, EventChannel eventChannel, BookingRepository bookingRepository) {
+    ApartmentApplicationService(ApartmentRepository apartmentRepository, BookingRepository bookingRepository, ApartmentEventsPublisher apartmentEventsPublisher) {
         this.apartmentRepository = apartmentRepository;
         this.bookingRepository = bookingRepository;
-        publisher = new ApartmentEventsPublisher(new EventIdFactory(), eventChannel);
+        this.apartmentEventsPublisher = apartmentEventsPublisher;
     }
 
     public String add(ApartmentDto apartmentDto) {
@@ -46,7 +43,7 @@ public class ApartmentApplicationService {
         Apartment apartment = apartmentRepository.findById(apartmentId);
         Period period = new Period(start, end);
 
-        Booking booking = apartment.book(tenantId, period, publisher);
+        Booking booking = apartment.book(tenantId, period, apartmentEventsPublisher);
 
         return bookingRepository.save(booking);
     }
