@@ -1,7 +1,7 @@
 package com.smalaca.rentalapplication.application.hotelroomoffer;
 
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomNotFoundException;
+import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomAvailabilityException;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferAssertion;
@@ -23,7 +23,9 @@ class HotelRoomOfferApplicationServiceTest {
     private static final String HOTEL_ROOM_ID = "213131";
     private static final BigDecimal PRICE = BigDecimal.valueOf(42);
     private static final LocalDate START = LocalDate.of(2040, 12, 10);
+    private static final LocalDate START_YEAR_LATER = LocalDate.of(2041, 12, 10);
     private static final LocalDate END = LocalDate.of(2041, 12, 20);
+    private static final LocalDate NO_DATE = null;
 
     private final HotelRoomRepository hotelRoomRepository = mock(HotelRoomRepository.class);
     private final HotelRoomOfferRepository hotelRoomOfferRepository = mock(HotelRoomOfferRepository.class);
@@ -80,6 +82,21 @@ class HotelRoomOfferApplicationServiceTest {
         HotelRoomAvailabilityException actual = assertThrows(HotelRoomAvailabilityException.class, () -> service.add(dto));
 
         assertThat(actual).hasMessage("Start date: 2020-10-10 is past date.");
+    }
+
+    @Test
+    void shouldCreateHotelRoomOfferWhenAvailabilityEndNotGiven() {
+        ArgumentCaptor<HotelRoomOffer> captor = ArgumentCaptor.forClass(HotelRoomOffer.class);
+        givenExistingHotelRoom();
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, START, NO_DATE);
+
+        service.add(dto);
+
+        then(hotelRoomOfferRepository).should().save(captor.capture());
+        HotelRoomOfferAssertion.assertThat(captor.getValue())
+                .hasHotelRoomEqualTo(HOTEL_ROOM_ID)
+                .hasPriceEqualTo(PRICE)
+                .hasAvailabilityEqualTo(START, START_YEAR_LATER);
     }
 
     private HotelRoomOfferDto givenHotelRoomOfferDto() {
