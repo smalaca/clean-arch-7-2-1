@@ -23,7 +23,7 @@ public class ApartmentOfferAssertion {
 
     public ApartmentOfferAssertion hasPriceEqualTo(BigDecimal expected) {
         Assertions.assertThat(actual).extracting("money")
-                .hasFieldOrPropertyWithValue("value", "expected");
+                .hasFieldOrPropertyWithValue("value", expected);
         return this;
     }
 
