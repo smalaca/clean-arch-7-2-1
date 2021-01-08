@@ -11,6 +11,10 @@ class HotelRoomAvailability {
         this.end = end;
     }
 
+    static HotelRoomAvailability fromStart(LocalDate start) {
+        return from(start, start.plusYears(1));
+    }
+
     static HotelRoomAvailability from(LocalDate start, LocalDate end) {
         if (start.isAfter(end)) {
             throw HotelRoomAvailabilityException.startAfterEnd(start, end);
@@ -21,9 +25,5 @@ class HotelRoomAvailability {
         }
 
         return new HotelRoomAvailability(start, end);
-    }
-
-    static HotelRoomAvailability fromStart(LocalDate start) {
-        return new HotelRoomAvailability(start, start.plusYears(1));
     }
 }
