@@ -1,6 +1,7 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.hotel;
 
 import com.smalaca.rentalapplication.application.hotel.HotelApplicationService;
+import com.smalaca.rentalapplication.application.hotel.HotelDto;
 import com.smalaca.rentalapplication.query.hotel.HotelReadModel;
 import com.smalaca.rentalapplication.query.hotel.QueryHotelRepository;
 import org.springframework.http.HttpStatus;
