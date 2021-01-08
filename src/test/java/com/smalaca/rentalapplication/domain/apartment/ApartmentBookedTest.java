@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ApartmentBookedTest {
     @Test
     void shouldCreateEventWithAllInformation() {
+        String eventId = "87324";
         String apartmentId = "1234";
         String ownerId = "5678";
         String tenantId = "3456";
@@ -19,9 +19,9 @@ class ApartmentBookedTest {
         Period period = new Period(periodStart, periodEnd);
         LocalDateTime beforeNow = LocalDateTime.now().minusNanos(1);
 
-        ApartmentBooked actual = ApartmentBooked.create(apartmentId, ownerId, tenantId, period);
+        ApartmentBooked actual = ApartmentBooked.create(eventId, apartmentId, ownerId, tenantId, period);
 
-        assertThat(actual.getEventId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
+        assertThat(actual.getEventId()).isEqualTo(eventId);
         assertThat(actual.getEventCreationDateTime())
                 .isAfter(beforeNow)
                 .isBefore(LocalDateTime.now().plusNanos(1));

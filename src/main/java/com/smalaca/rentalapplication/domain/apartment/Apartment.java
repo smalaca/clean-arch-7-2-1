@@ -1,7 +1,5 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
-import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
-
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
@@ -41,13 +39,6 @@ public class Apartment {
         this.address = address;
         this.rooms = rooms;
         this.description = description;
-    }
-
-    public Booking book(String tenantId, Period period, EventChannel eventChannel) {
-        ApartmentBooked apartmentBooked = ApartmentBooked.create(id(), ownerId, tenantId, period);
-        eventChannel.publish(apartmentBooked);
-
-        return Booking.apartment(id(), tenantId, period);
     }
 
     public Booking book(String tenantId, Period period, ApartmentEventsPublisher apartmentEventsPublisher) {
