@@ -8,7 +8,7 @@ public class ApartmentOffer {
     private final Money money;
     private final ApartmentAvailability availability;
 
-    public ApartmentOffer(String apartmentId, Money money, ApartmentAvailability availability) {
+    private ApartmentOffer(String apartmentId, Money money, ApartmentAvailability availability) {
         this.apartmentId = apartmentId;
         this.money = money;
         this.availability = availability;
