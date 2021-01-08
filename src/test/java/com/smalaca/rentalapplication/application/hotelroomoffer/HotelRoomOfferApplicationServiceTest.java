@@ -85,6 +85,16 @@ class HotelRoomOfferApplicationServiceTest {
     }
 
     @Test
+    void shouldRecognizeAvailabilityStartDateIsFromPastWhenEndNotGiven() {
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, LocalDate.of(2020, 10, 10), NO_DATE);
+        givenExistingHotelRoom();
+
+        HotelRoomAvailabilityException actual = assertThrows(HotelRoomAvailabilityException.class, () -> service.add(dto));
+
+        assertThat(actual).hasMessage("Start date: 2020-10-10 is past date.");
+    }
+
+    @Test
     void shouldCreateHotelRoomOfferWhenAvailabilityEndNotGiven() {
         ArgumentCaptor<HotelRoomOffer> captor = ArgumentCaptor.forClass(HotelRoomOffer.class);
         givenExistingHotelRoom();
