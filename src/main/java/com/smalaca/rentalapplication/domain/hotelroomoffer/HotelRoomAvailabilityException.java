@@ -3,11 +3,15 @@ package com.smalaca.rentalapplication.domain.hotelroomoffer;
 import java.time.LocalDate;
 
 public class HotelRoomAvailabilityException extends RuntimeException {
-    HotelRoomAvailabilityException(LocalDate start, LocalDate end) {
-        super("Start date: " + start + " of availability is after end date: " + end + ".");
+    private HotelRoomAvailabilityException(String message) {
+        super(message);
     }
 
-    HotelRoomAvailabilityException(LocalDate start) {
-        super("Start date: " + start + " is past date.");
+    static RuntimeException startAfterEnd(LocalDate start, LocalDate end) {
+        return new HotelRoomAvailabilityException("Start date: " + start + " of availability is after end date: " + end + ".");
+    }
+
+    static RuntimeException startFromPast(LocalDate start) {
+        return new HotelRoomAvailabilityException("Start date: " + start + " is past date.");
     }
 }
