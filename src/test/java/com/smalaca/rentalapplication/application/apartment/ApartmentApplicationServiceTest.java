@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.application.apartment;
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentAssertion;
+import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartment.Booking;
 import com.smalaca.rentalapplication.domain.apartment.BookingAssertion;
@@ -13,9 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -92,6 +96,26 @@ class ApartmentApplicationServiceTest {
         String actual = service.book(APARTMENT_ID, TENANT_ID, START, END);
 
         Assertions.assertThat(actual).isEqualTo(BOOKING_ID);
+    }
+
+    @Test
+    void shouldPublishApartmentBookedEvent() {
+        givenApartment();
+        LocalDateTime beforeNow = LocalDateTime.now().minusNanos(1);
+        ArgumentCaptor<ApartmentBooked> captor = ArgumentCaptor.forClass(ApartmentBooked.class);
+
+        service.book(APARTMENT_ID, TENANT_ID, START, END);
+
+        then(eventChannel).should().publish(captor.capture());
+        ApartmentBooked actual = captor.getValue();
+        assertThat(actual.getEventId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
+        assertThat(actual.getEventCreationDateTime())
+                .isAfter(beforeNow)
+                .isBefore(LocalDateTime.now().plusNanos(1));
+        assertThat(actual.getOwnerId()).isEqualTo(OWNER_ID);
+        assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
+        assertThat(actual.getPeriodStart()).isEqualTo(START);
+        assertThat(actual.getPeriodEnd()).isEqualTo(END);
     }
 
     private void givenApartment() {
