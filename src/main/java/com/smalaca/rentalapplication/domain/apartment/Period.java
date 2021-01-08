@@ -1,10 +1,13 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import lombok.EqualsAndHashCode;
+
 import java.time.LocalDate;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@EqualsAndHashCode
 public class Period {
     private final LocalDate start;
     private final LocalDate end;
