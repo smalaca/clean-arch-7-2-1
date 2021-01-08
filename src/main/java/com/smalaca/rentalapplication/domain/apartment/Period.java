@@ -1,5 +1,8 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,5 +30,26 @@ public class Period {
         dates.add(end);
 
         return dates;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Period period = (Period) o;
+
+        return new EqualsBuilder().append(start, period.start).append(end, period.end).isEquals();
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(start).append(end).toHashCode();
     }
 }

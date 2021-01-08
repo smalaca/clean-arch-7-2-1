@@ -50,8 +50,8 @@ public class Apartment {
         return Booking.apartment(id(), tenantId, period);
     }
 
-    public Booking book(String tenantId, Period period, ApartmentEventsPublisher publisher) {
-        publisher.publishApartmentBooked(id(), ownerId, tenantId, period);
+    public Booking book(String tenantId, Period period, ApartmentEventsPublisher apartmentEventsPublisher) {
+        apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);
 
         return Booking.apartment(id(), tenantId, period);
     }
