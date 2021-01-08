@@ -13,8 +13,10 @@ public class HotelApplicationService {
         this.hotelRepository = hotelRepository;
     }
 
-    public void add(String name, String street, String postalCode, String buildingNumber, String city, String country) {
-        Hotel hotel = new HotelFactory().create(name, street, postalCode, buildingNumber, city, country);
+    public void add(HotelDto hotelDto) {
+        Hotel hotel = new HotelFactory().create(
+                hotelDto.getName(), hotelDto.getStreet(), hotelDto.getPostalCode(), hotelDto.getBuildingNumber(),
+                hotelDto.getCity(), hotelDto.getCountry());
 
         hotelRepository.save(hotel);
     }
