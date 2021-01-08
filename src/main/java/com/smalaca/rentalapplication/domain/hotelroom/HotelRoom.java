@@ -46,6 +46,12 @@ public class HotelRoom {
         return Booking.hotelRoom(id(), tenantId, days);
     }
 
+    public Booking book(String tenantId, List<LocalDate> days, HotelRoomEventsPublisher hotelRoomEventsPublisher) {
+        hotelRoomEventsPublisher.publishHotelRoomBooked(id(), hotelId, tenantId, days);
+
+        return Booking.hotelRoom(id(), tenantId, days);
+    }
+
     public String id() {
         if (id == null) {
             return null;
