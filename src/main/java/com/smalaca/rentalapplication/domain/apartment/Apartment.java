@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.booking.Booking;
+
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;

@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.apartment;
+package com.smalaca.rentalapplication.domain.booking;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.smalaca.rentalapplication.domain.apartment.RentalType.APARTMENT;
+import static com.smalaca.rentalapplication.domain.booking.RentalType.APARTMENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BookingAcceptedTest {

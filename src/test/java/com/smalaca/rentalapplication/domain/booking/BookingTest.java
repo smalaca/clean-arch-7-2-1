@@ -1,5 +1,6 @@
-package com.smalaca.rentalapplication.domain.apartment;
+package com.smalaca.rentalapplication.domain.booking;
 
+import com.smalaca.rentalapplication.domain.apartment.Period;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import org.mockito.BDDMockito;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.smalaca.rentalapplication.domain.apartment.BookingAssertion.assertThat;
+import static com.smalaca.rentalapplication.domain.booking.BookingAssertion.assertThat;
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 

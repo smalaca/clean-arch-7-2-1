@@ -3,9 +3,9 @@ package com.smalaca.rentalapplication.application.apartment;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentEventsPublisher;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
-import com.smalaca.rentalapplication.domain.apartment.Booking;
-import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
+import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.apartment.Period;
+import com.smalaca.rentalapplication.domain.booking.Booking;
 
 import java.time.LocalDate;
 

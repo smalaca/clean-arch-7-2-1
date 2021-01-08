@@ -1,6 +1,8 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
 import com.google.common.collect.ImmutableMap;
+import com.smalaca.rentalapplication.domain.booking.Booking;
+import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;

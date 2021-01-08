@@ -1,9 +1,9 @@
 package com.smalaca.rentalapplication.application.booking;
 
-import com.smalaca.rentalapplication.domain.apartment.Booking;
-import com.smalaca.rentalapplication.domain.apartment.BookingAccepted;
-import com.smalaca.rentalapplication.domain.apartment.BookingAssertion;
-import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
+import com.smalaca.rentalapplication.domain.booking.Booking;
+import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
+import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
+import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

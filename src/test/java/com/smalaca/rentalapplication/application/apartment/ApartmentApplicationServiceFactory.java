@@ -2,7 +2,7 @@ package com.smalaca.rentalapplication.application.apartment;
 
 import com.smalaca.rentalapplication.domain.apartment.ApartmentEventsPublisher;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
-import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
+import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import org.springframework.context.annotation.Bean;
