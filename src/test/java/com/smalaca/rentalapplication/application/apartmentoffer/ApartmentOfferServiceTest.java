@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.application.apartmentoffer;
 
 import com.smalaca.rentalapplication.domain.apartment.ApartmentNotFoundException;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentAvailabilityException;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferAssertion;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
@@ -59,6 +60,16 @@ class ApartmentOfferServiceTest {
         NotAllowedMoneyValueException actual = assertThrows(NotAllowedMoneyValueException.class, () -> service.add(dto));
 
         assertThat(actual).hasMessage("Price -13 is lower than zero.");
+    }
+
+    @Test
+    void shouldRecognizeThanStartIsAfterEnd() {
+        givenExistingApartment();
+        ApartmentOfferDto dto = new ApartmentOfferDto(APARTMENT_ID, PRICE, END, START);
+
+        ApartmentAvailabilityException actual = assertThrows(ApartmentAvailabilityException.class, () -> service.add(dto));
+
+        assertThat(actual).hasMessage("Start date of availability is after end date.");
     }
 
     private ApartmentOfferDto givenApartmentOfferDto() {
