@@ -53,7 +53,7 @@ class HotelRoomOfferApplicationServiceTest {
 
     @Test
     void shouldRecognizePriceIsNotHigherThanZero() {
-        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, START, END);
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, BigDecimal.ZERO, START, END);
         givenExistingHotelRoom();
 
         NotAllowedMoneyValueException actual = assertThrows(NotAllowedMoneyValueException.class, () -> service.add(dto));

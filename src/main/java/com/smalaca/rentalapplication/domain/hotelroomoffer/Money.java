@@ -8,4 +8,12 @@ class Money {
     Money(BigDecimal value) {
         this.value = value;
     }
+
+    static Money of(BigDecimal price) {
+        if (price.compareTo(BigDecimal.ZERO) > 0) {
+            return new Money(price);
+        }
+
+        throw new NotAllowedMoneyValueException(price);
+    }
 }

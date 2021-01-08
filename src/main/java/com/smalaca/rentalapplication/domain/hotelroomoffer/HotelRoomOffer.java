@@ -51,7 +51,7 @@ public class HotelRoomOffer {
         }
 
         private Money money() {
-            return new Money(price);
+            return Money.of(price);
         }
     }
 }
