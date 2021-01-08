@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.application.hotelroomoffer;
 
+import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomNotFoundException;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferRepository;
@@ -7,19 +8,25 @@ import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferReposit
 import static com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer.Builder.hotelRoomOffer;
 
 class HotelRoomOfferApplicationService {
-    private final HotelRoomOfferRepository repository;
+    private final HotelRoomOfferRepository hotelRoomOfferRepository;
+    private final HotelRoomRepository hotelRoomRepository;
 
-    HotelRoomOfferApplicationService(HotelRoomOfferRepository repository, HotelRoomRepository hotelRoomRepository) {
-        this.repository = repository;
+    HotelRoomOfferApplicationService(HotelRoomOfferRepository hotelRoomOfferRepository, HotelRoomRepository hotelRoomRepository) {
+        this.hotelRoomOfferRepository = hotelRoomOfferRepository;
+        this.hotelRoomRepository = hotelRoomRepository;
     }
 
     void add(HotelRoomOfferDto dto) {
-        HotelRoomOffer hotelRoomOffer = hotelRoomOffer()
-                .withHotelRoomId(dto.getHotelRoomId())
-                .withPrice(dto.getPrice())
-                .withAvailability(dto.getStart(), dto.getEnd())
-                .build();
+        if (hotelRoomRepository.existById(dto.getHotelRoomId())) {
+            HotelRoomOffer hotelRoomOffer = hotelRoomOffer()
+                    .withHotelRoomId(dto.getHotelRoomId())
+                    .withPrice(dto.getPrice())
+                    .withAvailability(dto.getStart(), dto.getEnd())
+                    .build();
 
-        repository.save(hotelRoomOffer);
+            hotelRoomOfferRepository.save(hotelRoomOffer);
+        } else {
+            throw new HotelRoomNotFoundException(dto.getHotelRoomId());
+        }
     }
 }
