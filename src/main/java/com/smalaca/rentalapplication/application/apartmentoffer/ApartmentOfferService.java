@@ -1,12 +1,12 @@
 package com.smalaca.rentalapplication.application.apartmentoffer;
 
-import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentAvailability;
-import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
-import com.smalaca.rentalapplication.domain.apartmentoffer.Money;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer.Builder.apartmentOffer;
 
 class ApartmentOfferService {
     private final ApartmentOfferRepository repository;
@@ -16,7 +16,11 @@ class ApartmentOfferService {
     }
 
     void add(String apartmentId, BigDecimal price, LocalDate start, LocalDate end) {
-        ApartmentOffer apartmentOffer = new ApartmentOffer(apartmentId, new Money(price), new ApartmentAvailability(start, end));
+        ApartmentOffer apartmentOffer = apartmentOffer()
+            .withApartmentId(apartmentId)
+            .withPrice(price)
+            .withAvailability(start, end)
+            .build();
         repository.save(apartmentOffer);
     }
 }
