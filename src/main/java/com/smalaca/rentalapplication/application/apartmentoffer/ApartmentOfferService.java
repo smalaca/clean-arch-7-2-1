@@ -5,9 +5,6 @@ import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
 import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer.Builder.apartmentOffer;
 
 class ApartmentOfferService {
@@ -19,16 +16,16 @@ class ApartmentOfferService {
         this.apartmentRepository = apartmentRepository;
     }
 
-    void add(String apartmentId, BigDecimal price, LocalDate start, LocalDate end) {
-        if (apartmentRepository.existById(apartmentId)) {
+    void add(ApartmentOfferDto dto) {
+        if (apartmentRepository.existById(dto.getApartmentId())) {
             ApartmentOffer apartmentOffer = apartmentOffer()
-                    .withApartmentId(apartmentId)
-                    .withPrice(price)
-                    .withAvailability(start, end)
+                    .withApartmentId(dto.getApartmentId())
+                    .withPrice(dto.getPrice())
+                    .withAvailability(dto.getStart(), dto.getEnd())
                     .build();
             apartmentOfferRepository.save(apartmentOffer);
         } else {
-            throw new ApartmentNotFoundException(apartmentId);
+            throw new ApartmentNotFoundException(dto.getApartmentId());
         }
     }
 }
