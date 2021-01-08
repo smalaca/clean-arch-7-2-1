@@ -15,6 +15,8 @@ public class HotelRoomOffer {
     }
 
     public static class Builder {
+        private static final LocalDate NO_END_DATE = null;
+
         private String hotelRoomId;
         private BigDecimal price;
         private LocalDate start;
@@ -47,7 +49,7 @@ public class HotelRoomOffer {
         }
 
         private HotelRoomAvailability hotelRoomAvailability() {
-            if (end == null) {
+            if (end == NO_END_DATE) {
                 return HotelRoomAvailability.of(start);
             }
 
