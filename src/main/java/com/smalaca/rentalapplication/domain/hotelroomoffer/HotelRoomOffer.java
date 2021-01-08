@@ -47,6 +47,10 @@ public class HotelRoomOffer {
         }
 
         private HotelRoomAvailability hotelRoomAvailability() {
+            if (end == null) {
+                return HotelRoomAvailability.of(start);
+            }
+
             return HotelRoomAvailability.of(start, end);
         }
 
