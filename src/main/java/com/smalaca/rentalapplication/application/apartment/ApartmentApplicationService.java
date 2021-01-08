@@ -8,23 +8,21 @@ import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
 import com.smalaca.rentalapplication.domain.apartment.Period;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
 
-@Service
 public class ApartmentApplicationService {
     private final ApartmentRepository apartmentRepository;
-    private final EventChannel eventChannel;
     private final BookingRepository bookingRepository;
+    private final ApartmentEventsPublisher publisher;
 
-    public ApartmentApplicationService(
+    ApartmentApplicationService(
             ApartmentRepository apartmentRepository, EventChannel eventChannel, BookingRepository bookingRepository) {
         this.apartmentRepository = apartmentRepository;
-        this.eventChannel = eventChannel;
         this.bookingRepository = bookingRepository;
+        publisher = new ApartmentEventsPublisher(new EventIdFactory(), eventChannel);
     }
 
     public String add(ApartmentDto apartmentDto) {
@@ -47,7 +45,6 @@ public class ApartmentApplicationService {
     public String book(String apartmentId, String tenantId, LocalDate start, LocalDate end) {
         Apartment apartment = apartmentRepository.findById(apartmentId);
         Period period = new Period(start, end);
-        ApartmentEventsPublisher publisher = new ApartmentEventsPublisher(new EventIdFactory(), eventChannel);
 
         Booking booking = apartment.book(tenantId, period, publisher);
 

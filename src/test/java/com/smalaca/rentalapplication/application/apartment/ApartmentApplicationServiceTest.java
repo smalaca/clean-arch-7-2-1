@@ -45,7 +45,7 @@ class ApartmentApplicationServiceTest {
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
     private final EventChannel eventChannel = mock(EventChannel.class);
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
-    private final ApartmentApplicationService service = new ApartmentApplicationService(apartmentRepository, eventChannel, bookingRepository);
+    private final ApartmentApplicationService service = new ApartmentApplicationServiceFactory().create(apartmentRepository, eventChannel, bookingRepository);
 
     @Test
     void shouldAddNewApartment() {
