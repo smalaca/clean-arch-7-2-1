@@ -1,6 +1,7 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.hotel;
 
 import com.smalaca.rentalapplication.application.hotel.HotelApplicationService;
+import com.smalaca.rentalapplication.application.hotel.HotelDto;
 import com.smalaca.rentalapplication.query.hotel.HotelReadModel;
 import com.smalaca.rentalapplication.query.hotel.QueryHotelRepository;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,7 @@ public class HotelRestController {
 
     @PostMapping
     public ResponseEntity<Void> add(@RequestBody HotelDto hotelDto) {
-        hotelApplicationService.add(
-                hotelDto.getName(), hotelDto.getStreet(), hotelDto.getPostalCode(), hotelDto.getBuildingNumber(),
-                hotelDto.getCity(), hotelDto.getCountry());
+        hotelApplicationService.add(hotelDto);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

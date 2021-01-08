@@ -1,7 +1,6 @@
 package com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotel;
 
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
-import com.smalaca.rentalapplication.domain.hotel.HotelFactory;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
@@ -11,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
 
+import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
 import static com.smalaca.rentalapplication.domain.hotel.HotelAssertion.assertThat;
 
 @SpringBootTest
@@ -35,7 +35,14 @@ class JpaHotelRepositoryIntegrationTest {
 
     @Test
     void shouldSaveHotel() {
-        Hotel hotel = new HotelFactory().create(NAME, STREET, POSTAL_CODE, BUILDING_NUMBER, CITY, COUNTRY);
+        Hotel hotel = hotel()
+                .withName(NAME)
+                .withStreet(STREET)
+                .withPostalCode(POSTAL_CODE)
+                .withBuildingNumber(BUILDING_NUMBER)
+                .withCity(CITY)
+                .withCountry(COUNTRY)
+                .build();
 
         hotelId = hotelRepository.save(hotel);
 

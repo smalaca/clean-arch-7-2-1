@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.hotel;
 
+import com.smalaca.rentalapplication.application.hotel.HotelDto;
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
