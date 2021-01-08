@@ -22,7 +22,7 @@ public class Hotel {
 
     private Hotel() {}
 
-    Hotel(String name, Address address) {
+    private Hotel(String name, Address address) {
         this.name = name;
         this.address = address;
     }
