@@ -23,6 +23,7 @@ class ApartmentOfferService {
                     .withPrice(dto.getPrice())
                     .withAvailability(dto.getStart(), dto.getEnd())
                     .build();
+
             apartmentOfferRepository.save(apartmentOffer);
         } else {
             throw new ApartmentNotFoundException(dto.getApartmentId());
