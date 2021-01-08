@@ -13,7 +13,7 @@ public class HotelRoomBooked {
     private final String tenantId;
     private final List<LocalDate> days;
 
-    private HotelRoomBooked(
+    HotelRoomBooked(
             String eventId, LocalDateTime eventCreationDateTime, String hotelRoomId, String hotelId, String tenantId, List<LocalDate> days) {
         this.eventId = eventId;
         this.eventCreationDateTime = eventCreationDateTime;
