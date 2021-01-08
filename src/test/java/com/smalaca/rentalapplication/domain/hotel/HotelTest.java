@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.domain.hotel;
 
 import org.junit.jupiter.api.Test;
 
+import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
 import static com.smalaca.rentalapplication.domain.hotel.HotelAssertion.assertThat;
 
 class HotelTest {
@@ -14,7 +15,14 @@ class HotelTest {
 
     @Test
     void shouldCreateHotelWithAllInformation() {
-        Hotel actual = new HotelFactory().create(NAME, STREET, POSTAL_CODE, BUILDING_NUMBER, CITY, COUNTRY);
+        Hotel actual = hotel()
+                .withName(NAME)
+                .withStreet(STREET)
+                .withPostalCode(POSTAL_CODE)
+                .withBuildingNumber(BUILDING_NUMBER)
+                .withCity(CITY)
+                .withCountry(COUNTRY)
+                .build();
 
         assertThat(actual)
                 .hasNameEqualsTo(NAME)
