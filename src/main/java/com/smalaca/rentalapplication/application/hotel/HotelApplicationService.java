@@ -1,9 +1,10 @@
 package com.smalaca.rentalapplication.application.hotel;
 
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
-import com.smalaca.rentalapplication.domain.hotel.HotelFactory;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import org.springframework.stereotype.Service;
+
+import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
 
 @Service
 public class HotelApplicationService {
@@ -14,9 +15,14 @@ public class HotelApplicationService {
     }
 
     public void add(HotelDto hotelDto) {
-        Hotel hotel = new HotelFactory().create(
-                hotelDto.getName(), hotelDto.getStreet(), hotelDto.getPostalCode(), hotelDto.getBuildingNumber(),
-                hotelDto.getCity(), hotelDto.getCountry());
+        Hotel hotel = hotel()
+                .withName(hotelDto.getName())
+                .withStreet(hotelDto.getStreet())
+                .withPostalCode(hotelDto.getPostalCode())
+                .withBuildingNumber(hotelDto.getBuildingNumber())
+                .withCity(hotelDto.getCity())
+                .withCountry(hotelDto.getCountry())
+                .build();
 
         hotelRepository.save(hotel);
     }
