@@ -30,10 +30,9 @@ class HotelRoomOfferApplicationServiceTest {
     @Test
     void shouldCreateHotelRoomOffer() {
         ArgumentCaptor<HotelRoomOffer> captor = ArgumentCaptor.forClass(HotelRoomOffer.class);
-        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, START, END);
         givenExistingHotelRoom();
 
-        service.add(dto);
+        service.add(givenHotelRoomOfferDto());
 
         then(hotelRoomOfferRepository).should().save(captor.capture());
         HotelRoomOfferAssertion.assertThat(captor.getValue())
@@ -44,12 +43,15 @@ class HotelRoomOfferApplicationServiceTest {
 
     @Test
     void shouldRecognizeHotelRoomDoesNotExist() {
-        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, START, END);
         givenNotExistingHotelRoom();
 
-        HotelRoomNotFoundException actual = assertThrows(HotelRoomNotFoundException.class, () -> service.add(dto));
+        HotelRoomNotFoundException actual = assertThrows(HotelRoomNotFoundException.class, () -> service.add(givenHotelRoomOfferDto()));
 
         assertThat(actual).hasMessage("Hotel room with id: " + HOTEL_ROOM_ID + " does not exist.");
+    }
+
+    private HotelRoomOfferDto givenHotelRoomOfferDto() {
+        return new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, START, END);
     }
 
     private void givenNotExistingHotelRoom() {
