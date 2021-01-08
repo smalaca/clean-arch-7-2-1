@@ -5,6 +5,7 @@ import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomNotFoundException
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferAssertion;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferRepository;
+import com.smalaca.rentalapplication.domain.hotelroomoffer.NotAllowedMoneyValueException;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -48,6 +49,16 @@ class HotelRoomOfferApplicationServiceTest {
         HotelRoomNotFoundException actual = assertThrows(HotelRoomNotFoundException.class, () -> service.add(givenHotelRoomOfferDto()));
 
         assertThat(actual).hasMessage("Hotel room with id: " + HOTEL_ROOM_ID + " does not exist.");
+    }
+
+    @Test
+    void shouldRecognizePriceIsNotHigherThanZero() {
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, START, END);
+        givenExistingHotelRoom();
+
+        NotAllowedMoneyValueException actual = assertThrows(NotAllowedMoneyValueException.class, () -> service.add(dto));
+
+        assertThat(actual).hasMessage("Price 0 is not greater than zero.");
     }
 
     private HotelRoomOfferDto givenHotelRoomOfferDto() {
