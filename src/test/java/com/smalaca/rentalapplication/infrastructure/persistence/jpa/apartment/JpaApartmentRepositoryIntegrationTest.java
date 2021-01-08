@@ -44,6 +44,15 @@ class JpaApartmentRepositoryIntegrationTest {
     }
 
     @Test
+    void shouldAlwaysRecognizeApartmentAsNotExisting() {
+        String apartmentId = UUID.randomUUID().toString();
+
+        boolean actual = apartmentRepository.existById(apartmentId);
+
+        assertThat(actual).isFalse();
+    }
+
+    @Test
     void shouldThrowExceptionWhenApartmentDoesNotExist() {
         String nonExistingApartmentId = UUID.randomUUID().toString();
 
