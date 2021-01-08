@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.apartmentoffer;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class ApartmentOffer {
     private final String apartmentId;
     private final Money money;

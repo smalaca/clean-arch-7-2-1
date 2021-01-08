@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.domain.apartmentoffer;
 
 import java.time.LocalDate;
 
+@SuppressWarnings("PMD.UnusedPrivateField")
 class ApartmentAvailability {
     private final LocalDate start;
     private final LocalDate end;

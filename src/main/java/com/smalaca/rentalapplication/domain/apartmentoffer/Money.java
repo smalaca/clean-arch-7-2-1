@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.domain.apartmentoffer;
 
 import java.math.BigDecimal;
 
+@SuppressWarnings("PMD.UnusedPrivateField")
 class Money {
     private final BigDecimal value;
 
