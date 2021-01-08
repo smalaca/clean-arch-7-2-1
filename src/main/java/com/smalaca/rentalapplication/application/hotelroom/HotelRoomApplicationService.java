@@ -2,27 +2,25 @@ package com.smalaca.rentalapplication.application.hotelroom;
 
 import com.smalaca.rentalapplication.domain.apartment.Booking;
 import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
-import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
+import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomEventsPublisher;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomFactory;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public class HotelRoomApplicationService {
     private final HotelRoomRepository hotelRoomRepository;
     private final BookingRepository bookingRepository;
-    private final EventChannel eventChannel;
+    private final HotelRoomEventsPublisher hotelRoomEventsPublisher;
 
-    public HotelRoomApplicationService(
-            HotelRoomRepository hotelRoomRepository, BookingRepository bookingRepository, EventChannel eventChannel) {
+    HotelRoomApplicationService(
+            HotelRoomRepository hotelRoomRepository, BookingRepository bookingRepository, HotelRoomEventsPublisher hotelRoomEventsPublisher) {
         this.hotelRoomRepository = hotelRoomRepository;
         this.bookingRepository = bookingRepository;
-        this.eventChannel = eventChannel;
+        this.hotelRoomEventsPublisher = hotelRoomEventsPublisher;
     }
 
     public String add(String hotelId, int number, Map<String, Double> spacesDefinition, String description) {
@@ -34,7 +32,7 @@ public class HotelRoomApplicationService {
     public String book(String id, String tenantId, List<LocalDate> days) {
         HotelRoom hotelRoom = hotelRoomRepository.findById(id);
 
-        Booking booking = hotelRoom.book(tenantId, days, eventChannel);
+        Booking booking = hotelRoom.book(tenantId, days, hotelRoomEventsPublisher);
 
         return bookingRepository.save(booking);
     }
