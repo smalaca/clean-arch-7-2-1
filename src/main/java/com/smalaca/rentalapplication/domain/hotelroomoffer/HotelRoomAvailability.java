@@ -6,7 +6,7 @@ class HotelRoomAvailability {
     private final LocalDate start;
     private final LocalDate end;
 
-    HotelRoomAvailability(LocalDate start, LocalDate end) {
+    private HotelRoomAvailability(LocalDate start, LocalDate end) {
         this.start = start;
         this.end = end;
     }
