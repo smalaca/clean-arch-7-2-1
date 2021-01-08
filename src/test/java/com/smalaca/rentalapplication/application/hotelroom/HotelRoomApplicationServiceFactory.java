@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.application.hotelroom;
 
-import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
+import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.clock.Clock;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;

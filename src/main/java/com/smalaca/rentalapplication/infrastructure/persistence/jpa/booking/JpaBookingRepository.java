@@ -1,7 +1,7 @@
 package com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking;
 
-import com.smalaca.rentalapplication.domain.apartment.Booking;
-import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
+import com.smalaca.rentalapplication.domain.booking.Booking;
+import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;

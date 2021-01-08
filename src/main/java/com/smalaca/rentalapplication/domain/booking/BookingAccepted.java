@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.apartment;
+package com.smalaca.rentalapplication.domain.booking;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

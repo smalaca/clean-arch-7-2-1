@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking;
 
-import com.smalaca.rentalapplication.domain.apartment.Booking;
+import com.smalaca.rentalapplication.domain.booking.Booking;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import static com.smalaca.rentalapplication.domain.apartment.BookingAssertion.assertThat;
+import static com.smalaca.rentalapplication.domain.booking.BookingAssertion.assertThat;
 import static java.util.Arrays.asList;
 
 @SpringBootTest

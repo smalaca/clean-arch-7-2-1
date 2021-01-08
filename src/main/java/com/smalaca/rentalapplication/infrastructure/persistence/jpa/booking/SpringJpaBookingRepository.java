@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking;
 
-import com.smalaca.rentalapplication.domain.apartment.Booking;
+import com.smalaca.rentalapplication.domain.booking.Booking;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

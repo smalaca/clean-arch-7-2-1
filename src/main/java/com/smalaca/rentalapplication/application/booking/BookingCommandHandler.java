@@ -1,7 +1,7 @@
 package com.smalaca.rentalapplication.application.booking;
 
-import com.smalaca.rentalapplication.domain.apartment.Booking;
-import com.smalaca.rentalapplication.domain.apartment.BookingRepository;
+import com.smalaca.rentalapplication.domain.booking.Booking;
+import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

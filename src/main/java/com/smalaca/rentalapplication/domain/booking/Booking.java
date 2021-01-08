@@ -1,5 +1,6 @@
-package com.smalaca.rentalapplication.domain.apartment;
+package com.smalaca.rentalapplication.domain.booking;
 
+import com.smalaca.rentalapplication.domain.apartment.Period;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 
 import javax.persistence.ElementCollection;
@@ -37,7 +38,7 @@ public class Booking {
         this.days = days;
     }
 
-    static Booking apartment(String rentalPlaceId, String tenantId, Period period) {
+    public static Booking apartment(String rentalPlaceId, String tenantId, Period period) {
         List<LocalDate> days = period.asDays();
 
         return new Booking(RentalType.APARTMENT, rentalPlaceId, tenantId, days);
