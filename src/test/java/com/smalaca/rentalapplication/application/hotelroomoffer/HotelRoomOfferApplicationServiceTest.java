@@ -69,7 +69,7 @@ class HotelRoomOfferApplicationServiceTest {
 
         HotelRoomAvailabilityException actual = assertThrows(HotelRoomAvailabilityException.class, () -> service.add(dto));
 
-        assertThat(actual).hasMessage("Start date: 2020-12-10 of availability is after end date: 2021-12-20.");
+        assertThat(actual).hasMessage("Start date: 2021-12-20 of availability is after end date: 2020-12-10.");
     }
 
     private HotelRoomOfferDto givenHotelRoomOfferDto() {

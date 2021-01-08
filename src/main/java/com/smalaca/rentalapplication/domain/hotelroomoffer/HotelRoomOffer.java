@@ -47,7 +47,7 @@ public class HotelRoomOffer {
         }
 
         private HotelRoomAvailability hotelRoomAvailability() {
-            return new HotelRoomAvailability(start, end);
+            return HotelRoomAvailability.of(start, end);
         }
 
         private Money money() {
