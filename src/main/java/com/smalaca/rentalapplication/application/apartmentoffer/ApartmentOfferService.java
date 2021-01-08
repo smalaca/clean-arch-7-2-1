@@ -28,7 +28,7 @@ class ApartmentOfferService {
                     .build();
             apartmentOfferRepository.save(apartmentOffer);
         } else {
-            throw new ApartmentNotFoundException("Apartment with id: " + apartmentId + " does not exist.");
+            throw new ApartmentNotFoundException(apartmentId);
         }
     }
 }
