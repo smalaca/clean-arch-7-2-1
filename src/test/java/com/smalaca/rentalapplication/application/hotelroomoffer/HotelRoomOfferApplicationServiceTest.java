@@ -72,6 +72,16 @@ class HotelRoomOfferApplicationServiceTest {
         assertThat(actual).hasMessage("Start date: 2041-12-20 of availability is after end date: 2040-12-10.");
     }
 
+    @Test
+    void shouldRecognizeAvailabilityStartDateIsFromPast() {
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, LocalDate.of(2020, 10, 10), END);
+        givenExistingHotelRoom();
+
+        HotelRoomAvailabilityException actual = assertThrows(HotelRoomAvailabilityException.class, () -> service.add(dto));
+
+        assertThat(actual).hasMessage("Start date: 2020-10-10 is past date.");
+    }
+
     private HotelRoomOfferDto givenHotelRoomOfferDto() {
         return new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, START, END);
     }
