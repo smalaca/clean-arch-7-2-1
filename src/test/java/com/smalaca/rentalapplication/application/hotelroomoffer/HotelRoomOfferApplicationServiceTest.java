@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.application.hotelroomoffer;
 
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomNotFoundException;
+import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomAvailabilityException;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferAssertion;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferRepository;
@@ -59,6 +60,16 @@ class HotelRoomOfferApplicationServiceTest {
         NotAllowedMoneyValueException actual = assertThrows(NotAllowedMoneyValueException.class, () -> service.add(dto));
 
         assertThat(actual).hasMessage("Price 0 is not greater than zero.");
+    }
+
+    @Test
+    void shouldRecognizeAvailabilityStartIsAfterEnd() {
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, END, START);
+        givenExistingHotelRoom();
+
+        HotelRoomAvailabilityException actual = assertThrows(HotelRoomAvailabilityException.class, () -> service.add(dto));
+
+        assertThat(actual).hasMessage("Start date: 2020-12-10 of availability is after end date: 2021-12-20.");
     }
 
     private HotelRoomOfferDto givenHotelRoomOfferDto() {
