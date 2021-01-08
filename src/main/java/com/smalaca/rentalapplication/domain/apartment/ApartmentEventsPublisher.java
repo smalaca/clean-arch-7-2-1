@@ -12,8 +12,8 @@ public class ApartmentEventsPublisher {
         this.eventChannel = eventChannel;
     }
 
-    void publishApartmentBooked(String id, String ownerId, String tenantId, Period period) {
-        ApartmentBooked apartmentBooked = ApartmentBooked.create(eventIdFactory.create(), id, ownerId, tenantId, period);
+    void publishApartmentBooked(String apartmentId, String ownerId, String tenantId, Period period) {
+        ApartmentBooked apartmentBooked = ApartmentBooked.create(eventIdFactory.create(), apartmentId, ownerId, tenantId, period);
         eventChannel.publish(apartmentBooked);
     }
 }
