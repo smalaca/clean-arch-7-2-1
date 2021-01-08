@@ -22,8 +22,8 @@ import static org.mockito.Mockito.mock;
 class HotelRoomOfferApplicationServiceTest {
     private static final String HOTEL_ROOM_ID = "213131";
     private static final BigDecimal PRICE = BigDecimal.valueOf(42);
-    private static final LocalDate START = LocalDate.of(2020, 12, 10);
-    private static final LocalDate END = LocalDate.of(2021, 12, 20);
+    private static final LocalDate START = LocalDate.of(2040, 12, 10);
+    private static final LocalDate END = LocalDate.of(2041, 12, 20);
 
     private final HotelRoomRepository hotelRoomRepository = mock(HotelRoomRepository.class);
     private final HotelRoomOfferRepository hotelRoomOfferRepository = mock(HotelRoomOfferRepository.class);
@@ -69,7 +69,7 @@ class HotelRoomOfferApplicationServiceTest {
 
         HotelRoomAvailabilityException actual = assertThrows(HotelRoomAvailabilityException.class, () -> service.add(dto));
 
-        assertThat(actual).hasMessage("Start date: 2021-12-20 of availability is after end date: 2020-12-10.");
+        assertThat(actual).hasMessage("Start date: 2041-12-20 of availability is after end date: 2040-12-10.");
     }
 
     private HotelRoomOfferDto givenHotelRoomOfferDto() {
