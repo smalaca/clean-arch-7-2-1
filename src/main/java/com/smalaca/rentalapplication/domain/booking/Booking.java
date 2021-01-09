@@ -59,6 +59,12 @@ public class Booking {
         eventChannel.publish(bookingAccepted);
     }
 
+    public void accept(BookingEventsPublisher bookingEventsPublisher) {
+        bookingStatus = BookingStatus.ACCEPTED;
+
+        bookingEventsPublisher.bookingAccepted(rentalType, rentalPlaceId, tenantId, days);
+    }
+
     public String id() {
         return id.toString();
     }

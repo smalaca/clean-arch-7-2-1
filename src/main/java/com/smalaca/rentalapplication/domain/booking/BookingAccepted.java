@@ -13,7 +13,7 @@ public class BookingAccepted {
     private final String tenantId;
     private final List<LocalDate> days;
 
-    private BookingAccepted(
+    BookingAccepted(
             String eventId, LocalDateTime eventCreationDateTime, String rentalType, String rentalPlaceId,
             String tenantId, List<LocalDate> days) {
         this.eventId = eventId;
