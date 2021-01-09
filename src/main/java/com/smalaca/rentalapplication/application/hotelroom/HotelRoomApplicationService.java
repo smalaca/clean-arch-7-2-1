@@ -9,7 +9,6 @@ import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 public class HotelRoomApplicationService {
     private final HotelRoomRepository hotelRoomRepository;
@@ -23,8 +22,9 @@ public class HotelRoomApplicationService {
         this.hotelRoomEventsPublisher = hotelRoomEventsPublisher;
     }
 
-    public String add(String hotelId, int number, Map<String, Double> spacesDefinition, String description) {
-        HotelRoom hotelRoom = new HotelRoomFactory().create(hotelId, number, spacesDefinition, description);
+    public String add(HotelRoomDto hotelRoomDto) {
+        HotelRoom hotelRoom = new HotelRoomFactory()
+                .create(hotelRoomDto.getHotelId(), hotelRoomDto.getNumber(), hotelRoomDto.getSpacesDefinition(), hotelRoomDto.getDescription());
 
         return hotelRoomRepository.save(hotelRoom);
     }

@@ -29,8 +29,7 @@ public class HotelRoomRestController {
 
     @PostMapping
     public ResponseEntity<String> add(@RequestBody HotelRoomDto hotelRoomDto) {
-        String id = hotelRoomApplicationService.add(
-                hotelRoomDto.getHotelId(), hotelRoomDto.getNumber(), hotelRoomDto.getSpacesDefinition(), hotelRoomDto.getDescription());
+        String id = hotelRoomApplicationService.add(hotelRoomDto);
 
         return ResponseEntity.created(URI.create("/hotelroom/" + id)).build();
     }

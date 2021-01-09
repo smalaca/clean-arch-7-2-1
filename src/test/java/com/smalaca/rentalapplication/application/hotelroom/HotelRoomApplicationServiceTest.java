@@ -48,7 +48,7 @@ class HotelRoomApplicationServiceTest {
     void shouldCreateHotelRoom() {
         ArgumentCaptor<HotelRoom> captor = ArgumentCaptor.forClass(HotelRoom.class);
 
-        service.add(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+        service.add(givenHotelRoomDto());
 
         then(hotelRoomRepository).should().save(captor.capture());
         HotelRoomAssertion.assertThat(captor.getValue())
@@ -62,9 +62,13 @@ class HotelRoomApplicationServiceTest {
     void shouldReturnIdOfNewHotelRoom() {
         given(hotelRoomRepository.save(any())).willReturn(HOTEL_ROOM_ID);
 
-        String actual = service.add(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+        String actual = service.add(givenHotelRoomDto());
 
         Assertions.assertThat(actual).isEqualTo(HOTEL_ROOM_ID);
+    }
+
+    private HotelRoomDto givenHotelRoomDto() {
+        return new HotelRoomDto(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
     }
 
     @Test
