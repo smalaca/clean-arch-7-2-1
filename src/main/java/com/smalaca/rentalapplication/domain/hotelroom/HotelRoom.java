@@ -34,7 +34,7 @@ public class HotelRoom {
 
     private HotelRoom() {}
 
-    HotelRoom(String hotelId, int number, List<Space> spaces, String description) {
+    private HotelRoom(String hotelId, int number, List<Space> spaces, String description) {
         this.hotelId = hotelId;
         this.number = number;
         this.spaces = spaces;

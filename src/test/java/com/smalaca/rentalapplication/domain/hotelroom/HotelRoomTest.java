@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -23,12 +24,16 @@ class HotelRoomTest {
     private static final String DESCRIPTION = "What a lovely place";
     private static final String TENANT_ID = "325426";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
-    private final HotelRoomFactory factory = new HotelRoomFactory();
     private final HotelRoomEventsPublisher hotelRoomEventsPublisher = mock(HotelRoomEventsPublisher.class);
 
     @Test
     void shouldCreateHotelRoomWithAllRequiredInformation() {
-        HotelRoom actual = factory.create(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+        HotelRoom actual = hotelRoom()
+                .withHotelId(HOTEL_ID)
+                .withNumber(ROOM_NUMBER)
+                .withSpacesDefinition(SPACES_DEFINITION)
+                .withDescription(DESCRIPTION)
+                .build();
 
         HotelRoomAssertion.assertThat(actual)
                 .hasHotelIdEqualTo(HOTEL_ID)
@@ -39,7 +44,7 @@ class HotelRoomTest {
 
     @Test
     void shouldCreateBookingOnceBooked() {
-        HotelRoom hotelRoom = createHotelRoom();
+        HotelRoom hotelRoom = givenHotelRoom();
 
         Booking actual = hotelRoom.book(TENANT_ID, DAYS, hotelRoomEventsPublisher);
 
@@ -51,14 +56,19 @@ class HotelRoomTest {
 
     @Test
     void shouldPublishHotelRoomBooked() {
-        HotelRoom hotelRoom = createHotelRoom();
+        HotelRoom hotelRoom = givenHotelRoom();
 
         hotelRoom.book(TENANT_ID, DAYS, hotelRoomEventsPublisher);
 
         BDDMockito.then(hotelRoomEventsPublisher).should().publishHotelRoomBooked(any(), eq(HOTEL_ID), eq(TENANT_ID), eq(DAYS));
     }
 
-    private HotelRoom createHotelRoom() {
-        return factory.create(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+    private HotelRoom givenHotelRoom() {
+        return hotelRoom()
+                .withHotelId(HOTEL_ID)
+                .withNumber(ROOM_NUMBER)
+                .withSpacesDefinition(SPACES_DEFINITION)
+                .withDescription(DESCRIPTION)
+                .build();
     }
 }

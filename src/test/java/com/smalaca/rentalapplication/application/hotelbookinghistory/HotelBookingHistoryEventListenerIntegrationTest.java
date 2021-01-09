@@ -6,7 +6,6 @@ import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHist
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryAssertion;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryRepository;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomFactory;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelbookinghistory.SpringJpaHotelBookingHistoryTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelroom.SpringJpaHotelRoomTestRepository;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 
 @SpringBootTest
@@ -64,6 +64,11 @@ class HotelBookingHistoryEventListenerIntegrationTest {
     }
 
     private HotelRoom createHotelRoom() {
-        return new HotelRoomFactory().create(HOTEL_ID, HOTEL_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+        return hotelRoom()
+                .withHotelId(HOTEL_ID)
+                .withNumber(HOTEL_NUMBER)
+                .withSpacesDefinition(SPACES_DEFINITION)
+                .withDescription(DESCRIPTION)
+                .build();
     }
 }
