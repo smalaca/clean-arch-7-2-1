@@ -1,6 +1,7 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.hotelroom;
 
 import com.google.common.collect.ImmutableMap;
+import com.smalaca.rentalapplication.application.hotelroom.HotelBookingDto;
 import com.smalaca.rentalapplication.application.hotelroom.HotelRoomDto;
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import org.junit.jupiter.api.Tag;
