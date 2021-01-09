@@ -49,8 +49,9 @@ class HotelRoomRestControllerSystemTest {
 
     @Test
     void shouldBookHotelRoom() throws Exception {
-        HotelBookingDto hotelBookingDto = new HotelBookingDto("1357", asList(LocalDate.of(2020, 11, 12), LocalDate.of(2020, 12, 1)));
         String url = save(givenHotelRoom1()).getResponse().getRedirectedUrl();
+        String hotelRoomId = url.replace("/hotelroom/", "");
+        HotelBookingDto hotelBookingDto = new HotelBookingDto(hotelRoomId, "1357", asList(LocalDate.of(2020, 11, 12), LocalDate.of(2020, 12, 1)));
 
         mockMvc.perform(put(url.replace("hotelroom/", "hotelroom/book/")).contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelBookingDto)))
                 .andExpect(status().isCreated());

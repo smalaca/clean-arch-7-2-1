@@ -34,8 +34,8 @@ public class HotelRoomApplicationService {
         return hotelRoomRepository.save(hotelRoom);
     }
 
-    public String book(String id, String tenantId, List<LocalDate> days) {
-        HotelRoom hotelRoom = hotelRoomRepository.findById(id);
+    public String book(String hotelRoomId, String tenantId, List<LocalDate> days) {
+        HotelRoom hotelRoom = hotelRoomRepository.findById(hotelRoomId);
 
         Booking booking = hotelRoom.book(tenantId, days, hotelRoomEventsPublisher);
 

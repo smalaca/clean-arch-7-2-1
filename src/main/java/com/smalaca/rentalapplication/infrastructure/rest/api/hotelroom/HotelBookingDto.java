@@ -9,6 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class HotelBookingDto {
+    private final String hotelRoomId;
     private final String tenantId;
     private final List<LocalDate> days;
 }
