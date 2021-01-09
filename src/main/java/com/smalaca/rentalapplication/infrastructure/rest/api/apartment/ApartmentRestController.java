@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.infrastructure.rest.api.apartment;
 
 import com.smalaca.rentalapplication.application.apartment.ApartmentApplicationService;
 import com.smalaca.rentalapplication.application.apartment.ApartmentDto;
+import com.smalaca.rentalapplication.application.apartment.ApartmentBookingDto;
 import com.smalaca.rentalapplication.query.apartment.ApartmentDetails;
 import com.smalaca.rentalapplication.query.apartment.ApartmentReadModel;
 import com.smalaca.rentalapplication.query.apartment.QueryApartmentRepository;
@@ -36,9 +37,8 @@ public class ApartmentRestController {
     }
 
     @PutMapping("/book/{id}")
-    public ResponseEntity<String> book(@PathVariable String id, @RequestBody ApartmentBookingDto apartmentBookingDto) {
-        String bookingId = apartmentApplicationService.book(
-                id, apartmentBookingDto.getTenantId(), apartmentBookingDto.getStart(), apartmentBookingDto.getEnd());
+    public ResponseEntity<String> book(@RequestBody ApartmentBookingDto apartmentBookingDto) {
+        String bookingId = apartmentApplicationService.book(apartmentBookingDto);
 
         return ResponseEntity.created(URI.create("/booking/" + bookingId)).build();
     }

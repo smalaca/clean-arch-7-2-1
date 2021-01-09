@@ -79,7 +79,7 @@ class ApartmentApplicationServiceTest {
         givenApartment();
         ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
 
-        service.book(APARTMENT_ID, TENANT_ID, START, END);
+        service.book(givenBookApartmentDto());
 
         then(bookingRepository).should().save(captor.capture());
         BookingAssertion.assertThat(captor.getValue())
@@ -93,7 +93,7 @@ class ApartmentApplicationServiceTest {
         givenApartment();
         given(bookingRepository.save(any())).willReturn(BOOKING_ID);
 
-        String actual = service.book(APARTMENT_ID, TENANT_ID, START, END);
+        String actual = service.book(givenBookApartmentDto());
 
         Assertions.assertThat(actual).isEqualTo(BOOKING_ID);
     }
@@ -104,7 +104,7 @@ class ApartmentApplicationServiceTest {
         LocalDateTime beforeNow = LocalDateTime.now().minusNanos(1);
         ArgumentCaptor<ApartmentBooked> captor = ArgumentCaptor.forClass(ApartmentBooked.class);
 
-        service.book(APARTMENT_ID, TENANT_ID, START, END);
+        service.book(givenBookApartmentDto());
 
         then(eventChannel).should().publish(captor.capture());
         ApartmentBooked actual = captor.getValue();
@@ -116,6 +116,10 @@ class ApartmentApplicationServiceTest {
         assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
         assertThat(actual.getPeriodStart()).isEqualTo(START);
         assertThat(actual.getPeriodEnd()).isEqualTo(END);
+    }
+
+    private ApartmentBookingDto givenBookApartmentDto() {
+        return new ApartmentBookingDto(APARTMENT_ID, TENANT_ID, START, END);
     }
 
     private void givenApartment() {

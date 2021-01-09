@@ -3,11 +3,9 @@ package com.smalaca.rentalapplication.application.apartment;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentEventsPublisher;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
-import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.apartment.Period;
 import com.smalaca.rentalapplication.domain.booking.Booking;
-
-import java.time.LocalDate;
+import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
 
@@ -38,12 +36,11 @@ public class ApartmentApplicationService {
         return apartmentRepository.save(apartment);
     }
 
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public String book(String apartmentId, String tenantId, LocalDate start, LocalDate end) {
-        Apartment apartment = apartmentRepository.findById(apartmentId);
-        Period period = new Period(start, end);
+    public String book(ApartmentBookingDto apartmentBookingDto) {
+        Apartment apartment = apartmentRepository.findById(apartmentBookingDto.getApartmentId());
+        Period period = new Period(apartmentBookingDto.getStart(), apartmentBookingDto.getEnd());
 
-        Booking booking = apartment.book(tenantId, period, apartmentEventsPublisher);
+        Booking booking = apartment.book(apartmentBookingDto.getTenantId(), period, apartmentEventsPublisher);
 
         return bookingRepository.save(booking);
     }
