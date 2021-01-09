@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.hotelroom;
 
-import com.smalaca.rentalapplication.application.hotelroom.HotelBookingDto;
+import com.smalaca.rentalapplication.application.hotelroom.HotelRoomBookingDto;
 import com.smalaca.rentalapplication.application.hotelroom.HotelRoomApplicationService;
 import com.smalaca.rentalapplication.application.hotelroom.HotelRoomDto;
 import com.smalaca.rentalapplication.query.hotelroom.HotelRoomReadModel;
@@ -36,8 +36,8 @@ public class HotelRoomRestController {
     }
 
     @PutMapping("/book/{id}")
-    public ResponseEntity<String> book(@PathVariable String id, @RequestBody HotelBookingDto hotelBookingDto) {
-        String bookingId = hotelRoomApplicationService.book(hotelBookingDto.getHotelRoomId(), hotelBookingDto.getTenantId(), hotelBookingDto.getDays());
+    public ResponseEntity<String> book(@PathVariable String id, @RequestBody HotelRoomBookingDto hotelRoomBookingDto) {
+        String bookingId = hotelRoomApplicationService.book(hotelRoomBookingDto.getHotelRoomId(), hotelRoomBookingDto.getTenantId(), hotelRoomBookingDto.getDays());
 
         return ResponseEntity.created(URI.create("/booking/" + bookingId)).build();
     }
