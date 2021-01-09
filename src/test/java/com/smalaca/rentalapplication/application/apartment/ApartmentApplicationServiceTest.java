@@ -9,12 +9,12 @@ import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -45,7 +45,8 @@ class ApartmentApplicationServiceTest {
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
     private final EventChannel eventChannel = mock(EventChannel.class);
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
-    private final ApartmentApplicationService service = new ApartmentApplicationServiceFactory().apartmentApplicationService(apartmentRepository, eventChannel, bookingRepository);
+    private final ApartmentApplicationService service = new ApartmentApplicationServiceFactory()
+            .apartmentApplicationService(apartmentRepository, bookingRepository, new FakeClock(), eventChannel);
 
     @Test
     void shouldAddNewApartment() {
@@ -101,7 +102,6 @@ class ApartmentApplicationServiceTest {
     @Test
     void shouldPublishApartmentBookedEvent() {
         givenApartment();
-        LocalDateTime beforeNow = LocalDateTime.now().minusNanos(1);
         ArgumentCaptor<ApartmentBooked> captor = ArgumentCaptor.forClass(ApartmentBooked.class);
 
         service.book(givenBookApartmentDto());
@@ -109,9 +109,7 @@ class ApartmentApplicationServiceTest {
         then(eventChannel).should().publish(captor.capture());
         ApartmentBooked actual = captor.getValue();
         assertThat(actual.getEventId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
-        assertThat(actual.getEventCreationDateTime())
-                .isAfter(beforeNow)
-                .isBefore(LocalDateTime.now().plusNanos(1));
+        assertThat(actual.getEventCreationDateTime()).isEqualTo(FakeClock.NOW);
         assertThat(actual.getOwnerId()).isEqualTo(OWNER_ID);
         assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
         assertThat(actual.getPeriodStart()).isEqualTo(START);

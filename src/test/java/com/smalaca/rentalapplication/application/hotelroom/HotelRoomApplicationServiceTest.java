@@ -9,6 +9,7 @@ import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomAssertion;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomBooked;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
+import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -16,7 +17,6 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,7 +41,7 @@ class HotelRoomApplicationServiceTest {
     private final HotelRoomRepository hotelRoomRepository = Mockito.mock(HotelRoomRepository.class);
     private final BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);
     private final EventChannel eventChannel = Mockito.mock(EventChannel.class);
-    private final HotelRoomApplicationService service = new HotelRoomApplicationServiceFactory().hotelRoomApplicationService(hotelRoomRepository, bookingRepository, eventChannel);
+    private final HotelRoomApplicationService service = new HotelRoomApplicationServiceFactory().hotelRoomApplicationService(hotelRoomRepository, bookingRepository, new FakeClock(), eventChannel);
 
     @Test
     void shouldCreateHotelRoom() {
@@ -83,7 +83,6 @@ class HotelRoomApplicationServiceTest {
     @Test
     void shouldPublishHotelRoomBookedEvent() {
         ArgumentCaptor<HotelRoomBooked> captor = ArgumentCaptor.forClass(HotelRoomBooked.class);
-        LocalDateTime beforeNow = LocalDateTime.now().minusNanos(1);
         String hotelRoomId = "1234";
         givenHotelRoom(hotelRoomId);
 
@@ -92,9 +91,7 @@ class HotelRoomApplicationServiceTest {
         then(eventChannel).should().publish(captor.capture());
         HotelRoomBooked actual = captor.getValue();
         assertThat(actual.getEventId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
-        assertThat(actual.getEventCreationDateTime())
-                .isAfter(beforeNow)
-                .isBefore(LocalDateTime.now().plusNanos(1));
+        assertThat(actual.getEventCreationDateTime()).isEqualTo(FakeClock.NOW);
         assertThat(actual.getHotelId()).isEqualTo(HOTEL_ID);
         assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
         assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);

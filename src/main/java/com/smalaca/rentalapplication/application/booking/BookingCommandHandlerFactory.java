@@ -1,6 +1,9 @@
 package com.smalaca.rentalapplication.application.booking;
 
+import com.smalaca.rentalapplication.domain.booking.BookingEventsPublisher;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
+import com.smalaca.rentalapplication.domain.clock.Clock;
+import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class BookingCommandHandlerFactory {
     @Bean
-    BookingCommandHandler bookingCommandHandler(BookingRepository bookingRepository, EventChannel eventChannel) {
-        return new BookingCommandHandler(bookingRepository, eventChannel);
+    BookingCommandHandler bookingCommandHandler(BookingRepository bookingRepository, Clock clock, EventChannel eventChannel) {
+        return new BookingCommandHandler(bookingRepository, new BookingEventsPublisher(new EventIdFactory(), clock, eventChannel));
     }
 }

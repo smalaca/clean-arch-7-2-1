@@ -5,6 +5,7 @@ import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -28,7 +29,7 @@ class BookingCommandHandlerTest {
 
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
     private final EventChannel eventChannel = mock(EventChannel.class);
-    private final BookingCommandHandler commandHandler = new BookingCommandHandlerFactory().bookingCommandHandler(bookingRepository, eventChannel);
+    private final BookingCommandHandler commandHandler = new BookingCommandHandlerFactory().bookingCommandHandler(bookingRepository, new FakeClock(), eventChannel);
 
     @Test
     void shouldAcceptBooking() {

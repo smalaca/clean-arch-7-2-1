@@ -9,7 +9,7 @@ public class ApartmentEventsPublisher {
     private final EventChannel eventChannel;
     private final Clock clock;
 
-    public ApartmentEventsPublisher(EventIdFactory eventIdFactory, EventChannel eventChannel, Clock clock) {
+    public ApartmentEventsPublisher(EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
         this.eventIdFactory = eventIdFactory;
         this.eventChannel = eventChannel;
         this.clock = clock;
