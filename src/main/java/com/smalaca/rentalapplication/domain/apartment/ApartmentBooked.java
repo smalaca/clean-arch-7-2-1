@@ -12,7 +12,7 @@ public class ApartmentBooked {
     private final LocalDate periodStart;
     private final LocalDate periodEnd;
 
-    private ApartmentBooked(
+    ApartmentBooked(
             String eventId, LocalDateTime eventCreationDateTime, String apartmentId, String ownerId, String tenantId, Period period) {
         this.eventId = eventId;
         this.eventCreationDateTime = eventCreationDateTime;
@@ -21,13 +21,6 @@ public class ApartmentBooked {
         this.tenantId = tenantId;
         periodStart = period.getStart();
         periodEnd = period.getEnd();
-    }
-
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    static ApartmentBooked create(String eventId, String apartmentId, String ownerId, String tenantId, Period period) {
-        LocalDateTime eventCreationDateTime = LocalDateTime.now();
-
-        return new ApartmentBooked(eventId, eventCreationDateTime, apartmentId, ownerId, tenantId, period);
     }
 
     public String getEventId() {
