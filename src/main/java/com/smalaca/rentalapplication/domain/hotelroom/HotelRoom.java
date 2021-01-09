@@ -11,7 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 @Table(name = "HOTEL_ROOM")
@@ -50,5 +53,53 @@ public class HotelRoom {
         }
 
         return id.toString();
+    }
+
+    public static class Builder {
+        private String hotelId;
+        private int number;
+        private Map<String, Double> spacesDefinition;
+        private String description;
+
+        private Builder() {}
+
+        public static Builder hotelRoom() {
+            return new Builder();
+        }
+
+        public Builder withHotelId(String hotelId) {
+            this.hotelId = hotelId;
+            return this;
+        }
+
+        public Builder withNumber(int number) {
+            this.number = number;
+            return this;
+        }
+
+        public Builder withSpacesDefinition(Map<String, Double> spacesDefinition) {
+            this.spacesDefinition = spacesDefinition;
+            return this;
+        }
+
+        public Builder withDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public HotelRoom build() {
+            List<Space> spaces = spacesDefinition.entrySet().stream()
+                    .map(this::asSpace)
+                    .collect(toList());
+
+            return new HotelRoom(hotelId, number, spaces, description);
+
+        }
+
+        private Space asSpace(Map.Entry<String, Double> entry) {
+            SquareMeter squareMeter = new SquareMeter(entry.getValue());
+
+            return new Space(entry.getKey(), squareMeter);
+        }
     }
 }

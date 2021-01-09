@@ -4,11 +4,12 @@ import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomEventsPublisher;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomFactory;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
 
 public class HotelRoomApplicationService {
     private final HotelRoomRepository hotelRoomRepository;
@@ -23,8 +24,12 @@ public class HotelRoomApplicationService {
     }
 
     public String add(HotelRoomDto hotelRoomDto) {
-        HotelRoom hotelRoom = new HotelRoomFactory()
-                .create(hotelRoomDto.getHotelId(), hotelRoomDto.getNumber(), hotelRoomDto.getSpacesDefinition(), hotelRoomDto.getDescription());
+        HotelRoom hotelRoom = hotelRoom()
+                .withHotelId(hotelRoomDto.getHotelId())
+                .withNumber(hotelRoomDto.getNumber())
+                .withSpacesDefinition(hotelRoomDto.getSpacesDefinition())
+                .withDescription(hotelRoomDto.getDescription())
+                .build();
 
         return hotelRoomRepository.save(hotelRoom);
     }
