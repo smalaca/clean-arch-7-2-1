@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
+import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomAssertion;
@@ -20,7 +21,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
@@ -41,7 +41,8 @@ class HotelRoomApplicationServiceTest {
     private final HotelRoomRepository hotelRoomRepository = Mockito.mock(HotelRoomRepository.class);
     private final BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);
     private final EventChannel eventChannel = Mockito.mock(EventChannel.class);
-    private final HotelRoomApplicationService service = new HotelRoomApplicationServiceFactory().hotelRoomApplicationService(hotelRoomRepository, bookingRepository, new FakeClock(), eventChannel);
+    private final HotelRoomApplicationService service = new HotelRoomApplicationServiceFactory().hotelRoomApplicationService(
+            hotelRoomRepository, bookingRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
     void shouldCreateHotelRoom() {
@@ -90,7 +91,7 @@ class HotelRoomApplicationServiceTest {
 
         then(eventChannel).should().publish(captor.capture());
         HotelRoomBooked actual = captor.getValue();
-        assertThat(actual.getEventId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
+        assertThat(actual.getEventId()).isEqualTo(FakeEventIdFactory.UUID);
         assertThat(actual.getEventCreationDateTime()).isEqualTo(FakeClock.NOW);
         assertThat(actual.getHotelId()).isEqualTo(HOTEL_ID);
         assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);

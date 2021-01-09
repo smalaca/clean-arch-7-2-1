@@ -1,13 +1,12 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
-import com.smalaca.rentalapplication.domain.event.EventIdFactory;
+import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
-import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.then;
@@ -15,7 +14,7 @@ import static org.mockito.Mockito.mock;
 
 class ApartmentEventsPublisherTest {
     private final EventChannel eventChannel = mock(EventChannel.class);
-    private final ApartmentEventsPublisher publisher = new ApartmentEventsPublisher(new EventIdFactory(), new FakeClock(), eventChannel);
+    private final ApartmentEventsPublisher publisher = new ApartmentEventsPublisher(new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
     void shouldCreateApartmentBooked() {
@@ -31,7 +30,7 @@ class ApartmentEventsPublisherTest {
 
         then(eventChannel).should().publish(captor.capture());
         ApartmentBooked actual = captor.getValue();
-        assertThat(actual.getEventId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
+        assertThat(actual.getEventId()).isEqualTo(FakeEventIdFactory.UUID);
         assertThat(actual.getEventCreationDateTime()).isEqualTo(FakeClock.NOW);
         assertThat(actual.getApartmentId()).isEqualTo(apartmentId);
         assertThat(actual.getOwnerId()).isEqualTo(ownerId);

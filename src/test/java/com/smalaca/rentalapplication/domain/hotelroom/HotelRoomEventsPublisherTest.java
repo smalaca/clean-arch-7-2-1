@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.domain.hotelroom;
 
-import com.smalaca.rentalapplication.domain.event.EventIdFactory;
+import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,6 @@ import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,7 +16,7 @@ import static org.mockito.Mockito.mock;
 
 class HotelRoomEventsPublisherTest {
     private final EventChannel eventChannel = mock(EventChannel.class);
-    private final HotelRoomEventsPublisher publisher = new HotelRoomEventsPublisher(new EventIdFactory(), new FakeClock(), eventChannel);
+    private final HotelRoomEventsPublisher publisher = new HotelRoomEventsPublisher(new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
     void shouldPublishHotelRoomBookedEvent() {
@@ -31,7 +30,7 @@ class HotelRoomEventsPublisherTest {
 
         then(eventChannel).should().publish(captor.capture());
         HotelRoomBooked actual = captor.getValue();
-        assertThat(actual.getEventId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
+        assertThat(actual.getEventId()).isEqualTo(FakeEventIdFactory.UUID);
         assertThat(actual.getEventCreationDateTime()).isEqualTo(FakeClock.NOW);
         assertThat(actual.getHotelRoomId()).isEqualTo(hotelRoomId);
         assertThat(actual.getHotelId()).isEqualTo(hotelId);

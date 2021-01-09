@@ -8,6 +8,7 @@ import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
+import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
@@ -16,7 +17,6 @@ import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,7 +46,7 @@ class ApartmentApplicationServiceTest {
     private final EventChannel eventChannel = mock(EventChannel.class);
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
     private final ApartmentApplicationService service = new ApartmentApplicationServiceFactory()
-            .apartmentApplicationService(apartmentRepository, bookingRepository, new FakeClock(), eventChannel);
+            .apartmentApplicationService(apartmentRepository, bookingRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
     void shouldAddNewApartment() {
@@ -108,7 +108,7 @@ class ApartmentApplicationServiceTest {
 
         then(eventChannel).should().publish(captor.capture());
         ApartmentBooked actual = captor.getValue();
-        assertThat(actual.getEventId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
+        assertThat(actual.getEventId()).isEqualTo(FakeEventIdFactory.UUID);
         assertThat(actual.getEventCreationDateTime()).isEqualTo(FakeClock.NOW);
         assertThat(actual.getOwnerId()).isEqualTo(OWNER_ID);
         assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);

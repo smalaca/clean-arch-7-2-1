@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 class ApartmentApplicationServiceFactory {
     @Bean
     ApartmentApplicationService apartmentApplicationService(
-            ApartmentRepository apartmentRepository, BookingRepository bookingRepository, Clock clock, EventChannel eventChannel) {
-        ApartmentEventsPublisher apartmentEventsPublisher = new ApartmentEventsPublisher(new EventIdFactory(), clock, eventChannel);
+            ApartmentRepository apartmentRepository, BookingRepository bookingRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
+        ApartmentEventsPublisher apartmentEventsPublisher = new ApartmentEventsPublisher(eventIdFactory, clock, eventChannel);
 
         return new ApartmentApplicationService(apartmentRepository, bookingRepository, apartmentEventsPublisher);
     }
