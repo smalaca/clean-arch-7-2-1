@@ -75,7 +75,7 @@ class HotelRoomApplicationServiceTest {
         String hotelRoomId = "1234";
         givenHotelRoom(hotelRoomId);
 
-        service.book(hotelRoomId, TENANT_ID, DAYS);
+        service.book(givenHotelRoomBookingDto(hotelRoomId));
 
         thenBookingShouldBeCreated();
     }
@@ -87,7 +87,7 @@ class HotelRoomApplicationServiceTest {
         String hotelRoomId = "1234";
         givenHotelRoom(hotelRoomId);
 
-        service.book(hotelRoomId, TENANT_ID, DAYS);
+        service.book(givenHotelRoomBookingDto(hotelRoomId));
 
         then(eventChannel).should().publish(captor.capture());
         HotelRoomBooked actual = captor.getValue();
@@ -98,6 +98,10 @@ class HotelRoomApplicationServiceTest {
         assertThat(actual.getHotelId()).isEqualTo(HOTEL_ID);
         assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
         assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
+    }
+
+    private HotelRoomBookingDto givenHotelRoomBookingDto(String hotelRoomId) {
+        return new HotelRoomBookingDto(hotelRoomId, TENANT_ID, DAYS);
     }
 
     private void thenBookingShouldBeCreated() {

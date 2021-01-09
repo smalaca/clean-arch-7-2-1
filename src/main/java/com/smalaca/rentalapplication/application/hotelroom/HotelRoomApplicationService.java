@@ -6,9 +6,6 @@ import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomEventsPublisher;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
 
 public class HotelRoomApplicationService {
@@ -34,10 +31,10 @@ public class HotelRoomApplicationService {
         return hotelRoomRepository.save(hotelRoom);
     }
 
-    public String book(String hotelRoomId, String tenantId, List<LocalDate> days) {
-        HotelRoom hotelRoom = hotelRoomRepository.findById(hotelRoomId);
+    public String book(HotelRoomBookingDto hotelRoomBookingDto) {
+        HotelRoom hotelRoom = hotelRoomRepository.findById(hotelRoomBookingDto.getHotelRoomId());
 
-        Booking booking = hotelRoom.book(tenantId, days, hotelRoomEventsPublisher);
+        Booking booking = hotelRoom.book(hotelRoomBookingDto.getTenantId(), hotelRoomBookingDto.getDays(), hotelRoomEventsPublisher);
 
         return bookingRepository.save(booking);
     }

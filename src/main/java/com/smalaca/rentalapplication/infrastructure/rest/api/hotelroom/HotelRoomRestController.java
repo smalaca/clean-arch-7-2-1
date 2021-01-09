@@ -37,7 +37,7 @@ public class HotelRoomRestController {
 
     @PutMapping("/book/{id}")
     public ResponseEntity<String> book(@PathVariable String id, @RequestBody HotelRoomBookingDto hotelRoomBookingDto) {
-        String bookingId = hotelRoomApplicationService.book(hotelRoomBookingDto.getHotelRoomId(), hotelRoomBookingDto.getTenantId(), hotelRoomBookingDto.getDays());
+        String bookingId = hotelRoomApplicationService.book(hotelRoomBookingDto);
 
         return ResponseEntity.created(URI.create("/booking/" + bookingId)).build();
     }
