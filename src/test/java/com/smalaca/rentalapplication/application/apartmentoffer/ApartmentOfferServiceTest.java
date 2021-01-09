@@ -27,7 +27,7 @@ class ApartmentOfferServiceTest {
 
     private final ApartmentOfferRepository apartmentOfferRepository = mock(ApartmentOfferRepository.class);
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
-    private final ApartmentOfferService service = new ApartmentOfferService(apartmentOfferRepository, apartmentRepository);
+    private final ApartmentOfferApplicationService service = new ApartmentOfferApplicationService(apartmentOfferRepository, apartmentRepository);
 
     @Test
     void shouldCreateApartmentOfferForExistingApartment() {

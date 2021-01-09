@@ -7,11 +7,11 @@ import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferReposit
 
 import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer.Builder.apartmentOffer;
 
-class ApartmentOfferService {
+class ApartmentOfferApplicationService {
     private final ApartmentOfferRepository apartmentOfferRepository;
     private final ApartmentRepository apartmentRepository;
 
-    ApartmentOfferService(ApartmentOfferRepository apartmentOfferRepository, ApartmentRepository apartmentRepository) {
+    ApartmentOfferApplicationService(ApartmentOfferRepository apartmentOfferRepository, ApartmentRepository apartmentRepository) {
         this.apartmentOfferRepository = apartmentOfferRepository;
         this.apartmentRepository = apartmentRepository;
     }
