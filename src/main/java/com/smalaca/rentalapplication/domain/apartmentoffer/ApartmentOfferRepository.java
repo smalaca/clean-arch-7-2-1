@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.apartmentoffer;
 
+import java.util.UUID;
+
 public interface ApartmentOfferRepository {
-    void save(ApartmentOffer apartmentOffer);
+    UUID save(ApartmentOffer apartmentOffer);
 }
