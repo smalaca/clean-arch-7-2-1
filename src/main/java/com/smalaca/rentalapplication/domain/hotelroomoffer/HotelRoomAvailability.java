@@ -1,11 +1,15 @@
 package com.smalaca.rentalapplication.domain.hotelroomoffer;
 
+import javax.persistence.Embeddable;
 import java.time.LocalDate;
 
+@Embeddable
 @SuppressWarnings("PMD.UnusedPrivateField")
 class HotelRoomAvailability {
-    private final LocalDate start;
-    private final LocalDate end;
+    private LocalDate start;
+    private LocalDate end;
+
+    private HotelRoomAvailability() {}
 
     private HotelRoomAvailability(LocalDate start, LocalDate end) {
         this.start = start;

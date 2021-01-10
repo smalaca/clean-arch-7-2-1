@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.hotelroomoffer;
 
+import java.util.UUID;
+
 public interface HotelRoomOfferRepository {
-    void save(HotelRoomOffer hotelRoomOffer);
+    UUID save(HotelRoomOffer hotelRoomOffer);
 }

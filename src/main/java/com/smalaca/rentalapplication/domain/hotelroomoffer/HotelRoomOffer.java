@@ -1,18 +1,35 @@
 package com.smalaca.rentalapplication.domain.hotelroomoffer;
 
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
+@Entity
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class HotelRoomOffer {
-    private final String hotelRoomId;
-    private final Money money;
-    private final HotelRoomAvailability availability;
+    @Id
+    @GeneratedValue
+    private UUID id;
+    private String hotelRoomId;
+    @Embedded
+    private Money money;
+    @Embedded
+    private HotelRoomAvailability availability;
+
+    private HotelRoomOffer() {}
 
     private HotelRoomOffer(String hotelRoomId, Money money, HotelRoomAvailability availability) {
         this.hotelRoomId = hotelRoomId;
         this.money = money;
         this.availability = availability;
+    }
+
+    public UUID id() {
+        return id;
     }
 
     public static class Builder {
