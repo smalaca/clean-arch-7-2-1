@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentof
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferAssertion;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,8 @@ import java.util.UUID;
 import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer.Builder.apartmentOffer;
 
 @SpringBootTest
-class JpaApartmentOfferRepositoryTest {
+@Tag("DomainRepositoryIntegrationTest")
+class JpaApartmentOfferRepositoryIntegrationTest {
     private static final String APARTMENT_ID = "1234";
     private static final BigDecimal PRICE = BigDecimal.valueOf(123.45);
     private static final LocalDate START = LocalDate.of(2020, 10, 11);
