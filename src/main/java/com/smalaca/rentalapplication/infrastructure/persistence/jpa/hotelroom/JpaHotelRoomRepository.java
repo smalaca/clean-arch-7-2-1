@@ -21,11 +21,15 @@ class JpaHotelRoomRepository implements HotelRoomRepository {
 
     @Override
     public HotelRoom findById(String id) {
-        return hotelRoomRepository.findById(UUID.fromString(id)).orElseThrow(() -> new HotelRoomDoesNotExistException(id));
+        return hotelRoomRepository.findById(asUUID(id)).orElseThrow(() -> new HotelRoomDoesNotExistException(id));
     }
 
     @Override
     public boolean existById(String hotelRoomId) {
-        return false;
+        return hotelRoomRepository.existsById(asUUID(hotelRoomId));
+    }
+
+    private UUID asUUID(String id) {
+        return UUID.fromString(id);
     }
 }

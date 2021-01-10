@@ -37,12 +37,21 @@ class JpaHotelRoomRepositoryIntegrationTest {
     }
 
     @Test
-    void shouldAlwaysRecognizeApartmentAsNotExisting() {
+    void shouldRecognizeHotelRoomDoesNotExist() {
         String hotelRoomId = UUID.randomUUID().toString();
 
         boolean actual = hotelRoomRepository.existById(hotelRoomId);
 
         assertThat(actual).isFalse();
+    }
+
+    @Test
+    void shouldRecognizeHotelRoomExists() {
+        hotelRoomId = hotelRoomRepository.save(createHotelRoom());
+
+        boolean actual = hotelRoomRepository.existById(hotelRoomId);
+
+        assertThat(actual).isTrue();
     }
 
     @Test
