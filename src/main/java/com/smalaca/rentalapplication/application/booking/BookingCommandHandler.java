@@ -1,19 +1,17 @@
 package com.smalaca.rentalapplication.application.booking;
 
 import com.smalaca.rentalapplication.domain.booking.Booking;
+import com.smalaca.rentalapplication.domain.booking.BookingEventsPublisher;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
-import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 
-@Component
 public class BookingCommandHandler {
     private final BookingRepository bookingRepository;
-    private final EventChannel eventChannel;
+    private final BookingEventsPublisher bookingEventsPublisher;
 
-    public BookingCommandHandler(BookingRepository bookingRepository, EventChannel eventChannel) {
+    BookingCommandHandler(BookingRepository bookingRepository, BookingEventsPublisher bookingEventsPublisher) {
         this.bookingRepository = bookingRepository;
-        this.eventChannel = eventChannel;
+        this.bookingEventsPublisher = bookingEventsPublisher;
     }
 
     @EventListener
@@ -29,7 +27,7 @@ public class BookingCommandHandler {
     public void accept(BookingAccept bookingAccept) {
         Booking booking = bookingRepository.findById(bookingAccept.getId());
 
-        booking.accept(eventChannel);
+        booking.accept(bookingEventsPublisher);
 
         bookingRepository.save(booking);
     }

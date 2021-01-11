@@ -3,7 +3,6 @@ package com.smalaca.rentalapplication.domain.booking;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 public class BookingAccepted {
     private final String eventId;
@@ -13,7 +12,7 @@ public class BookingAccepted {
     private final String tenantId;
     private final List<LocalDate> days;
 
-    private BookingAccepted(
+    BookingAccepted(
             String eventId, LocalDateTime eventCreationDateTime, String rentalType, String rentalPlaceId,
             String tenantId, List<LocalDate> days) {
         this.eventId = eventId;
@@ -22,13 +21,6 @@ public class BookingAccepted {
         this.rentalPlaceId = rentalPlaceId;
         this.tenantId = tenantId;
         this.days = days;
-    }
-
-    static BookingAccepted create(RentalType rentalType, String rentalPlaceId, String tenantId, List<LocalDate> days) {
-        String eventId = UUID.randomUUID().toString();
-        LocalDateTime eventCreationDateTime = LocalDateTime.now();
-
-        return new BookingAccepted(eventId, eventCreationDateTime, rentalType.name(), rentalPlaceId, tenantId, days);
     }
 
     public String getEventId() {

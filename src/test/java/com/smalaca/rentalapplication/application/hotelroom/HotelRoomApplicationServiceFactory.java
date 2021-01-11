@@ -12,8 +12,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class HotelRoomApplicationServiceFactory {
     @Bean
-    HotelRoomApplicationService hotelRoomApplicationService(HotelRoomRepository hotelRoomRepository, BookingRepository bookingRepository, EventChannel eventChannel) {
-        HotelRoomEventsPublisher hotelRoomEventsPublisher = new HotelRoomEventsPublisher(new EventIdFactory(), new Clock(), eventChannel);
+    HotelRoomApplicationService hotelRoomApplicationService(
+            HotelRoomRepository hotelRoomRepository, BookingRepository bookingRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
+        HotelRoomEventsPublisher hotelRoomEventsPublisher = new HotelRoomEventsPublisher(eventIdFactory, clock, eventChannel);
+
         return new HotelRoomApplicationService(hotelRoomRepository, bookingRepository, hotelRoomEventsPublisher);
     }
 }

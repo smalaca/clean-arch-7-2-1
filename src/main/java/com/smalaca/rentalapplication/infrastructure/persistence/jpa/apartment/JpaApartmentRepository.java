@@ -20,13 +20,17 @@ class JpaApartmentRepository implements ApartmentRepository {
     }
 
     @Override
-    public Apartment findById(String id) {
-        return springJpaApartmentRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new ApartmentDoesNotExistException(id));
+    public Apartment findById(String apartmentId) {
+        return springJpaApartmentRepository.findById(asUUID(apartmentId))
+                .orElseThrow(() -> new ApartmentDoesNotExistException(apartmentId));
     }
 
     @Override
     public boolean existById(String apartmentId) {
-        return false;
+        return springJpaApartmentRepository.existsById(asUUID(apartmentId));
+    }
+
+    private UUID asUUID(String id) {
+        return UUID.fromString(id);
     }
 }

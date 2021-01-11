@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.application.apartmentbookinghistory;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.application.apartment.ApartmentApplicationService;
+import com.smalaca.rentalapplication.application.apartment.ApartmentBookingDto;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingAssertion;
@@ -56,8 +57,10 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
         LocalDate start = LocalDate.of(2020, 1, 13);
         LocalDate end = LocalDate.of(2020, 1, 14);
         givenExistingApartment();
+        ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, tenantId, start, end);
 
-        apartmentApplicationService.book(apartmentId, tenantId, start, end);
+
+        apartmentApplicationService.book(apartmentBookingDto);
         ApartmentBookingHistory actual = apartmentBookingHistoryRepository.findFor(apartmentId);
 
         ApartmentBookingHistoryAssertion.assertThat(actual)

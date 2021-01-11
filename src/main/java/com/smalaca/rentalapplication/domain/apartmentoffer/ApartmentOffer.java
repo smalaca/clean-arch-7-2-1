@@ -1,18 +1,35 @@
 package com.smalaca.rentalapplication.domain.apartmentoffer;
 
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
+@Entity
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class ApartmentOffer {
-    private final String apartmentId;
-    private final Money money;
-    private final ApartmentAvailability availability;
+    @Id
+    @GeneratedValue
+    private UUID id;
+    private String apartmentId;
+    @Embedded
+    private Money money;
+    @Embedded
+    private ApartmentAvailability availability;
+
+    private ApartmentOffer() {}
 
     private ApartmentOffer(String apartmentId, Money money, ApartmentAvailability availability) {
         this.apartmentId = apartmentId;
         this.money = money;
         this.availability = availability;
+    }
+
+    public UUID id() {
+        return id;
     }
 
     public static class Builder {

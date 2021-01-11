@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @AllArgsConstructor
 @Getter
-class HotelRoomOfferDto {
+public class HotelRoomOfferDto {
     private final String hotelRoomId;
     private final BigDecimal price;
     private final LocalDate start;

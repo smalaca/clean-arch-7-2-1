@@ -2,11 +2,11 @@ package com.smalaca.rentalapplication.application.hotelbookinghistory;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.application.hotelroom.HotelRoomApplicationService;
+import com.smalaca.rentalapplication.application.hotelroom.HotelRoomBookingDto;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistory;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryAssertion;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryRepository;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomFactory;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelbookinghistory.SpringJpaHotelBookingHistoryTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelroom.SpringJpaHotelRoomTestRepository;
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 
 @SpringBootTest
@@ -51,19 +52,25 @@ class HotelBookingHistoryEventListenerIntegrationTest {
     void shouldUpdateHotelBookingHistory() {
         String tenantId = "11223344";
         List<LocalDate> days = asList(LocalDate.of(2020, 1, 13), LocalDate.of(2020, 1, 14));
-        givenExistingHotelRoom();
+        hotelRoomId = givenExistingHotelRoom();
+        HotelRoomBookingDto hotelRoomBookingDto = new HotelRoomBookingDto(hotelRoomId, tenantId, days);
 
-        hotelRoomApplicationService.book(hotelRoomId, tenantId, days);
+        hotelRoomApplicationService.book(hotelRoomBookingDto);
         HotelBookingHistory actual = hotelBookingHistoryRepository.findFor(HOTEL_ID);
 
         HotelBookingHistoryAssertion.assertThat(actual).hasHotelRoomBookingHistoryFor(hotelRoomId, tenantId, days);
     }
 
-    private void givenExistingHotelRoom() {
-        hotelRoomId = hotelRoomRepository.save(createHotelRoom());
+    private String givenExistingHotelRoom() {
+        return hotelRoomRepository.save(createHotelRoom());
     }
 
     private HotelRoom createHotelRoom() {
-        return new HotelRoomFactory().create(HOTEL_ID, HOTEL_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+        return hotelRoom()
+                .withHotelId(HOTEL_ID)
+                .withNumber(HOTEL_NUMBER)
+                .withSpacesDefinition(SPACES_DEFINITION)
+                .withDescription(DESCRIPTION)
+                .build();
     }
 }

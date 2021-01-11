@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.infrastructure.rest.api.hotelroom;
+package com.smalaca.rentalapplication.application.hotelroom;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,8 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class HotelBookingDto {
+public class HotelRoomBookingDto {
+    private final String hotelRoomId;
     private final String tenantId;
     private final List<LocalDate> days;
 }

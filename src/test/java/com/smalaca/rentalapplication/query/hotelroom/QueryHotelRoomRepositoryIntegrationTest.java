@@ -2,7 +2,6 @@ package com.smalaca.rentalapplication.query.hotelroom;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomFactory;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelroom.SpringJpaHotelRoomTestRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
+import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,7 +26,6 @@ class QueryHotelRoomRepositoryIntegrationTest {
     private static final int ROOM_NUMBER_2 = 13;
     private static final ImmutableMap<String, Double> SPACES_DEFINITION_2 = ImmutableMap.of("RoomOne", 10.0, "RoomTwo", 25.0);
     private static final String DESCRIPTION_2 = "This is even better place";
-    private final HotelRoomFactory hotelRoomFactory = new HotelRoomFactory();
 
     @Autowired private HotelRoomRepository hotelRoomRepository;
     @Autowired private QueryHotelRoomRepository queryHotelRoomRepository;
@@ -42,10 +41,18 @@ class QueryHotelRoomRepositoryIntegrationTest {
     @Test
     @Transactional
     void shouldReturnAllHotelRooms() {
-        HotelRoom hotelRoom1 = hotelRoomFactory.create(HOTEL_ID, ROOM_NUMBER_1, SPACES_DEFINITION_1, DESCRIPTION_1);
-        hotelRoomId1 = hotelRoomRepository.save(hotelRoom1);
-        HotelRoom hotelRoom2 = hotelRoomFactory.create(HOTEL_ID, ROOM_NUMBER_2, SPACES_DEFINITION_2, DESCRIPTION_2);
-        hotelRoomId2 = hotelRoomRepository.save(hotelRoom2);
+        HotelRoom.Builder hotelRoom1 = hotelRoom()
+                .withHotelId(HOTEL_ID)
+                .withNumber(ROOM_NUMBER_1)
+                .withSpacesDefinition(SPACES_DEFINITION_1)
+                .withDescription(DESCRIPTION_1);
+        hotelRoomId1 = existing(hotelRoom1);
+        HotelRoom.Builder hotelRoom2 = hotelRoom()
+                .withHotelId(HOTEL_ID)
+                .withNumber(ROOM_NUMBER_2)
+                .withSpacesDefinition(SPACES_DEFINITION_2)
+                .withDescription(DESCRIPTION_2);
+        hotelRoomId2 = existing(hotelRoom2);
 
         Iterable<HotelRoomReadModel> actual = queryHotelRoomRepository.findAll(HOTEL_ID);
         
@@ -67,5 +74,9 @@ class QueryHotelRoomRepositoryIntegrationTest {
                             .hasSpacesDefinitionEqualTo(SPACES_DEFINITION_2)
                             .hasDescriptionEqualTo(DESCRIPTION_2);
                 });
+    }
+
+    private String existing(HotelRoom.Builder hotelRoom) {
+        return hotelRoomRepository.save(hotelRoom.build());
     }
 }

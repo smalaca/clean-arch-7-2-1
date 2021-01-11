@@ -4,12 +4,13 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
+import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomAssertion;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomBooked;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomFactory;
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
+import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -17,12 +18,11 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
+import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,14 +41,14 @@ class HotelRoomApplicationServiceTest {
     private final HotelRoomRepository hotelRoomRepository = Mockito.mock(HotelRoomRepository.class);
     private final BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);
     private final EventChannel eventChannel = Mockito.mock(EventChannel.class);
-    private final HotelRoomApplicationService service = new HotelRoomApplicationServiceFactory().hotelRoomApplicationService(hotelRoomRepository, bookingRepository, eventChannel);
-    private final HotelRoomFactory factory = new HotelRoomFactory();
+    private final HotelRoomApplicationService service = new HotelRoomApplicationServiceFactory().hotelRoomApplicationService(
+            hotelRoomRepository, bookingRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
     void shouldCreateHotelRoom() {
         ArgumentCaptor<HotelRoom> captor = ArgumentCaptor.forClass(HotelRoom.class);
 
-        service.add(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+        service.add(givenHotelRoomDto());
 
         then(hotelRoomRepository).should().save(captor.capture());
         HotelRoomAssertion.assertThat(captor.getValue())
@@ -62,9 +62,13 @@ class HotelRoomApplicationServiceTest {
     void shouldReturnIdOfNewHotelRoom() {
         given(hotelRoomRepository.save(any())).willReturn(HOTEL_ROOM_ID);
 
-        String actual = service.add(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+        String actual = service.add(givenHotelRoomDto());
 
         Assertions.assertThat(actual).isEqualTo(HOTEL_ROOM_ID);
+    }
+
+    private HotelRoomDto givenHotelRoomDto() {
+        return new HotelRoomDto(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
     }
 
     @Test
@@ -72,7 +76,7 @@ class HotelRoomApplicationServiceTest {
         String hotelRoomId = "1234";
         givenHotelRoom(hotelRoomId);
 
-        service.book(hotelRoomId, TENANT_ID, DAYS);
+        service.book(givenHotelRoomBookingDto(hotelRoomId));
 
         thenBookingShouldBeCreated();
     }
@@ -80,21 +84,22 @@ class HotelRoomApplicationServiceTest {
     @Test
     void shouldPublishHotelRoomBookedEvent() {
         ArgumentCaptor<HotelRoomBooked> captor = ArgumentCaptor.forClass(HotelRoomBooked.class);
-        LocalDateTime beforeNow = LocalDateTime.now().minusNanos(1);
         String hotelRoomId = "1234";
         givenHotelRoom(hotelRoomId);
 
-        service.book(hotelRoomId, TENANT_ID, DAYS);
+        service.book(givenHotelRoomBookingDto(hotelRoomId));
 
         then(eventChannel).should().publish(captor.capture());
         HotelRoomBooked actual = captor.getValue();
-        assertThat(actual.getEventId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
-        assertThat(actual.getEventCreationDateTime())
-                .isAfter(beforeNow)
-                .isBefore(LocalDateTime.now().plusNanos(1));
+        assertThat(actual.getEventId()).isEqualTo(FakeEventIdFactory.UUID);
+        assertThat(actual.getEventCreationDateTime()).isEqualTo(FakeClock.NOW);
         assertThat(actual.getHotelId()).isEqualTo(HOTEL_ID);
         assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
         assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
+    }
+
+    private HotelRoomBookingDto givenHotelRoomBookingDto(String hotelRoomId) {
+        return new HotelRoomBookingDto(hotelRoomId, TENANT_ID, DAYS);
     }
 
     private void thenBookingShouldBeCreated() {
@@ -113,6 +118,11 @@ class HotelRoomApplicationServiceTest {
     }
 
     private HotelRoom createHotelRoom() {
-        return factory.create(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+        return hotelRoom()
+                .withHotelId(HOTEL_ID)
+                .withNumber(ROOM_NUMBER)
+                .withSpacesDefinition(SPACES_DEFINITION)
+                .withDescription(DESCRIPTION)
+                .build();
     }
 }

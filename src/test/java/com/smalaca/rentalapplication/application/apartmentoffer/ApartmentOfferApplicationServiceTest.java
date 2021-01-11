@@ -12,14 +12,16 @@ import org.mockito.ArgumentCaptor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
-class ApartmentOfferServiceTest {
+class ApartmentOfferApplicationServiceTest {
     private static final String APARTMENT_ID = "1234";
     private static final BigDecimal PRICE = BigDecimal.valueOf(123);
     private static final LocalDate START = LocalDate.of(2020, 10, 11);
@@ -27,7 +29,7 @@ class ApartmentOfferServiceTest {
 
     private final ApartmentOfferRepository apartmentOfferRepository = mock(ApartmentOfferRepository.class);
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
-    private final ApartmentOfferService service = new ApartmentOfferService(apartmentOfferRepository, apartmentRepository);
+    private final ApartmentOfferApplicationService service = new ApartmentOfferApplicationService(apartmentOfferRepository, apartmentRepository);
 
     @Test
     void shouldCreateApartmentOfferForExistingApartment() {
@@ -41,6 +43,17 @@ class ApartmentOfferServiceTest {
                 .hasApartmentIdEqualTo(APARTMENT_ID)
                 .hasPriceEqualTo(PRICE)
                 .hasAvailabilityEqualTo(START, END);
+    }
+
+    @Test
+    void shouldReturnApartmentOfferId() {
+        givenExistingApartment();
+        UUID apartmentOfferId = UUID.randomUUID();
+        given(apartmentOfferRepository.save(any())).willReturn(apartmentOfferId);
+
+        UUID actual = service.add(givenApartmentOfferDto());
+
+        assertThat(actual).isEqualTo(apartmentOfferId);
     }
 
     @Test

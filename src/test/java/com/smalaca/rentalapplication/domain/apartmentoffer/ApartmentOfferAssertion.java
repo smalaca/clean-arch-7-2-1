@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class ApartmentOfferAssertion {
     private final ApartmentOffer actual;
@@ -14,6 +15,11 @@ public class ApartmentOfferAssertion {
 
     public static ApartmentOfferAssertion assertThat(ApartmentOffer actual) {
         return new ApartmentOfferAssertion(actual);
+    }
+
+    public ApartmentOfferAssertion hasIdEqualTo(UUID expected) {
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("id", expected);
+        return this;
     }
 
     public ApartmentOfferAssertion hasApartmentIdEqualTo(String expected) {

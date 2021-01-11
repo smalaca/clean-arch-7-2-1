@@ -1,6 +1,8 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.hotelroom;
 
 import com.google.common.collect.ImmutableMap;
+import com.smalaca.rentalapplication.application.hotelroom.HotelRoomBookingDto;
+import com.smalaca.rentalapplication.application.hotelroom.HotelRoomDto;
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -48,10 +50,11 @@ class HotelRoomRestControllerSystemTest {
 
     @Test
     void shouldBookHotelRoom() throws Exception {
-        HotelBookingDto hotelBookingDto = new HotelBookingDto("1357", asList(LocalDate.of(2020, 11, 12), LocalDate.of(2020, 12, 1)));
         String url = save(givenHotelRoom1()).getResponse().getRedirectedUrl();
+        String hotelRoomId = url.replace("/hotelroom/", "");
+        HotelRoomBookingDto hotelRoomBookingDto = new HotelRoomBookingDto(hotelRoomId, "1357", asList(LocalDate.of(2020, 11, 12), LocalDate.of(2020, 12, 1)));
 
-        mockMvc.perform(put(url.replace("hotelroom/", "hotelroom/book/")).contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelBookingDto)))
+        mockMvc.perform(put(url.replace("hotelroom/", "hotelroom/book/")).contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelRoomBookingDto)))
                 .andExpect(status().isCreated());
     }
 

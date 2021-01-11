@@ -1,10 +1,14 @@
 package com.smalaca.rentalapplication.domain.apartmentoffer;
 
+import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 
+@Embeddable
 @SuppressWarnings("PMD.UnusedPrivateField")
 class Money {
-    private final BigDecimal value;
+    private BigDecimal value;
+
+    private Money() {}
 
     private Money(BigDecimal value) {
         this.value = value;
