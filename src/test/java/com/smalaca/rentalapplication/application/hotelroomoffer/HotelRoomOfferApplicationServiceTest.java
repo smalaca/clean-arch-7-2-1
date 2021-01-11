@@ -12,9 +12,11 @@ import org.mockito.ArgumentCaptor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
@@ -43,6 +45,17 @@ class HotelRoomOfferApplicationServiceTest {
                 .hasHotelRoomEqualTo(HOTEL_ROOM_ID)
                 .hasPriceEqualTo(PRICE)
                 .hasAvailabilityEqualTo(START, END);
+    }
+
+    @Test
+    void shouldReturnHotelRoomOfferId() {
+        givenExistingHotelRoom();
+        UUID hotelRoomOfferId = UUID.randomUUID();
+        given(hotelRoomOfferRepository.save(any())).willReturn(hotelRoomOfferId);
+
+        UUID actual = service.add(givenHotelRoomOfferDto());
+
+        assertThat(actual).isEqualTo(hotelRoomOfferId);
     }
 
     @Test

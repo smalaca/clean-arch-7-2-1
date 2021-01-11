@@ -4,10 +4,14 @@ import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomNotFoundException
 import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 import static com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer.Builder.hotelRoomOffer;
 
-class HotelRoomOfferApplicationService {
+@Service
+public class HotelRoomOfferApplicationService {
     private final HotelRoomOfferRepository hotelRoomOfferRepository;
     private final HotelRoomRepository hotelRoomRepository;
 
@@ -16,7 +20,7 @@ class HotelRoomOfferApplicationService {
         this.hotelRoomRepository = hotelRoomRepository;
     }
 
-    void add(HotelRoomOfferDto dto) {
+    public UUID add(HotelRoomOfferDto dto) {
         if (hotelRoomRepository.existById(dto.getHotelRoomId())) {
             HotelRoomOffer hotelRoomOffer = hotelRoomOffer()
                     .withHotelRoomId(dto.getHotelRoomId())
@@ -24,7 +28,7 @@ class HotelRoomOfferApplicationService {
                     .withAvailability(dto.getStart(), dto.getEnd())
                     .build();
 
-            hotelRoomOfferRepository.save(hotelRoomOffer);
+            return hotelRoomOfferRepository.save(hotelRoomOffer);
         } else {
             throw new HotelRoomNotFoundException(dto.getHotelRoomId());
         }
