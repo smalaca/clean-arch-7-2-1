@@ -43,20 +43,20 @@ public class ApartmentAssertion {
         return this;
     }
 
-    public ApartmentAssertion hasRoomsEqualsTo(Map<String, Double> roomsDefinition) {
-        Assertions.assertThat(actual).extracting("rooms").satisfies(roomsActual -> {
+    public ApartmentAssertion hasSpacesEqualsTo(Map<String, Double> spacesDefinition) {
+        Assertions.assertThat(actual).extracting("spaces").satisfies(roomsActual -> {
             List<Room> rooms = (List<Room>) roomsActual;
-            Assertions.assertThat(rooms).hasSize(roomsDefinition.size());
+            Assertions.assertThat(rooms).hasSize(spacesDefinition.size());
 
-            roomsDefinition.forEach((name, squareMeter) -> {
-                Assertions.assertThat(rooms).anySatisfy(hasRoomThat(name, squareMeter));
+            spacesDefinition.forEach((name, squareMeter) -> {
+                Assertions.assertThat(rooms).anySatisfy(hasSpaceThat(name, squareMeter));
             });
         });
 
         return this;
     }
 
-    private Consumer<Room> hasRoomThat(String name, Double squareMeter) {
+    private Consumer<Room> hasSpaceThat(String name, Double squareMeter) {
         return room -> Assertions.assertThat(room)
                 .hasFieldOrPropertyWithValue("name", name)
                 .hasFieldOrPropertyWithValue("squareMeter.size", squareMeter);
