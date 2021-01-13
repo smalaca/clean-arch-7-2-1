@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.apartment;
+package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
