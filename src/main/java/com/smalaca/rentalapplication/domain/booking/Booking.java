@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.domain.booking;
 
-import com.smalaca.rentalapplication.domain.apartment.Period;
+import com.smalaca.rentalapplication.domain.period.Period;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;

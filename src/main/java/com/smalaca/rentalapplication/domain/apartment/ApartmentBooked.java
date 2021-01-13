@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.period.Period;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -12,15 +14,14 @@ public class ApartmentBooked {
     private final LocalDate periodStart;
     private final LocalDate periodEnd;
 
-    ApartmentBooked(
-            String eventId, LocalDateTime eventCreationDateTime, String apartmentId, String ownerId, String tenantId, Period period) {
+    ApartmentBooked(String eventId, LocalDateTime eventCreationDateTime, String apartmentId, String ownerId, String tenantId, Period period) {
         this.eventId = eventId;
         this.eventCreationDateTime = eventCreationDateTime;
         this.apartmentId = apartmentId;
         this.ownerId = ownerId;
         this.tenantId = tenantId;
-        periodStart = period.getStart();
-        periodEnd = period.getEnd();
+        periodStart = period.getPeriodStart();
+        periodEnd = period.getPeriodEnd();
     }
 
     public String getEventId() {

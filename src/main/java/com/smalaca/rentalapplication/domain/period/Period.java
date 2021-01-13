@@ -29,7 +29,7 @@ public class Period {
         return dates;
     }
 
-    private LocalDate getPeriodStart() {
+    public LocalDate getPeriodStart() {
         return periodStart;
     }
 
@@ -37,7 +37,7 @@ public class Period {
         this.periodStart = periodStart;
     }
 
-    private LocalDate getPeriodEnd() {
+    public LocalDate getPeriodEnd() {
         return periodEnd;
     }
 

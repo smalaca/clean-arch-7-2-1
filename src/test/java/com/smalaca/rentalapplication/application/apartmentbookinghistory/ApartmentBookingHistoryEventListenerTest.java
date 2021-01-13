@@ -25,7 +25,7 @@ class ApartmentBookingHistoryEventListenerTest {
     private static final String TENANT_ID = "8989";
     private static final LocalDate START = LocalDate.of(2020, 10, 11);
     private static final LocalDate END = LocalDate.of(2020, 10, 12);
-    private static final com.smalaca.rentalapplication.domain.apartment.Period PERIOD = new com.smalaca.rentalapplication.domain.apartment.Period(START, END);
+    private static final Period PERIOD = new Period(START, END);
     private static final int FIRST_BOOKING = 1;
     private static final int NEXT_BOOKING = 2;
 

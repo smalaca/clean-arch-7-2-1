@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.domain.apartment;
 
 import com.smalaca.rentalapplication.domain.address.Address;
 import com.smalaca.rentalapplication.domain.booking.Booking;
+import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.space.Space;
 import com.smalaca.rentalapplication.domain.space.SpacesFactory;
 
