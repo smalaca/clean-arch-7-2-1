@@ -1,8 +1,12 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.address.Address;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -26,7 +30,12 @@ public class Apartment {
     private String ownerId;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "buildingNumber", column = @Column(name = "house_number"))
+    })
     private Address address;
+
+    private String apartmentNumber;
 
     @ElementCollection
     @CollectionTable(name = "APARTMENT_ROOM", joinColumns = @JoinColumn(name = "APARTMENT_ID"))
@@ -36,9 +45,10 @@ public class Apartment {
 
     private Apartment() {}
 
-    private Apartment(String ownerId, Address address, List<Room> rooms, String description) {
+    private Apartment(String ownerId, Address address, String apartmentNumber, List<Room> rooms, String description) {
         this.ownerId = ownerId;
         this.address = address;
+        this.apartmentNumber = apartmentNumber;
         this.rooms = rooms;
         this.description = description;
     }
@@ -120,11 +130,11 @@ public class Apartment {
         }
 
         public Apartment build() {
-            return new Apartment(ownerId, address(), rooms(), description);
+            return new Apartment(ownerId, address(), apartmentNumber, rooms(), description);
         }
 
         private Address address() {
-            return new Address(street, postalCode, houseNumber, apartmentNumber, city, country);
+            return new Address(street, postalCode, houseNumber, city, country);
         }
 
         private List<Room> rooms() {

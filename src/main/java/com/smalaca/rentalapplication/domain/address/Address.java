@@ -1,24 +1,22 @@
-package com.smalaca.rentalapplication.domain.apartment;
+package com.smalaca.rentalapplication.domain.address;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
 @SuppressWarnings("PMD.UnusedPrivateField")
-class Address {
+public class Address {
     private String street;
     private String postalCode;
-    private String houseNumber;
-    private String apartmentNumber;
+    private String buildingNumber;
     private String city;
     private String country;
 
     private Address() {}
 
-    Address(String street, String postalCode, String houseNumber, String apartmentNumber, String city, String country) {
+    public Address(String street, String postalCode, String buildingNumber, String city, String country) {
         this.street = street;
         this.postalCode = postalCode;
-        this.houseNumber = houseNumber;
-        this.apartmentNumber = apartmentNumber;
+        this.buildingNumber = buildingNumber;
         this.city = city;
         this.country = country;
     }
