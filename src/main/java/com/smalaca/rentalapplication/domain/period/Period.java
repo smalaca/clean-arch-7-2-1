@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
+package com.smalaca.rentalapplication.domain.period;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -29,20 +29,12 @@ public class Period {
         return dates;
     }
 
-    LocalDate getStart() {
-        return getPeriodStart();
-    }
-
     private LocalDate getPeriodStart() {
         return periodStart;
     }
 
     private void setPeriodStart(LocalDate periodStart) {
         this.periodStart = periodStart;
-    }
-
-    LocalDate getEnd() {
-        return getPeriodEnd();
     }
 
     private LocalDate getPeriodEnd() {

@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
 
+import com.smalaca.rentalapplication.domain.period.Period;
+
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.EnumType;

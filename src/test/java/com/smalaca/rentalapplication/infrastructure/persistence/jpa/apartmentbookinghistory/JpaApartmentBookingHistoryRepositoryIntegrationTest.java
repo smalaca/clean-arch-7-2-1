@@ -5,7 +5,7 @@ import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBoo
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
-import com.smalaca.rentalapplication.domain.apartmentbookinghistory.Period;
+import com.smalaca.rentalapplication.domain.period.Period;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
