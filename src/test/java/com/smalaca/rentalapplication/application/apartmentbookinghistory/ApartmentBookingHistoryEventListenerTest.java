@@ -2,7 +2,6 @@ package com.smalaca.rentalapplication.application.apartmentbookinghistory;
 
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBookedTestFactory;
-import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBooking;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryAssertion;
@@ -76,9 +75,8 @@ class ApartmentBookingHistoryEventListenerTest {
 
     private ApartmentBookingHistory getApartmentBookingHistory() {
         ApartmentBookingHistory apartmentBookingHistory = new ApartmentBookingHistory(APARTMENT_ID);
-        ApartmentBooking apartmentBooking = ApartmentBooking.start(
+        apartmentBookingHistory.addBookingStart(
                 LocalDateTime.now(), OWNER_ID, "9807", new Period(LocalDate.now(), LocalDate.now().plusDays(1)));
-        apartmentBookingHistory.add(apartmentBooking);
         return apartmentBookingHistory;
     }
 

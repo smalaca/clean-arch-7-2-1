@@ -1,6 +1,5 @@
 package com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentbookinghistory;
 
-import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBooking;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryAssertion;
@@ -58,7 +57,7 @@ class JpaApartmentBookingHistoryRepositoryIntegrationTest {
         String ownerId = randomId();
         String tenantId = randomId();
         ApartmentBookingHistory apartmentBookingHistory = new ApartmentBookingHistory(apartmentId);
-        apartmentBookingHistory.add(ApartmentBooking.start(eventCreationDate, ownerId, tenantId, new Period(start, end)));
+        apartmentBookingHistory.addBookingStart(eventCreationDate, ownerId, tenantId, new Period(start, end));
         repository.save(apartmentBookingHistory);
 
         ApartmentBookingHistory actual = repository.findFor(apartmentId);

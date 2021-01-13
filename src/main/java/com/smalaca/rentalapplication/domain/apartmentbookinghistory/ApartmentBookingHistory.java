@@ -1,11 +1,14 @@
 package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
 
+import com.smalaca.rentalapplication.domain.period.Period;
+
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +29,11 @@ public class ApartmentBookingHistory {
         this.apartmentId = apartmentId;
     }
 
-    public void add(ApartmentBooking apartmentBooking) {
+    public void addBookingStart(LocalDateTime bookingDateTime, String ownerId, String tenantId, Period period) {
+        add(ApartmentBooking.start(bookingDateTime, ownerId, tenantId, period));
+    }
+
+    private void add(ApartmentBooking apartmentBooking) {
         bookings.add(apartmentBooking);
     }
 }

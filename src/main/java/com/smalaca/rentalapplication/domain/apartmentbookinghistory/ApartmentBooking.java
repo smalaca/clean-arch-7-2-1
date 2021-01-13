@@ -30,7 +30,7 @@ public class ApartmentBooking {
         this.period = period;
     }
 
-    public static ApartmentBooking start(LocalDateTime bookingDateTime, String ownerId, String tenantId, Period period) {
+    static ApartmentBooking start(LocalDateTime bookingDateTime, String ownerId, String tenantId, Period period) {
         return new ApartmentBooking(BookingStep.START, bookingDateTime, ownerId, tenantId, period);
     }
 }
