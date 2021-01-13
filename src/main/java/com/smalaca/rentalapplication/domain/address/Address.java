@@ -1,10 +1,10 @@
-package com.smalaca.rentalapplication.domain.hotel;
+package com.smalaca.rentalapplication.domain.address;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
 @SuppressWarnings("PMD.UnusedPrivateField")
-class Address {
+public class Address {
     private String street;
     private String postalCode;
     private String buildingNumber;
@@ -13,7 +13,7 @@ class Address {
 
     private Address() {}
 
-    Address(String street, String postalCode, String buildingNumber, String city, String country) {
+    public Address(String street, String postalCode, String buildingNumber, String city, String country) {
         this.street = street;
         this.postalCode = postalCode;
         this.buildingNumber = buildingNumber;

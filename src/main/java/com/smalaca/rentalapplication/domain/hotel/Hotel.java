@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.hotel;
 
+import com.smalaca.rentalapplication.domain.address.Address;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
