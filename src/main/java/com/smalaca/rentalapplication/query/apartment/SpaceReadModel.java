@@ -1,15 +1,13 @@
 package com.smalaca.rentalapplication.query.apartment;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class RoomReadModel {
+public class SpaceReadModel {
     private String name;
-    @Column(name = "size")
     private Double size;
 
-    private RoomReadModel() {}
+    private SpaceReadModel() {}
 
     public String getName() {
         return name;

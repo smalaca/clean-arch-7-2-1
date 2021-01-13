@@ -30,7 +30,7 @@ public class ApartmentReadModel {
 
     @ElementCollection
     @CollectionTable(name = "APARTMENT_ROOM", joinColumns = @JoinColumn(name = "APARTMENT_ID"))
-    private List<RoomReadModel> rooms;
+    private List<SpaceReadModel> spaces;
 
     private ApartmentReadModel() {}
 
@@ -70,7 +70,7 @@ public class ApartmentReadModel {
         return description;
     }
 
-    public List<RoomReadModel> getRooms() {
-        return rooms;
+    public List<SpaceReadModel> getSpaces() {
+        return spaces;
     }
 }
