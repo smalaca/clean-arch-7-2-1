@@ -33,7 +33,7 @@ public class ApartmentBookingHistory {
         add(ApartmentBooking.start(bookingDateTime, ownerId, tenantId, period));
     }
 
-    public void add(ApartmentBooking apartmentBooking) {
+    private void add(ApartmentBooking apartmentBooking) {
         bookings.add(apartmentBooking);
     }
 }

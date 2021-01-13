@@ -3,7 +3,6 @@ package com.smalaca.rentalapplication.query.apartment;
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
-import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBooking;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
 import com.smalaca.rentalapplication.domain.period.Period;
@@ -77,7 +76,7 @@ class QueryApartmentRepositoryIntegrationTest {
                 .build();
         apartmentId1 = apartmentRepository.save(apartment1);
         ApartmentBookingHistory apartmentBookingHistory = new ApartmentBookingHistory(apartmentId1);
-        apartmentBookingHistory.add(ApartmentBooking.start(BOOKING_DATE_TIME_1, OWNER_ID_1, TENANT_ID_1, new Period(BOOKING_START_1, BOOKING_END_1)));
+        apartmentBookingHistory.addBookingStart(BOOKING_DATE_TIME_1, OWNER_ID_1, TENANT_ID_1, new Period(BOOKING_START_1, BOOKING_END_1));
         apartmentBookingHistoryRepository.save(apartmentBookingHistory);
 
         Apartment apartment2 = apartment()
