@@ -5,13 +5,13 @@ import java.time.LocalDate;
 
 @Embeddable
 @SuppressWarnings("PMD.UnusedPrivateMethod")
-public class BookingPeriod {
+public class Period {
     private LocalDate periodStart;
     private LocalDate periodEnd;
 
-    private BookingPeriod() {}
+    private Period() {}
 
-    public BookingPeriod(LocalDate periodStart, LocalDate periodEnd) {
+    public Period(LocalDate periodStart, LocalDate periodEnd) {
         this.periodStart = periodStart;
         this.periodEnd = periodEnd;
     }

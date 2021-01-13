@@ -2,13 +2,12 @@ package com.smalaca.rentalapplication.application.apartmentbookinghistory;
 
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBookedTestFactory;
-import com.smalaca.rentalapplication.domain.apartment.Period;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBooking;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryAssertion;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
-import com.smalaca.rentalapplication.domain.apartmentbookinghistory.BookingPeriod;
+import com.smalaca.rentalapplication.domain.apartmentbookinghistory.Period;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.BDDMockito;
@@ -26,7 +25,7 @@ class ApartmentBookingHistoryEventListenerTest {
     private static final String TENANT_ID = "8989";
     private static final LocalDate START = LocalDate.of(2020, 10, 11);
     private static final LocalDate END = LocalDate.of(2020, 10, 12);
-    private static final Period PERIOD = new Period(START, END);
+    private static final com.smalaca.rentalapplication.domain.apartment.Period PERIOD = new com.smalaca.rentalapplication.domain.apartment.Period(START, END);
     private static final int FIRST_BOOKING = 1;
     private static final int NEXT_BOOKING = 2;
 
@@ -65,7 +64,7 @@ class ApartmentBookingHistoryEventListenerTest {
                         ApartmentBookingAssertion.assertThat(actualBooking)
                                 .hasOwnerIdEqualTo(OWNER_ID)
                                 .hasTenantIdEqualTo(TENANT_ID)
-                                .hasBookingPeriodThatHas(START, END);
+                                .hasPeriodThatHas(START, END);
                 });
     }
 
@@ -78,7 +77,7 @@ class ApartmentBookingHistoryEventListenerTest {
     private ApartmentBookingHistory getApartmentBookingHistory() {
         ApartmentBookingHistory apartmentBookingHistory = new ApartmentBookingHistory(APARTMENT_ID);
         ApartmentBooking apartmentBooking = ApartmentBooking.start(
-                LocalDateTime.now(), OWNER_ID, "9807", new BookingPeriod(LocalDate.now(), LocalDate.now().plusDays(1)));
+                LocalDateTime.now(), OWNER_ID, "9807", new Period(LocalDate.now(), LocalDate.now().plusDays(1)));
         apartmentBookingHistory.add(apartmentBooking);
         return apartmentBookingHistory;
     }
