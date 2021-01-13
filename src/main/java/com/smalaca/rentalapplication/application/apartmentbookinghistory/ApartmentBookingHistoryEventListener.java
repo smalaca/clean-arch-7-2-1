@@ -4,7 +4,7 @@ import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBooking;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
-import com.smalaca.rentalapplication.domain.apartmentbookinghistory.BookingPeriod;
+import com.smalaca.rentalapplication.domain.period.Period;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -19,10 +19,10 @@ public class ApartmentBookingHistoryEventListener {
     @EventListener
     public void consume(ApartmentBooked apartmentBooked) {
         ApartmentBookingHistory apartmentBookingHistory = getApartmentBookingHistoryFor(apartmentBooked.getApartmentId());
-        BookingPeriod bookingPeriod = new BookingPeriod(apartmentBooked.getPeriodStart(), apartmentBooked.getPeriodEnd());
+        Period period = new Period(apartmentBooked.getPeriodStart(), apartmentBooked.getPeriodEnd());
 
         apartmentBookingHistory.add(ApartmentBooking.start(
-                apartmentBooked.getEventCreationDateTime(), apartmentBooked.getOwnerId(), apartmentBooked.getTenantId(), bookingPeriod));
+                apartmentBooked.getEventCreationDateTime(), apartmentBooked.getOwnerId(), apartmentBooked.getTenantId(), period));
 
         apartmentBookingHistoryRepository.save(apartmentBookingHistory);
     }

@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
 
+import com.smalaca.rentalapplication.domain.period.Period;
+
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.EnumType;
@@ -16,19 +18,19 @@ public class ApartmentBooking {
     private String tenantId;
 
     @Embedded
-    private BookingPeriod bookingPeriod;
+    private Period period;
 
     private ApartmentBooking() {}
 
-    private ApartmentBooking(BookingStep bookingStep, LocalDateTime bookingDateTime, String ownerId, String tenantId, BookingPeriod bookingPeriod) {
+    private ApartmentBooking(BookingStep bookingStep, LocalDateTime bookingDateTime, String ownerId, String tenantId, Period period) {
         this.bookingStep = bookingStep;
         this.bookingDateTime = bookingDateTime;
         this.ownerId = ownerId;
         this.tenantId = tenantId;
-        this.bookingPeriod = bookingPeriod;
+        this.period = period;
     }
 
-    public static ApartmentBooking start(LocalDateTime bookingDateTime, String ownerId, String tenantId, BookingPeriod bookingPeriod) {
-        return new ApartmentBooking(BookingStep.START, bookingDateTime, ownerId, tenantId, bookingPeriod);
+    public static ApartmentBooking start(LocalDateTime bookingDateTime, String ownerId, String tenantId, Period period) {
+        return new ApartmentBooking(BookingStep.START, bookingDateTime, ownerId, tenantId, period);
     }
 }

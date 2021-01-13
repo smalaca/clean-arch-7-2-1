@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.apartment;
 import com.smalaca.rentalapplication.domain.clock.Clock;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import com.smalaca.rentalapplication.domain.period.Period;
 
 public class ApartmentEventsPublisher {
     private final EventIdFactory eventIdFactory;

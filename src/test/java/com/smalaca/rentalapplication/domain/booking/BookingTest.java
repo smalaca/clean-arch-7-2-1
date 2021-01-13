@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.domain.booking;
 
-import com.smalaca.rentalapplication.domain.apartment.Period;
+import com.smalaca.rentalapplication.domain.period.Period;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

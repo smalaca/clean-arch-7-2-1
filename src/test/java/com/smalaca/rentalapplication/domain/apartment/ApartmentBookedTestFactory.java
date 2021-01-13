@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.period.Period;
+
 import java.time.LocalDateTime;
 
 public class ApartmentBookedTestFactory {
