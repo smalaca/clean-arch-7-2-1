@@ -1,7 +1,6 @@
 package com.smalaca.rentalapplication.application.apartmentbookinghistory;
 
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
-import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBooking;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistory;
 import com.smalaca.rentalapplication.domain.apartmentbookinghistory.ApartmentBookingHistoryRepository;
 import com.smalaca.rentalapplication.domain.period.Period;
@@ -21,8 +20,8 @@ public class ApartmentBookingHistoryEventListener {
         ApartmentBookingHistory apartmentBookingHistory = getApartmentBookingHistoryFor(apartmentBooked.getApartmentId());
         Period period = new Period(apartmentBooked.getPeriodStart(), apartmentBooked.getPeriodEnd());
 
-        apartmentBookingHistory.add(ApartmentBooking.start(
-                apartmentBooked.getEventCreationDateTime(), apartmentBooked.getOwnerId(), apartmentBooked.getTenantId(), period));
+        apartmentBookingHistory.addBookingStart(
+                apartmentBooked.getEventCreationDateTime(), apartmentBooked.getOwnerId(), apartmentBooked.getTenantId(), period);
 
         apartmentBookingHistoryRepository.save(apartmentBookingHistory);
     }
