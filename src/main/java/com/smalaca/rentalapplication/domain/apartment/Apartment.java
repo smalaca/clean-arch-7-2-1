@@ -2,6 +2,8 @@ package com.smalaca.rentalapplication.domain.apartment;
 
 import com.smalaca.rentalapplication.domain.address.Address;
 import com.smalaca.rentalapplication.domain.booking.Booking;
+import com.smalaca.rentalapplication.domain.space.Space;
+import com.smalaca.rentalapplication.domain.space.SpacesFactory;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -14,7 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -39,13 +40,16 @@ public class Apartment {
 
     @ElementCollection
     @CollectionTable(name = "APARTMENT_ROOM", joinColumns = @JoinColumn(name = "APARTMENT_ID"))
-    private List<Room> spaces;
+    @AttributeOverrides({
+            @AttributeOverride(name = "squareMeter.value", column = @Column(name = "size"))
+    })
+    private List<Space> spaces;
 
     private String description;
 
     private Apartment() {}
 
-    private Apartment(String ownerId, Address address, String apartmentNumber, List<Room> spaces, String description) {
+    private Apartment(String ownerId, Address address, String apartmentNumber, List<Space> spaces, String description) {
         this.ownerId = ownerId;
         this.address = address;
         this.apartmentNumber = apartmentNumber;
@@ -137,14 +141,8 @@ public class Apartment {
             return new Address(street, postalCode, houseNumber, city, country);
         }
 
-        private List<Room> spaces() {
-            List<Room> rooms = new ArrayList<>();
-            spacesDefinition.forEach((name, size) -> {
-                SquareMeter squareMeter = new SquareMeter(size);
-                rooms.add(new Room(name, squareMeter));
-            });
-
-            return rooms;
+        private List<Space> spaces() {
+            return SpacesFactory.create(spacesDefinition);
         }
     }
 }

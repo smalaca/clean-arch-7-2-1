@@ -1,10 +1,11 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.space.Space;
+import com.smalaca.rentalapplication.domain.space.SpacesAssertion;
 import org.assertj.core.api.Assertions;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class ApartmentAssertion {
     private final Apartment actual;
@@ -43,22 +44,13 @@ public class ApartmentAssertion {
         return this;
     }
 
-    public ApartmentAssertion hasSpacesEqualsTo(Map<String, Double> spacesDefinition) {
+    public ApartmentAssertion hasSpacesEqualsTo(Map<String, Double> expected) {
         Assertions.assertThat(actual).extracting("spaces").satisfies(roomsActual -> {
-            List<Room> rooms = (List<Room>) roomsActual;
-            Assertions.assertThat(rooms).hasSize(spacesDefinition.size());
-
-            spacesDefinition.forEach((name, squareMeter) -> {
-                Assertions.assertThat(rooms).anySatisfy(hasSpaceThat(name, squareMeter));
-            });
+            SpacesAssertion.assertThat((List<Space>) roomsActual)
+                    .hasSize(expected.size())
+                    .hasAllSpacesFrom(expected);
         });
 
         return this;
-    }
-
-    private Consumer<Room> hasSpaceThat(String name, Double squareMeter) {
-        return room -> Assertions.assertThat(room)
-                .hasFieldOrPropertyWithValue("name", name)
-                .hasFieldOrPropertyWithValue("squareMeter.size", squareMeter);
     }
 }
