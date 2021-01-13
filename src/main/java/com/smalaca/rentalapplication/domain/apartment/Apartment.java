@@ -1,8 +1,12 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.address.Address;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -26,6 +30,9 @@ public class Apartment {
     private String ownerId;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "buildingNumber", column = @Column(name = "house_number"))
+    })
     private Address address;
 
     private String apartmentNumber;

@@ -1,6 +1,7 @@
 package com.smalaca.rentalapplication.query.apartment;
 
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ public class ApartmentReadModel {
     private String ownerId;
     private String street;
     private String postalCode;
+    @Column(name = "house_number")
     private String houseNumber;
     private String apartmentNumber;
     private String city;
