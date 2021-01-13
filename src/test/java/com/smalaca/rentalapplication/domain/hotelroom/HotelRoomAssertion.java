@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.domain.hotelroom;
 
+import com.smalaca.rentalapplication.domain.space.Space;
 import org.assertj.core.api.Assertions;
 
 import java.util.List;

@@ -1,11 +1,11 @@
-package com.smalaca.rentalapplication.domain.hotelroom;
+package com.smalaca.rentalapplication.domain.space;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 
 @Embeddable
 @SuppressWarnings("PMD.UnusedPrivateField")
-class Space {
+public class Space {
     private String name;
 
     @Embedded

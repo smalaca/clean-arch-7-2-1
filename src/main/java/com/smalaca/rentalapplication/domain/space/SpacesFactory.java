@@ -1,14 +1,14 @@
-package com.smalaca.rentalapplication.domain.hotelroom;
+package com.smalaca.rentalapplication.domain.space;
 
 import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
-class SpacesFactory {
+public class SpacesFactory {
     private SpacesFactory() {}
 
-    static List<Space> create(Map<String, Double> definition) {
+    public static List<Space> create(Map<String, Double> definition) {
         return definition.entrySet().stream()
                 .map(SpacesFactory::asSpace)
                 .collect(toList());
