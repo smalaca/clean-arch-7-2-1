@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.application.hotelroom;
 
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
+import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomEventsPublisher;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
@@ -9,12 +10,15 @@ import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
 import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 
 public class HotelRoomApplicationService {
+    private final HotelRepository hotelRepository;
     private final HotelRoomRepository hotelRoomRepository;
     private final BookingRepository bookingRepository;
     private final HotelRoomEventsPublisher hotelRoomEventsPublisher;
 
     HotelRoomApplicationService(
-            HotelRoomRepository hotelRoomRepository, BookingRepository bookingRepository, HotelRoomEventsPublisher hotelRoomEventsPublisher) {
+            HotelRepository hotelRepository, HotelRoomRepository hotelRoomRepository,
+            BookingRepository bookingRepository, HotelRoomEventsPublisher hotelRoomEventsPublisher) {
+        this.hotelRepository = hotelRepository;
         this.hotelRoomRepository = hotelRoomRepository;
         this.bookingRepository = bookingRepository;
         this.hotelRoomEventsPublisher = hotelRoomEventsPublisher;

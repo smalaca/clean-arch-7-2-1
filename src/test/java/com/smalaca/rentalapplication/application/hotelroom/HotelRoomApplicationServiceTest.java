@@ -6,6 +6,7 @@ import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomAssertion;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
@@ -28,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 class HotelRoomApplicationServiceTest {
     private static final String HOTEL_ID = UUID.randomUUID().toString();
@@ -38,11 +40,12 @@ class HotelRoomApplicationServiceTest {
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
     private static final String HOTEL_ROOM_ID = "7821321";
 
+    private final HotelRepository hotelRepository = mock(HotelRepository.class);
     private final HotelRoomRepository hotelRoomRepository = Mockito.mock(HotelRoomRepository.class);
     private final BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);
     private final EventChannel eventChannel = Mockito.mock(EventChannel.class);
     private final HotelRoomApplicationService service = new HotelRoomApplicationServiceFactory().hotelRoomApplicationService(
-            hotelRoomRepository, bookingRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
+            hotelRepository, hotelRoomRepository, bookingRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
     void shouldCreateHotelRoom() {
