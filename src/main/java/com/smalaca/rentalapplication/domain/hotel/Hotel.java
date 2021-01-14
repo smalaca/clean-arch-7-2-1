@@ -2,12 +2,21 @@ package com.smalaca.rentalapplication.domain.hotel;
 
 import com.smalaca.rentalapplication.domain.address.Address;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 
 @Entity
 @Table(name = "HOTEL")
@@ -15,12 +24,17 @@ import java.util.UUID;
 public class Hotel {
     @Id
     @GeneratedValue
+    @Column(name = "ID")
     private UUID id;
 
     private String name;
 
     @Embedded
     private Address address;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "HOTEL_ID", referencedColumnName = "ID")
+    private List<HotelRoom> hotelRooms = new ArrayList<>();
 
     private Hotel() {}
 
@@ -31,6 +45,28 @@ public class Hotel {
 
     public String id() {
         return id.toString();
+    }
+
+    public void addRoom(int number, Map<String, Double> spacesDefinition, String description) {
+        HotelRoom hotelRoom = hotelRoom()
+                .withHotelId(id)
+                .withNumber(number)
+                .withSpacesDefinition(spacesDefinition)
+                .withDescription(description)
+                .build();
+
+        hotelRooms.add(hotelRoom);
+    }
+
+    public String getIdOfRoom(int number) {
+        return getHotelRoom(number).id();
+    }
+
+    private HotelRoom getHotelRoom(int number) {
+        return hotelRooms.stream()
+                .filter(hotelRoom -> hotelRoom.hasNumberEqualTo(number))
+                .findFirst()
+                .get();
     }
 
     public static class Builder {

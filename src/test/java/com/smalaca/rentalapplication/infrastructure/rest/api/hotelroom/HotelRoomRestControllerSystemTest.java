@@ -8,7 +8,6 @@ import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotel.SpringJpaHotelTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelbookinghistory.SpringJpaHotelBookingHistoryTestRepository;
-import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelroom.SpringJpaHotelRoomTestRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -43,13 +42,11 @@ class HotelRoomRestControllerSystemTest {
     private static final String DESCRIPTION_2 = "This is even better place";
 
     private final JsonFactory jsonFactory = new JsonFactory();
-    private final List<String> hotelRoomIds = new ArrayList<>();
     private final List<String> bookingIds = new ArrayList<>();
     private String hotelId;
 
     @Autowired private MockMvc mockMvc;
     @Autowired private SpringJpaHotelTestRepository hotelRepository;
-    @Autowired private SpringJpaHotelRoomTestRepository hotelRoomRepository;
     @Autowired private SpringJpaHotelBookingHistoryTestRepository hotelBookingHistoryRepository;
     @Autowired private SpringJpaBookingTestRepository bookingRepository;
 
@@ -66,7 +63,6 @@ class HotelRoomRestControllerSystemTest {
     @AfterEach
     void deleteHotelRooms() {
         hotelRepository.deleteById(hotelId);
-        hotelRoomRepository.deleteAll(hotelRoomIds);
         bookingRepository.deleteAll(bookingIds);
 
         if (!bookingIds.isEmpty()) {
@@ -110,12 +106,6 @@ class HotelRoomRestControllerSystemTest {
     }
 
     private MvcResult save(HotelRoomDto hotelRoomDto) throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/hotelroom").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelRoomDto))).andReturn();
-        hotelRoomIds.add(getHotelRoomId(mvcResult));
-        return mvcResult;
-    }
-
-    private String getHotelRoomId(MvcResult result) {
-        return result.getResponse().getRedirectedUrl().replace("/hotelroom/", "");
+        return mockMvc.perform(post("/hotelroom").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelRoomDto))).andReturn();
     }
 }

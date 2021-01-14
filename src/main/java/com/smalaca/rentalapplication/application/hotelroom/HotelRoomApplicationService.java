@@ -2,12 +2,11 @@ package com.smalaca.rentalapplication.application.hotelroom;
 
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
+import com.smalaca.rentalapplication.domain.hotel.Hotel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomEventsPublisher;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
-
-import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 
 public class HotelRoomApplicationService {
     private final HotelRepository hotelRepository;
@@ -25,14 +24,12 @@ public class HotelRoomApplicationService {
     }
 
     public String add(HotelRoomDto hotelRoomDto) {
-        HotelRoom hotelRoom = hotelRoom()
-                .withHotelId(hotelRoomDto.getHotelId())
-                .withNumber(hotelRoomDto.getNumber())
-                .withSpacesDefinition(hotelRoomDto.getSpacesDefinition())
-                .withDescription(hotelRoomDto.getDescription())
-                .build();
+        Hotel hotel = hotelRepository.findById(hotelRoomDto.getHotelId());
 
-        return hotelRoomRepository.save(hotelRoom);
+        hotel.addRoom(hotelRoomDto.getNumber(), hotelRoomDto.getSpacesDefinition(), hotelRoomDto.getDescription());
+
+        hotelRepository.save(hotel);
+        return hotel.getIdOfRoom(hotelRoomDto.getNumber());
     }
 
     public String book(HotelRoomBookingDto hotelRoomBookingDto) {
