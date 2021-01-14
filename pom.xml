@@ -26,6 +26,7 @@
         <mockito-junit-jupiter.version>3.3.3</mockito-junit-jupiter.version>
         <archunit-junit5-engine.version>0.15.0</archunit-junit5-engine.version>
         <lombok.version>1.18.16</lombok.version>
+        <equalsverifier.version>3.5.1</equalsverifier.version>
     </properties>
 
     <parent>
@@ -114,6 +115,13 @@
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-engine</artifactId>
             <version>${archunit-junit5-engine.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier</artifactId>
+            <version>${equalsverifier.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

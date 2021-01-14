@@ -79,6 +79,14 @@ class ApartmentTest {
     }
 
     @Test
+    void shouldRecognizeTheSameInstanceAsTheSameAggregate() {
+        Apartment actual = createApartment1();
+
+        Assertions.assertThat(actual.equals(actual)).isTrue();
+        Assertions.assertThat(actual.hashCode()).isEqualTo(actual.hashCode());
+    }
+
+    @Test
     void shouldRecognizeTwoInstancesOfApartmentRepresentsTheSameAggregate() {
         Apartment apartment2 = createApartment2SameAsApartment1().build();
 
@@ -88,17 +96,23 @@ class ApartmentTest {
         Assertions.assertThat(actual.hashCode()).isEqualTo(apartment2.hashCode());
     }
 
+    @Test
+    void shouldRecognizeNullIsNotTheSameAsApartment() {
+        Apartment actual = createApartment1();
+
+        Assertions.assertThat(actual.equals(null)).isFalse();
+    }
+
     @ParameterizedTest
     @MethodSource("notTheSameApartments")
-    void shouldRecognizeApartmentDoesNotRepresentTheSameAggregate(Apartment notTheSame) {
+    void shouldRecognizeApartmentDoesNotRepresentTheSameAggregate(Object notTheSame) {
         Apartment actual = createApartment1();
 
         Assertions.assertThat(actual.equals(notTheSame)).isFalse();
         Assertions.assertThat(actual.hashCode()).isNotEqualTo(notTheSame.hashCode());
-
     }
 
-    private static Stream<Apartment> notTheSameApartments() {
+    private static Stream<Object> notTheSameApartments() {
         return Stream.of(
                 createApartment2SameAsApartment1().withOwnerId(OWNER_ID_2).build(),
                 createApartment2SameAsApartment1().withApartmentNumber(APARTMENT_NUMBER_2).build(),
@@ -106,7 +120,8 @@ class ApartmentTest {
                 createApartment2SameAsApartment1().withPostalCode(POSTAL_CODE_2).build(),
                 createApartment2SameAsApartment1().withHouseNumber(HOUSE_NUMBER_2).build(),
                 createApartment2SameAsApartment1().withCity(CITY_2).build(),
-                createApartment2SameAsApartment1().withCountry(COUNTRY_2).build()
+                createApartment2SameAsApartment1().withCountry(COUNTRY_2).build(),
+                new Object()
         );
     }
 
