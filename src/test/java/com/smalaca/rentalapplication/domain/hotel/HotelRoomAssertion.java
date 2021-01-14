@@ -6,6 +6,7 @@ import org.assertj.core.api.Assertions;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class HotelRoomAssertion {
     private final HotelRoom actual;
@@ -19,7 +20,7 @@ public class HotelRoomAssertion {
     }
 
     public HotelRoomAssertion hasHotelIdEqualTo(String expected) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("hotelId", expected);
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("hotelId", UUID.fromString(expected));
         return this;
     }
 

@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.hotel;
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.mock;
 class HotelRoomTest {
     private static final String HOTEL_ID = UUID.randomUUID().toString();
     private static final int ROOM_NUMBER = 13;
+    private static final int DIFFERENT_ROOM_NUMBER = 34;
     private static final Map<String, Double> SPACES_DEFINITION = ImmutableMap.of("RoomOne", 20.0, "RoomTwo", 20.0);
     private static final String DESCRIPTION = "What a lovely place";
     private static final String TENANT_ID = "325426";
@@ -61,6 +63,20 @@ class HotelRoomTest {
         hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
         BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(any(), eq(HOTEL_ID), eq(TENANT_ID), eq(DAYS));
+    }
+
+    @Test
+    void shouldRecognizeWhenNumberIsTheSame() {
+        boolean actual = givenHotelRoom().hasNumberEqualTo(ROOM_NUMBER);
+
+        Assertions.assertThat(actual).isTrue();
+    }
+
+    @Test
+    void shouldRecognizeWhenNumberIsDifferent() {
+        boolean actual = givenHotelRoom().hasNumberEqualTo(DIFFERENT_ROOM_NUMBER);
+
+        Assertions.assertThat(actual).isFalse();
     }
 
     private HotelRoom givenHotelRoom() {

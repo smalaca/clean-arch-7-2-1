@@ -98,6 +98,6 @@ class JpaHotelRepositoryIntegrationTest {
     }
 
     private Hotel findBy(String hotelId) {
-        return springJpaHotelRepository.findById(UUID.fromString(hotelId)).get();
+        return hotelRepository.findById(hotelId);
     }
 }
