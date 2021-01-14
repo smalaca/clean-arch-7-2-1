@@ -4,6 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.application.apartment.ApartmentBookingDto;
 import com.smalaca.rentalapplication.application.apartment.ApartmentDto;
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
+import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
+import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentbookinghistory.SpringJpaApartmentBookingHistoryTestRepository;
+import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,9 +41,20 @@ class BookingRestControllerSystemTest {
     private static final Map<String, Double> SPACES_DEFINITION = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
     
     private final JsonFactory jsonFactory = new JsonFactory();
-    
-    @Autowired
-    private MockMvc mockMvc;
+    private final List<String> apartmentIds = new ArrayList<>();
+    private final List<String> bookingIds = new ArrayList<>();
+
+    @Autowired private MockMvc mockMvc;
+    @Autowired private SpringJpaApartmentTestRepository apartmentRepository;
+    @Autowired private SpringJpaApartmentBookingHistoryTestRepository apartmentBookingHistoryRepository;
+    @Autowired private SpringJpaBookingTestRepository bookingRepository;
+
+    @AfterEach
+    void deleteBookings() {
+        apartmentRepository.deleteAll(apartmentIds);
+        apartmentBookingHistoryRepository.deleteAll(apartmentIds);
+        bookingRepository.deleteAll(bookingIds);
+    }
     
     @Test
     void shouldRejectBooking() throws Exception {
@@ -56,13 +73,18 @@ class BookingRestControllerSystemTest {
     private String getUrlToExistingBooking() throws Exception {
         String url = save(givenApartment()).getResponse().getRedirectedUrl();
         String apartmentId = url.replace("/apartment/", "");
+        apartmentIds.add(apartmentId);
         ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, "1357", LocalDate.of(2020, 11, 12), LocalDate.of(2020, 12, 1));
 
         MvcResult mvcResult = mockMvc.perform(put(url.replace("apartment/", "apartment/book/")).contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentBookingDto)))
                 .andExpect(status().isCreated())
                 .andReturn();
-
+        storeBookingId(mvcResult);
         return mvcResult.getResponse().getRedirectedUrl();
+    }
+
+    private void storeBookingId(MvcResult result) {
+        bookingIds.add(result.getResponse().getRedirectedUrl().replace("/booking/", ""));
     }
 
     private ApartmentDto givenApartment() {

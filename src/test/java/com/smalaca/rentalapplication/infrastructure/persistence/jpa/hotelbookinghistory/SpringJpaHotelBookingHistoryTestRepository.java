@@ -2,6 +2,8 @@ package com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelbookin
 
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class SpringJpaHotelBookingHistoryTestRepository {
     private final SpringJpaHotelBookingHistoryRepository repository;
@@ -12,5 +14,9 @@ public class SpringJpaHotelBookingHistoryTestRepository {
 
     public void deleteById(String hotelId) {
         repository.deleteById(hotelId);
+    }
+
+    public void deleteAll(List<String> hotelIds) {
+        hotelIds.forEach(this::deleteById);
     }
 }

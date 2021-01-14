@@ -4,13 +4,14 @@ import com.smalaca.rentalapplication.application.hotel.HotelApplicationService;
 import com.smalaca.rentalapplication.application.hotel.HotelDto;
 import com.smalaca.rentalapplication.query.hotel.HotelReadModel;
 import com.smalaca.rentalapplication.query.hotel.QueryHotelRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/hotel")
@@ -25,9 +26,9 @@ public class HotelRestController {
 
     @PostMapping
     public ResponseEntity<Void> add(@RequestBody HotelDto hotelDto) {
-        hotelApplicationService.add(hotelDto);
+        String id = hotelApplicationService.add(hotelDto);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("/hotel/" + id)).build();
     }
 
     @GetMapping
