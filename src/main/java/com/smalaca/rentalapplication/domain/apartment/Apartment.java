@@ -5,6 +5,8 @@ import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.space.Space;
 import com.smalaca.rentalapplication.domain.space.SpacesFactory;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -70,6 +72,35 @@ public class Apartment {
         }
 
         return id.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Apartment apartment = (Apartment) o;
+
+        return new EqualsBuilder()
+                .append(ownerId, apartment.ownerId)
+                .append(address, apartment.address)
+                .append(apartmentNumber, apartment.apartmentNumber)
+                .isEquals();
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(ownerId)
+                .append(address)
+                .append(apartmentNumber)
+                .toHashCode();
     }
 
     public static class Builder {

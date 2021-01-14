@@ -1,9 +1,12 @@
 package com.smalaca.rentalapplication.domain.address;
 
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
 @SuppressWarnings("PMD.UnusedPrivateField")
+@EqualsAndHashCode
 public class Address {
     private String street;
     private String postalCode;
