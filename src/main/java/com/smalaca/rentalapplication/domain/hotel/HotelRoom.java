@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -95,7 +96,7 @@ public class HotelRoom {
     public static class Builder {
         private UUID hotelId;
         private int number;
-        private Map<String, Double> spacesDefinition;
+        private Map<String, Double> spacesDefinition = new HashMap<>();
         private String description;
 
         private Builder() {}

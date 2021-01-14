@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.period.Period;
+import com.smalaca.rentalapplication.domain.space.NotEnoughSpacesGivenException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 
@@ -55,6 +57,23 @@ class ApartmentTest {
                 .hasDescriptionEqualsTo(DESCRIPTION_1)
                 .hasAddressEqualsTo(STREET_1, POSTAL_CODE_1, HOUSE_NUMBER_1, APARTMENT_NUMBER_1, CITY_1, COUNTRY_1)
                 .hasSpacesEqualsTo(SPACES_DEFINITION_1);
+    }
+
+    @Test
+    void shouldNotBeAbleToCreateApartmentWithoutSpaces() {
+        Apartment.Builder apartment = apartment()
+                .withOwnerId(OWNER_ID_1)
+                .withStreet(STREET_1)
+                .withPostalCode(POSTAL_CODE_1)
+                .withHouseNumber(HOUSE_NUMBER_1)
+                .withApartmentNumber(APARTMENT_NUMBER_1)
+                .withCity(CITY_1)
+                .withCountry(COUNTRY_1)
+                .withDescription(DESCRIPTION_1);
+
+        NotEnoughSpacesGivenException actual = assertThrows(NotEnoughSpacesGivenException.class, apartment::build);
+
+        Assertions.assertThat(actual).hasMessage("No spaces given.");
     }
 
     @Test
