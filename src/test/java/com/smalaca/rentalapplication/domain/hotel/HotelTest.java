@@ -34,6 +34,14 @@ class HotelTest {
     }
 
     @Test
+    void shouldRecognizeTheSameInstanceAsTheSameAggregate() {
+        Hotel actual = givenHotel();
+
+        Assertions.assertThat(actual.equals(actual)).isTrue();
+        Assertions.assertThat(actual.hashCode()).isEqualTo(actual.hashCode());
+    }
+
+    @Test
     void shouldRecognizeTwoHotelInstancesRepresentTheSameAggregate() {
         Hotel toCompare = givenHotel();
 
@@ -43,9 +51,16 @@ class HotelTest {
         Assertions.assertThat(actual.hashCode()).isEqualTo(toCompare.hashCode());
     }
 
+    @Test
+    void shouldRecognizeNullIsNotTheSameAsHotel() {
+        Hotel actual = givenHotel();
+
+        Assertions.assertThat(actual.equals(null)).isFalse();
+    }
+
     @ParameterizedTest
     @MethodSource("notTheSameHotels")
-    void shouldRecognizeHotelDoesNotRepresentTheSameAggregate(Hotel toCompare) {
+    void shouldRecognizeHotelDoesNotRepresentTheSameAggregate(Object toCompare) {
         Hotel actual = givenHotel();
 
         Assertions.assertThat(actual.equals(toCompare)).isFalse();
@@ -56,14 +71,15 @@ class HotelTest {
         return givenHotelBuilder().build();
     }
 
-    private static Stream<Hotel> notTheSameHotels() {
+    private static Stream<Object> notTheSameHotels() {
         return Stream.of(
                 givenHotelBuilder().withName(NAME_2).build(),
                 givenHotelBuilder().withStreet(STREET_2).build(),
                 givenHotelBuilder().withPostalCode(POSTAL_CODE_2).build(),
                 givenHotelBuilder().withBuildingNumber(BUILDING_NUMBER_2).build(),
                 givenHotelBuilder().withCity(CITY_2).build(),
-                givenHotelBuilder().withCountry(COUNTRY_2).build()
+                givenHotelBuilder().withCountry(COUNTRY_2).build(),
+                new Object()
         );
     }
 

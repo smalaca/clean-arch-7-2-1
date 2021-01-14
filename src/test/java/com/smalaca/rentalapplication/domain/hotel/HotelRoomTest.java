@@ -86,6 +86,14 @@ class HotelRoomTest {
     }
 
     @Test
+    void shouldRecognizeTheSameInstanceAsTheSameAggregate() {
+        HotelRoom actual = givenHotelRoom();
+
+        Assertions.assertThat(actual.equals(actual)).isTrue();
+        Assertions.assertThat(actual.hashCode()).isEqualTo(actual.hashCode());
+    }
+
+    @Test
     void shouldRecognizeTwoInstancesOfHotelRoomRepresentsTheSameAggregate() {
         HotelRoom toCompare = hotelRoom()
                 .withHotelId(HOTEL_ID_1)
@@ -100,9 +108,16 @@ class HotelRoomTest {
         Assertions.assertThat(actual.hashCode()).isEqualTo(toCompare.hashCode());
     }
 
+    @Test
+    void shouldRecognizeNullIsNotTheSameAsHotelRoom() {
+        HotelRoom actual = givenHotelRoom();
+
+        Assertions.assertThat(actual.equals(null)).isFalse();
+    }
+
     @ParameterizedTest
     @MethodSource("notTeSameHotelRooms")
-    void shouldRecognizeHotelRoomsDoesNotRepresentTheSameAggregate(HotelRoom toCompare) {
+    void shouldRecognizeHotelRoomsDoesNotRepresentTheSameAggregate(Object toCompare) {
         HotelRoom actual = givenHotelRoom();
 
         Assertions.assertThat(actual.equals(toCompare)).isFalse();
@@ -113,10 +128,11 @@ class HotelRoomTest {
         return givenHotelRoomBuilder().build();
     }
 
-    private static Stream<HotelRoom> notTeSameHotelRooms() {
+    private static Stream<Object> notTeSameHotelRooms() {
         return Stream.of(
                 givenHotelRoomBuilder().withHotelId(HOTEL_ID_2).build(),
-                givenHotelRoomBuilder().withNumber(ROOM_NUMBER_2).build()
+                givenHotelRoomBuilder().withNumber(ROOM_NUMBER_2).build(),
+                new Object()
         );
     }
 
