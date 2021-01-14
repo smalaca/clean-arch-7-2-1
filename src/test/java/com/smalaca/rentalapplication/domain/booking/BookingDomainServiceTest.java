@@ -22,6 +22,7 @@ class BookingDomainServiceTest {
     public static final LocalDate TODAY = LocalDate.now();
     private static final List<LocalDate> DAYS = asList(TODAY, LocalDate.now().plusDays(1));
     private static final List<LocalDate> DAYS_WITH_COLLISION = asList(TODAY, LocalDate.now().minusDays(13), LocalDate.now().plusDays(13));
+    private static final List<LocalDate> DAYS_WITHOUT_COLLISION = asList(LocalDate.now().minusDays(13), LocalDate.now().plusDays(13));
     private static final List<Booking> NO_BOOKINGS_FOUND = emptyList();
 
     private final EventIdFactory eventIdFactory = mock(EventIdFactory.class);
@@ -74,6 +75,19 @@ class BookingDomainServiceTest {
         Assertions.assertThat(actual.getRentalPlaceId()).isEqualTo(RENTAL_PLACE_ID);
         Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_ID_1);
         Assertions.assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
+    }
+
+    @Test
+    void shouldAcceptBookingWhenOtherWithoutDaysCollisionFound() {
+        Booking booking = givenBooking();
+
+        service.accept(booking, asList(givenBookingWithoutDaysCollision()));
+
+        BookingAssertion.assertThat(booking).isAccepted();
+    }
+
+    private Booking givenBookingWithoutDaysCollision() {
+        return Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITHOUT_COLLISION);
     }
 
     private Booking givenBookingWithDaysCollision() {
