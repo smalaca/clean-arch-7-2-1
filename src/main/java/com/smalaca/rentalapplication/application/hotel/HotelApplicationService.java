@@ -14,7 +14,7 @@ public class HotelApplicationService {
         this.hotelRepository = hotelRepository;
     }
 
-    public void add(HotelDto hotelDto) {
+    public String add(HotelDto hotelDto) {
         Hotel hotel = hotel()
                 .withName(hotelDto.getName())
                 .withStreet(hotelDto.getStreet())
@@ -24,6 +24,6 @@ public class HotelApplicationService {
                 .withCountry(hotelDto.getCountry())
                 .build();
 
-        hotelRepository.save(hotel);
+        return hotelRepository.save(hotel);
     }
 }
