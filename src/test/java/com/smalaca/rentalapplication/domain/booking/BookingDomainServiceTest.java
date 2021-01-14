@@ -96,6 +96,36 @@ class BookingDomainServiceTest {
         BookingAssertion.assertThat(booking).isAccepted();
     }
 
+    @Test
+    void shouldAcceptBookingWhenOthersWithoutCollisionFound() {
+        Booking booking = givenBooking();
+        List<Booking> bookings = asList(
+                givenOpenBookingWithDaysCollision(), givenRejectedBookingWithDaysCollision(), givenAcceptedBookingWithoutDaysCollision());
+
+        service.accept(booking, bookings);
+
+        BookingAssertion.assertThat(booking).isAccepted();
+    }
+
+    @Test
+    void shouldRejectBookingWhenAtLeastOneWithWithCollisionFound() {
+        Booking booking = givenBooking();
+        List<Booking> bookings = asList(
+                givenOpenBookingWithDaysCollision(), givenRejectedBookingWithDaysCollision(),
+                givenAcceptedBookingWithoutDaysCollision(), givenAcceptedBookingWithDaysCollision());
+
+        service.accept(booking, bookings);
+
+        BookingAssertion.assertThat(booking).isRejected();
+    }
+
+    private Booking givenRejectedBookingWithDaysCollision() {
+        Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITHOUT_COLLISION);
+        booking.reject(bookingEventsPublisher);
+
+        return booking;
+    }
+
     private Booking givenAcceptedBookingWithoutDaysCollision() {
         Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITHOUT_COLLISION);
         booking.accept(bookingEventsPublisher);
