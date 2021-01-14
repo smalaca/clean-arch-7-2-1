@@ -36,7 +36,8 @@ class HotelRoomOfferApplicationServiceTest {
 
     private final HotelRepository hotelRepository = mock(HotelRepository.class);
     private final HotelRoomOfferRepository hotelRoomOfferRepository = mock(HotelRoomOfferRepository.class);
-    private final HotelRoomOfferApplicationService service = new HotelRoomOfferApplicationService(hotelRoomOfferRepository, hotelRepository);
+    private final HotelRoomOfferApplicationService service = new HotelRoomOfferApplicationServiceFactory().hotelRoomOfferApplicationService(
+            hotelRoomOfferRepository, hotelRepository);
 
     @Test
     void shouldCreateHotelRoomOffer() {
