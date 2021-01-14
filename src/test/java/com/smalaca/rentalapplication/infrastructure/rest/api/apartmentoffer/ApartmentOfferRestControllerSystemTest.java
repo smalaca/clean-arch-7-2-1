@@ -40,7 +40,7 @@ class ApartmentOfferRestControllerSystemTest {
     @Autowired private SpringJpaApartmentOfferTestRepository apartmentOfferRepository;
 
     @AfterEach
-    void deleteApartments() {
+    void deleteApartmentOffers() {
         apartmentRepository.deleteAll(apartmentIds);
         apartmentOfferRepository.deleteAll(offerIds);
     }
@@ -56,8 +56,8 @@ class ApartmentOfferRestControllerSystemTest {
         storeOfferId(result);
     }
 
-    private String storeOfferId(MvcResult result) {
-        return result.getResponse().getRedirectedUrl().replace("/apartmentoffer/", "");
+    private void storeOfferId(MvcResult result) {
+        offerIds.add(result.getResponse().getRedirectedUrl().replace("/apartmentoffer/", ""));
     }
 
     private String givenExistingApartment() throws Exception {
