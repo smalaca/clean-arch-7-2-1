@@ -1,7 +1,8 @@
 package com.smalaca.rentalapplication.application.hotelroomoffer;
 
+import com.smalaca.rentalapplication.domain.hotel.Hotel;
+import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomNotFoundException;
-import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferRepository;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,17 @@ import static com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer
 @Service
 public class HotelRoomOfferApplicationService {
     private final HotelRoomOfferRepository hotelRoomOfferRepository;
-    private final HotelRoomRepository hotelRoomRepository;
+    private final HotelRepository hotelRepository;
 
-    HotelRoomOfferApplicationService(HotelRoomOfferRepository hotelRoomOfferRepository, HotelRoomRepository hotelRoomRepository) {
+    HotelRoomOfferApplicationService(HotelRoomOfferRepository hotelRoomOfferRepository, HotelRepository hotelRepository) {
         this.hotelRoomOfferRepository = hotelRoomOfferRepository;
-        this.hotelRoomRepository = hotelRoomRepository;
+        this.hotelRepository = hotelRepository;
     }
 
     public UUID add(HotelRoomOfferDto dto) {
-        if (hotelRoomRepository.existById(dto.getHotelRoomId())) {
+        Hotel hotel = hotelRepository.findById(dto.getHotelId());
+
+        if (hotel.hasRoomWithNumber(dto.getNumber())) {
             HotelRoomOffer hotelRoomOffer = hotelRoomOffer()
                     .withHotelRoomId(dto.getHotelRoomId())
                     .withPrice(dto.getPrice())

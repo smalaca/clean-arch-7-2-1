@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.application.hotelroomoffer;
 
+import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomNotFoundException;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomAvailabilityException;
@@ -32,8 +33,9 @@ class HotelRoomOfferApplicationServiceTest {
     private static final int ROOM_NUMBER = 42;
 
     private final HotelRoomRepository hotelRoomRepository = mock(HotelRoomRepository.class);
+    private final HotelRepository hotelRepository = mock(HotelRepository.class);
     private final HotelRoomOfferRepository hotelRoomOfferRepository = mock(HotelRoomOfferRepository.class);
-    private final HotelRoomOfferApplicationService service = new HotelRoomOfferApplicationService(hotelRoomOfferRepository, hotelRoomRepository);
+    private final HotelRoomOfferApplicationService service = new HotelRoomOfferApplicationService(hotelRoomOfferRepository, hotelRepository);
 
     @Test
     void shouldCreateHotelRoomOffer() {
