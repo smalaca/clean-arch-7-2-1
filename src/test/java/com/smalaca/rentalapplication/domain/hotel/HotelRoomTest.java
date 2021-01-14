@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.hotel;
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
+import com.smalaca.rentalapplication.domain.space.NotEnoughSpacesGivenException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +17,7 @@ import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -48,6 +50,18 @@ class HotelRoomTest {
                 .hasRoomNumberEqualTo(ROOM_NUMBER_1)
                 .hasSpacesDefinitionEqualTo(SPACES_DEFINITION_1)
                 .hasDescriptionEqualTo(DESCRIPTION_1);
+    }
+
+    @Test
+    void shouldNotBeAbleToCreateHotelRoomWithoutSpaces() {
+        HotelRoom.Builder hotelRoom = hotelRoom()
+                .withHotelId(HOTEL_ID_1)
+                .withNumber(ROOM_NUMBER_1)
+                .withDescription(DESCRIPTION_1);
+
+        NotEnoughSpacesGivenException actual = assertThrows(NotEnoughSpacesGivenException.class, hotelRoom::build);
+
+        Assertions.assertThat(actual).hasMessage("No spaces given.");
     }
 
     @Test
