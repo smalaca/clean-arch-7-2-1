@@ -1,5 +1,8 @@
 package com.smalaca.rentalapplication.domain.booking;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class RentalPlaceIdentifier {
     private final RentalType rentalType;
     private final String rentalPlaceId;

@@ -77,4 +77,8 @@ public class Booking {
     private boolean hasDaysCollisionWith(Booking booking) {
         return days.stream().anyMatch(day -> booking.days.contains(day));
     }
+
+    public RentalPlaceIdentifier rentalPlaceIdentifier() {
+        return new RentalPlaceIdentifier(rentalType, rentalPlaceId);
+    }
 }

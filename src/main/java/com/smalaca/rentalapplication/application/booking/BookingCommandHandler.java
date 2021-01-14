@@ -6,6 +6,8 @@ import com.smalaca.rentalapplication.domain.booking.BookingEventsPublisher;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import org.springframework.context.event.EventListener;
 
+import java.util.List;
+
 public class BookingCommandHandler {
     private final BookingRepository bookingRepository;
     private final BookingDomainService bookingDomainService;
@@ -29,8 +31,9 @@ public class BookingCommandHandler {
     @EventListener
     public void accept(BookingAccept bookingAccept) {
         Booking booking = bookingRepository.findById(bookingAccept.getId());
+        List<Booking> bookings = bookingRepository.findAllBy(booking.rentalPlaceIdentifier());
 
-        booking.accept(bookingEventsPublisher);
+        bookingDomainService.accept(booking, bookings);
 
         bookingRepository.save(booking);
     }

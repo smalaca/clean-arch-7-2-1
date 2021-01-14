@@ -9,7 +9,7 @@ public class BookingDomainService {
         this.bookingEventsPublisher = bookingEventsPublisher;
     }
 
-    void accept(Booking booking, List<Booking> bookings) {
+    public void accept(Booking booking, List<Booking> bookings) {
         if (hasNoCollisions(booking, bookings)) {
             booking.accept(bookingEventsPublisher);
         } else {
