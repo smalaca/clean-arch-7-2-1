@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.hotelroom;
+package com.smalaca.rentalapplication.domain.hotel;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

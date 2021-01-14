@@ -1,7 +1,7 @@
 package com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelroom;
 
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;

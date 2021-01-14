@@ -6,8 +6,8 @@ import com.smalaca.rentalapplication.application.hotelroom.HotelRoomBookingDto;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistory;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryAssertion;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryRepository;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelbookinghistory.SpringJpaHotelBookingHistoryTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelroom.SpringJpaHotelRoomTestRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
+import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 
 @SpringBootTest

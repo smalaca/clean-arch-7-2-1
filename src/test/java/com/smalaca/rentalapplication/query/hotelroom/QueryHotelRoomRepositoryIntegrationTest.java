@@ -1,8 +1,8 @@
 package com.smalaca.rentalapplication.query.hotelroom;
 
 import com.google.common.collect.ImmutableMap;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelroom.SpringJpaHotelRoomTestRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
-import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
+import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 

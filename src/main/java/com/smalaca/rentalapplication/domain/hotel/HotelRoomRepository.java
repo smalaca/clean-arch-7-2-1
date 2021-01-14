@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.hotelroom;
+package com.smalaca.rentalapplication.domain.hotel;
 
 public interface HotelRoomRepository {
     String save(HotelRoom hotelRoom);

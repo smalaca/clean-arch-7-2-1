@@ -3,7 +3,7 @@ package com.smalaca.rentalapplication.infrastructure.eventchannel.spring;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomBooked;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 

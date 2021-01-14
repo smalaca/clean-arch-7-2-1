@@ -3,7 +3,7 @@ package com.smalaca.rentalapplication.application.hotelbookinghistory;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistory;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryAssertion;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryRepository;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomBookedTestFactory;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomBookedTestFactory;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 

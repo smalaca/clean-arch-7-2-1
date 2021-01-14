@@ -1,7 +1,7 @@
 package com.smalaca.rentalapplication.application.hotelroomoffer;
 
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomNotFoundException;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomNotFoundException;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomAvailabilityException;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferAssertion;

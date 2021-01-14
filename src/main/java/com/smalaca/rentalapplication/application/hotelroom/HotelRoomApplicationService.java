@@ -2,11 +2,11 @@ package com.smalaca.rentalapplication.application.hotelroom;
 
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoom;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomEventsPublisher;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomEventsPublisher;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
 
-import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
+import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 
 public class HotelRoomApplicationService {
     private final HotelRoomRepository hotelRoomRepository;
