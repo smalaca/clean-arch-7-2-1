@@ -10,6 +10,10 @@ public class BookingDomainService {
     }
 
     void accept(Booking booking, List<Booking> bookings) {
-        booking.accept(bookingEventsPublisher);
+        if (bookings.isEmpty()) {
+            booking.accept(bookingEventsPublisher);
+        } else {
+            booking.reject();
+        }
     }
 }

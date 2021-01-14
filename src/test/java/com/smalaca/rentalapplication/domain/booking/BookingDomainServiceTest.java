@@ -17,8 +17,11 @@ import static org.mockito.Mockito.mock;
 
 class BookingDomainServiceTest {
     private static final String RENTAL_PLACE_ID = "1234";
-    private static final String TENANT_ID = "5678";
-    private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
+    private static final String TENANT_ID_1 = "5678";
+    private static final String TENANT_ID_2 = "123456";
+    public static final LocalDate TODAY = LocalDate.now();
+    private static final List<LocalDate> DAYS = asList(TODAY, LocalDate.now().plusDays(1));
+    private static final List<LocalDate> DAYS_WITH_COLLISION = asList(TODAY, LocalDate.now().minusDays(13), LocalDate.now().plusDays(13));
     private static final List<Booking> NO_BOOKINGS_FOUND = emptyList();
 
     private final EventIdFactory eventIdFactory = mock(EventIdFactory.class);
@@ -45,11 +48,25 @@ class BookingDomainServiceTest {
         BookingAccepted actual = captor.getValue();
         Assertions.assertThat(actual.getRentalType()).isEqualTo("HOTEL_ROOM");
         Assertions.assertThat(actual.getRentalPlaceId()).isEqualTo(RENTAL_PLACE_ID);
-        Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
+        Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_ID_1);
         Assertions.assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
     }
 
+    @Test
+    void shouldRejectBookingWhenOtherWithCollisionFound() {
+        Booking booking = givenBooking();
+        List<Booking> bookings = asList(givenBookingWithCollision());
+
+        service.accept(booking, bookings);
+
+        BookingAssertion.assertThat(booking).isRejected();
+    }
+
+    private Booking givenBookingWithCollision() {
+        return Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITH_COLLISION);
+    }
+
     private Booking givenBooking() {
-        return Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS);
+        return Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_1, DAYS);
     }
 }
