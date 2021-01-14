@@ -58,7 +58,7 @@ class BookingDomainServiceTest {
     void shouldRejectBookingWhenOtherWithDaysCollisionFound() {
         Booking booking = givenBooking();
 
-        service.accept(booking, asList(givenBookingWithDaysCollision()));
+        service.accept(booking, asList(givenAcceptedBookingWithDaysCollision()));
 
         BookingAssertion.assertThat(booking).isRejected();
     }
@@ -68,7 +68,7 @@ class BookingDomainServiceTest {
         ArgumentCaptor<BookingRejected> captor = ArgumentCaptor.forClass(BookingRejected.class);
         Booking booking = givenBooking();
 
-        service.accept(booking, asList(givenBookingWithDaysCollision()));
+        service.accept(booking, asList(givenAcceptedBookingWithDaysCollision()));
 
         BDDMockito.then(eventChannel).should().publish(captor.capture());
         BookingRejected actual = captor.getValue();
@@ -82,22 +82,35 @@ class BookingDomainServiceTest {
     void shouldAcceptBookingWhenOtherWithoutDaysCollisionFound() {
         Booking booking = givenBooking();
 
-        service.accept(booking, asList(givenBookingWithoutDaysCollision()));
+        service.accept(booking, asList(givenAcceptedBookingWithoutDaysCollision()));
 
         BookingAssertion.assertThat(booking).isAccepted();
     }
 
-    private Booking givenBookingWithoutDaysCollision() {
+    @Test
+    void shouldAcceptBookingWhenOtherWithDaysCollisionButNotAcceptedFound() {
+        Booking booking = givenBooking();
+
+        service.accept(booking, asList(givenOpenBookingWithDaysCollision()));
+
+        BookingAssertion.assertThat(booking).isAccepted();
+    }
+
+    private Booking givenAcceptedBookingWithoutDaysCollision() {
         Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITHOUT_COLLISION);
         booking.accept(bookingEventsPublisher);
 
         return booking;
     }
 
-    private Booking givenBookingWithDaysCollision() {
+    private Booking givenAcceptedBookingWithDaysCollision() {
         Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITH_COLLISION);
         booking.accept(bookingEventsPublisher);
         return booking;
+    }
+
+    private Booking givenOpenBookingWithDaysCollision() {
+        return Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITH_COLLISION);
     }
 
     private Booking givenBooking() {
