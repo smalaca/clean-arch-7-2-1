@@ -52,8 +52,8 @@ class HotelBookingHistoryEventListenerIntegrationTest {
     void shouldUpdateHotelBookingHistory() {
         String tenantId = "11223344";
         List<LocalDate> days = asList(LocalDate.of(2020, 1, 13), LocalDate.of(2020, 1, 14));
-        hotelRoomId = givenExistingHotelRoom();
-        HotelRoomBookingDto hotelRoomBookingDto = new HotelRoomBookingDto(HOTEL_ID, HOTEL_NUMBER, hotelRoomId, tenantId, days);
+        givenExistingHotelRoom();
+        HotelRoomBookingDto hotelRoomBookingDto = new HotelRoomBookingDto(HOTEL_ID, HOTEL_NUMBER, tenantId, days);
 
         hotelRoomApplicationService.book(hotelRoomBookingDto);
         HotelBookingHistory actual = hotelBookingHistoryRepository.findFor(HOTEL_ID);
@@ -61,8 +61,8 @@ class HotelBookingHistoryEventListenerIntegrationTest {
         HotelBookingHistoryAssertion.assertThat(actual).hasHotelRoomBookingHistoryFor(hotelRoomId, tenantId, days);
     }
 
-    private String givenExistingHotelRoom() {
-        return hotelRoomRepository.save(createHotelRoom());
+    private void givenExistingHotelRoom() {
+        hotelRoomRepository.save(createHotelRoom());
     }
 
     private HotelRoom createHotelRoom() {

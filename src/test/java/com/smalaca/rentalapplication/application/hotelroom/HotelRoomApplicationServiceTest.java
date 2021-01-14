@@ -79,7 +79,7 @@ class HotelRoomApplicationServiceTest {
         String hotelRoomId = "1234";
         givenHotelRoom(hotelRoomId);
 
-        service.book(givenHotelRoomBookingDto(hotelRoomId));
+        service.book(givenHotelRoomBookingDto());
 
         thenBookingShouldBeCreated();
     }
@@ -90,7 +90,7 @@ class HotelRoomApplicationServiceTest {
         String hotelRoomId = "1234";
         givenHotelRoom(hotelRoomId);
 
-        service.book(givenHotelRoomBookingDto(hotelRoomId));
+        service.book(givenHotelRoomBookingDto());
 
         then(eventChannel).should().publish(captor.capture());
         HotelRoomBooked actual = captor.getValue();
@@ -101,8 +101,8 @@ class HotelRoomApplicationServiceTest {
         assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
     }
 
-    private HotelRoomBookingDto givenHotelRoomBookingDto(String hotelRoomId) {
-        return new HotelRoomBookingDto(HOTEL_ID, ROOM_NUMBER, hotelRoomId, TENANT_ID, DAYS);
+    private HotelRoomBookingDto givenHotelRoomBookingDto() {
+        return new HotelRoomBookingDto(HOTEL_ID, ROOM_NUMBER, TENANT_ID, DAYS);
     }
 
     private void thenBookingShouldBeCreated() {
