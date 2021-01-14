@@ -3,6 +3,8 @@ package com.smalaca.rentalapplication.domain.hotel;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.space.Space;
 import com.smalaca.rentalapplication.domain.space.SpacesFactory;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -67,6 +69,27 @@ public class HotelRoom {
 
     boolean hasNumberEqualTo(int number) {
         return this.number == number;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        HotelRoom hotelRoom = (HotelRoom) o;
+
+        return new EqualsBuilder().append(number, hotelRoom.number).append(hotelId, hotelRoom.hotelId).isEquals();
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(hotelId).append(number).toHashCode();
     }
 
     public static class Builder {

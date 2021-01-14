@@ -5,12 +5,14 @@ import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.BDDMockito;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
@@ -19,11 +21,15 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 
 class HotelRoomTest {
-    private static final String HOTEL_ID = UUID.randomUUID().toString();
-    private static final int ROOM_NUMBER = 13;
-    private static final int DIFFERENT_ROOM_NUMBER = 34;
-    private static final Map<String, Double> SPACES_DEFINITION = ImmutableMap.of("RoomOne", 20.0, "RoomTwo", 20.0);
-    private static final String DESCRIPTION = "What a lovely place";
+    private static final String HOTEL_ID_1 = UUID.randomUUID().toString();
+    private static final int ROOM_NUMBER_1 = 42;
+    private static final ImmutableMap<String, Double> SPACES_DEFINITION_1 = ImmutableMap.of("Room1", 30.0);
+    private static final String DESCRIPTION_1 = "This is very nice place";
+    private static final String HOTEL_ID_2 = UUID.randomUUID().toString();
+    private static final int ROOM_NUMBER_2 = 13;
+    private static final ImmutableMap<String, Double> SPACES_DEFINITION_2 = ImmutableMap.of("RoomOne", 10.0, "RoomTwo", 25.0);
+    private static final String DESCRIPTION_2 = "This is even better place";
+    private static final int DIFFERENT_ROOM_NUMBER = ROOM_NUMBER_2;
     private static final String TENANT_ID = "325426";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
     private final HotelEventsPublisher hotelEventsPublisher = mock(HotelEventsPublisher.class);
@@ -31,17 +37,17 @@ class HotelRoomTest {
     @Test
     void shouldCreateHotelRoomWithAllRequiredInformation() {
         HotelRoom actual = hotelRoom()
-                .withHotelId(HOTEL_ID)
-                .withNumber(ROOM_NUMBER)
-                .withSpacesDefinition(SPACES_DEFINITION)
-                .withDescription(DESCRIPTION)
+                .withHotelId(HOTEL_ID_1)
+                .withNumber(ROOM_NUMBER_1)
+                .withSpacesDefinition(SPACES_DEFINITION_1)
+                .withDescription(DESCRIPTION_1)
                 .build();
 
         HotelRoomAssertion.assertThat(actual)
-                .hasHotelIdEqualTo(HOTEL_ID)
-                .hasRoomNumberEqualTo(ROOM_NUMBER)
-                .hasSpacesDefinitionEqualTo(SPACES_DEFINITION)
-                .hasDescriptionEqualTo(DESCRIPTION);
+                .hasHotelIdEqualTo(HOTEL_ID_1)
+                .hasRoomNumberEqualTo(ROOM_NUMBER_1)
+                .hasSpacesDefinitionEqualTo(SPACES_DEFINITION_1)
+                .hasDescriptionEqualTo(DESCRIPTION_1);
     }
 
     @Test
@@ -62,12 +68,12 @@ class HotelRoomTest {
 
         hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
-        BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(any(), eq(HOTEL_ID), eq(TENANT_ID), eq(DAYS));
+        BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(any(), eq(HOTEL_ID_1), eq(TENANT_ID), eq(DAYS));
     }
 
     @Test
     void shouldRecognizeWhenNumberIsTheSame() {
-        boolean actual = givenHotelRoom().hasNumberEqualTo(ROOM_NUMBER);
+        boolean actual = givenHotelRoom().hasNumberEqualTo(ROOM_NUMBER_1);
 
         Assertions.assertThat(actual).isTrue();
     }
@@ -79,12 +85,62 @@ class HotelRoomTest {
         Assertions.assertThat(actual).isFalse();
     }
 
-    private HotelRoom givenHotelRoom() {
-        return hotelRoom()
-                .withHotelId(HOTEL_ID)
-                .withNumber(ROOM_NUMBER)
-                .withSpacesDefinition(SPACES_DEFINITION)
-                .withDescription(DESCRIPTION)
+    @Test
+    void shouldRecognizeTheSameInstanceAsTheSameAggregate() {
+        HotelRoom actual = givenHotelRoom();
+
+        Assertions.assertThat(actual.equals(actual)).isTrue();
+        Assertions.assertThat(actual.hashCode()).isEqualTo(actual.hashCode());
+    }
+
+    @Test
+    void shouldRecognizeTwoInstancesOfHotelRoomRepresentsTheSameAggregate() {
+        HotelRoom toCompare = hotelRoom()
+                .withHotelId(HOTEL_ID_1)
+                .withNumber(ROOM_NUMBER_1)
+                .withSpacesDefinition(SPACES_DEFINITION_2)
+                .withDescription(DESCRIPTION_2)
                 .build();
+
+        HotelRoom actual = givenHotelRoom();
+
+        Assertions.assertThat(actual.equals(toCompare)).isTrue();
+        Assertions.assertThat(actual.hashCode()).isEqualTo(toCompare.hashCode());
+    }
+
+    @Test
+    void shouldRecognizeNullIsNotTheSameAsHotelRoom() {
+        HotelRoom actual = givenHotelRoom();
+
+        Assertions.assertThat(actual.equals(null)).isFalse();
+    }
+
+    @ParameterizedTest
+    @MethodSource("notTeSameHotelRooms")
+    void shouldRecognizeHotelRoomsDoesNotRepresentTheSameAggregate(Object toCompare) {
+        HotelRoom actual = givenHotelRoom();
+
+        Assertions.assertThat(actual.equals(toCompare)).isFalse();
+        Assertions.assertThat(actual.hashCode()).isNotEqualTo(toCompare.hashCode());
+    }
+
+    private HotelRoom givenHotelRoom() {
+        return givenHotelRoomBuilder().build();
+    }
+
+    private static Stream<Object> notTeSameHotelRooms() {
+        return Stream.of(
+                givenHotelRoomBuilder().withHotelId(HOTEL_ID_2).build(),
+                givenHotelRoomBuilder().withNumber(ROOM_NUMBER_2).build(),
+                new Object()
+        );
+    }
+
+    private static HotelRoom.Builder givenHotelRoomBuilder() {
+        return hotelRoom()
+                .withHotelId(HOTEL_ID_1)
+                .withNumber(ROOM_NUMBER_1)
+                .withSpacesDefinition(SPACES_DEFINITION_1)
+                .withDescription(DESCRIPTION_1);
     }
 }
