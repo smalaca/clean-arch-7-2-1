@@ -12,6 +12,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static com.smalaca.rentalapplication.domain.booking.BookingStatus.ACCEPTED;
+import static com.smalaca.rentalapplication.domain.booking.BookingStatus.REJECTED;
+
 @Entity
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class Booking {
@@ -48,11 +51,15 @@ public class Booking {
     }
 
     public void reject() {
-        bookingStatus = BookingStatus.REJECTED;
+        if (bookingStatus.equals(ACCEPTED)) {
+            throw new NotAllowedBookingStatusTransitionException(bookingStatus, REJECTED);
+        }
+
+        bookingStatus = REJECTED;
     }
 
     public void accept(BookingEventsPublisher bookingEventsPublisher) {
-        bookingStatus = BookingStatus.ACCEPTED;
+        bookingStatus = ACCEPTED;
 
         bookingEventsPublisher.bookingAccepted(rentalType, rentalPlaceId, tenantId, days);
     }
