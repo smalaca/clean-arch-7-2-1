@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.application.hotelroom;
+package com.smalaca.rentalapplication.application.hotel;
 
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;

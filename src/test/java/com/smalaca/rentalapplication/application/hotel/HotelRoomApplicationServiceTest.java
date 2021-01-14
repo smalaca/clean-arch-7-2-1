@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.application.hotelroom;
+package com.smalaca.rentalapplication.application.hotel;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.booking.Booking;

@@ -2,8 +2,8 @@ package com.smalaca.rentalapplication.infrastructure.rest.api.hotelroom;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.application.hotel.HotelDto;
-import com.smalaca.rentalapplication.application.hotelroom.HotelRoomBookingDto;
-import com.smalaca.rentalapplication.application.hotelroom.HotelRoomDto;
+import com.smalaca.rentalapplication.application.hotel.HotelRoomBookingDto;
+import com.smalaca.rentalapplication.application.hotel.HotelRoomDto;
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotel.SpringJpaHotelTestRepository;

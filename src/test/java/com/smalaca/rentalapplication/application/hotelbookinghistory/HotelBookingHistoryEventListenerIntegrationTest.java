@@ -1,8 +1,8 @@
 package com.smalaca.rentalapplication.application.hotelbookinghistory;
 
 import com.google.common.collect.ImmutableMap;
-import com.smalaca.rentalapplication.application.hotelroom.HotelRoomApplicationService;
-import com.smalaca.rentalapplication.application.hotelroom.HotelRoomBookingDto;
+import com.smalaca.rentalapplication.application.hotel.HotelRoomApplicationService;
+import com.smalaca.rentalapplication.application.hotel.HotelRoomBookingDto;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistory;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryAssertion;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryRepository;

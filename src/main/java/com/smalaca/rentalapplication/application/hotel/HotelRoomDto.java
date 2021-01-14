@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.application.hotelroom;
+package com.smalaca.rentalapplication.application.hotel;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
