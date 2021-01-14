@@ -2,7 +2,7 @@ package com.smalaca.rentalapplication.domain.eventchannel;
 
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomBooked;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
 
 public interface EventChannel {
     void publish(ApartmentBooked apartmentBooked);

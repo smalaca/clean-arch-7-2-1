@@ -1,8 +1,9 @@
-package com.smalaca.rentalapplication.domain.hotelroom;
+package com.smalaca.rentalapplication.domain.hotel;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.smalaca.rentalapplication.domain.hotelroom.HotelRoom.Builder.hotelRoom;
+import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -20,11 +21,12 @@ import static org.mockito.Mockito.mock;
 class HotelRoomTest {
     private static final String HOTEL_ID = UUID.randomUUID().toString();
     private static final int ROOM_NUMBER = 13;
+    private static final int DIFFERENT_ROOM_NUMBER = 34;
     private static final Map<String, Double> SPACES_DEFINITION = ImmutableMap.of("RoomOne", 20.0, "RoomTwo", 20.0);
     private static final String DESCRIPTION = "What a lovely place";
     private static final String TENANT_ID = "325426";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
-    private final HotelRoomEventsPublisher hotelRoomEventsPublisher = mock(HotelRoomEventsPublisher.class);
+    private final HotelEventsPublisher hotelEventsPublisher = mock(HotelEventsPublisher.class);
 
     @Test
     void shouldCreateHotelRoomWithAllRequiredInformation() {
@@ -46,7 +48,7 @@ class HotelRoomTest {
     void shouldCreateBookingOnceBooked() {
         HotelRoom hotelRoom = givenHotelRoom();
 
-        Booking actual = hotelRoom.book(TENANT_ID, DAYS, hotelRoomEventsPublisher);
+        Booking actual = hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
         BookingAssertion.assertThat(actual)
                 .isHotelRoom()
@@ -58,9 +60,23 @@ class HotelRoomTest {
     void shouldPublishHotelRoomBooked() {
         HotelRoom hotelRoom = givenHotelRoom();
 
-        hotelRoom.book(TENANT_ID, DAYS, hotelRoomEventsPublisher);
+        hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
-        BDDMockito.then(hotelRoomEventsPublisher).should().publishHotelRoomBooked(any(), eq(HOTEL_ID), eq(TENANT_ID), eq(DAYS));
+        BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(any(), eq(HOTEL_ID), eq(TENANT_ID), eq(DAYS));
+    }
+
+    @Test
+    void shouldRecognizeWhenNumberIsTheSame() {
+        boolean actual = givenHotelRoom().hasNumberEqualTo(ROOM_NUMBER);
+
+        Assertions.assertThat(actual).isTrue();
+    }
+
+    @Test
+    void shouldRecognizeWhenNumberIsDifferent() {
+        boolean actual = givenHotelRoom().hasNumberEqualTo(DIFFERENT_ROOM_NUMBER);
+
+        Assertions.assertThat(actual).isFalse();
     }
 
     private HotelRoom givenHotelRoom() {

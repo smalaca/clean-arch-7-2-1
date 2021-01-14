@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.hotelroom;
+package com.smalaca.rentalapplication.domain.hotel;
 
 import com.smalaca.rentalapplication.domain.clock.Clock;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
@@ -7,12 +7,12 @@ import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import java.time.LocalDate;
 import java.util.List;
 
-public class HotelRoomEventsPublisher {
+public class HotelEventsPublisher {
     private final EventIdFactory eventIdFactory;
     private final Clock clock;
     private final EventChannel eventChannel;
 
-    public HotelRoomEventsPublisher(EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
+    public HotelEventsPublisher(EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
         this.eventIdFactory = eventIdFactory;
         this.clock = clock;
         this.eventChannel = eventChannel;

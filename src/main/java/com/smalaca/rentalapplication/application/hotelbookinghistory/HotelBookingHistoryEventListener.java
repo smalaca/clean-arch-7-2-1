@@ -2,7 +2,7 @@ package com.smalaca.rentalapplication.application.hotelbookinghistory;
 
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistory;
 import com.smalaca.rentalapplication.domain.hotelbookinghistory.HotelBookingHistoryRepository;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomBooked;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 

@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.query.hotel;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,6 +12,7 @@ import java.util.UUID;
 public class HotelReadModel {
     @Id
     @GeneratedValue
+    @Column(name = "ID")
     private UUID id;
 
     private String name;

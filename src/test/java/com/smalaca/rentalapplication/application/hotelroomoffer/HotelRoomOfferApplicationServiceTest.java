@@ -1,7 +1,9 @@
 package com.smalaca.rentalapplication.application.hotelroomoffer;
 
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomNotFoundException;
-import com.smalaca.rentalapplication.domain.hotelroom.HotelRoomRepository;
+import com.google.common.collect.ImmutableMap;
+import com.smalaca.rentalapplication.domain.hotel.Hotel;
+import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomNotFoundException;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomAvailabilityException;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferAssertion;
@@ -14,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,10 +31,12 @@ class HotelRoomOfferApplicationServiceTest {
     private static final LocalDate START_YEAR_LATER = LocalDate.of(2041, 12, 10);
     private static final LocalDate END = LocalDate.of(2041, 12, 20);
     private static final LocalDate NO_DATE = null;
+    private static final String HOTEL_ID = "12341234";
+    private static final int ROOM_NUMBER = 42;
 
-    private final HotelRoomRepository hotelRoomRepository = mock(HotelRoomRepository.class);
+    private final HotelRepository hotelRepository = mock(HotelRepository.class);
     private final HotelRoomOfferRepository hotelRoomOfferRepository = mock(HotelRoomOfferRepository.class);
-    private final HotelRoomOfferApplicationService service = new HotelRoomOfferApplicationService(hotelRoomOfferRepository, hotelRoomRepository);
+    private final HotelRoomOfferApplicationService service = new HotelRoomOfferApplicationService(hotelRoomOfferRepository, hotelRepository);
 
     @Test
     void shouldCreateHotelRoomOffer() {
@@ -69,7 +74,7 @@ class HotelRoomOfferApplicationServiceTest {
 
     @Test
     void shouldRecognizePriceIsNotHigherThanZero() {
-        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, BigDecimal.ZERO, START, END);
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ID, ROOM_NUMBER, HOTEL_ROOM_ID, BigDecimal.ZERO, START, END);
         givenExistingHotelRoom();
 
         NotAllowedMoneyValueException actual = assertThrows(NotAllowedMoneyValueException.class, () -> service.add(dto));
@@ -79,7 +84,7 @@ class HotelRoomOfferApplicationServiceTest {
 
     @Test
     void shouldRecognizeAvailabilityStartIsAfterEnd() {
-        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, END, START);
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ID, ROOM_NUMBER, HOTEL_ROOM_ID, PRICE, END, START);
         givenExistingHotelRoom();
 
         HotelRoomAvailabilityException actual = assertThrows(HotelRoomAvailabilityException.class, () -> service.add(dto));
@@ -89,7 +94,7 @@ class HotelRoomOfferApplicationServiceTest {
 
     @Test
     void shouldRecognizeAvailabilityStartDateIsFromPast() {
-        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, LocalDate.of(2020, 10, 10), END);
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ID, ROOM_NUMBER, HOTEL_ROOM_ID, PRICE, LocalDate.of(2020, 10, 10), END);
         givenExistingHotelRoom();
 
         HotelRoomAvailabilityException actual = assertThrows(HotelRoomAvailabilityException.class, () -> service.add(dto));
@@ -99,7 +104,7 @@ class HotelRoomOfferApplicationServiceTest {
 
     @Test
     void shouldRecognizeAvailabilityStartDateIsFromPastWhenEndNotGiven() {
-        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, LocalDate.of(2020, 10, 10), NO_DATE);
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ID, ROOM_NUMBER, HOTEL_ROOM_ID, PRICE, LocalDate.of(2020, 10, 10), NO_DATE);
         givenExistingHotelRoom();
 
         HotelRoomAvailabilityException actual = assertThrows(HotelRoomAvailabilityException.class, () -> service.add(dto));
@@ -111,7 +116,7 @@ class HotelRoomOfferApplicationServiceTest {
     void shouldCreateHotelRoomOfferWhenAvailabilityEndNotGiven() {
         ArgumentCaptor<HotelRoomOffer> captor = ArgumentCaptor.forClass(HotelRoomOffer.class);
         givenExistingHotelRoom();
-        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, START, NO_DATE);
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ID, ROOM_NUMBER, HOTEL_ROOM_ID, PRICE, START, NO_DATE);
 
         service.add(dto);
 
@@ -123,14 +128,17 @@ class HotelRoomOfferApplicationServiceTest {
     }
 
     private HotelRoomOfferDto givenHotelRoomOfferDto() {
-        return new HotelRoomOfferDto(HOTEL_ROOM_ID, PRICE, START, END);
+        return new HotelRoomOfferDto(HOTEL_ID, ROOM_NUMBER, HOTEL_ROOM_ID, PRICE, START, END);
     }
 
     private void givenNotExistingHotelRoom() {
-        given(hotelRoomRepository.existById(HOTEL_ROOM_ID)).willReturn(false);
+        given(hotelRepository.findById(HOTEL_ID)).willReturn(hotel().build());
     }
 
     private void givenExistingHotelRoom() {
-        given(hotelRoomRepository.existById(HOTEL_ROOM_ID)).willReturn(true);
+        Hotel hotel = hotel().build();
+        hotel.addRoom(ROOM_NUMBER, ImmutableMap.of("Room1", 30.0), "room to rent");
+
+        given(hotelRepository.findById(HOTEL_ID)).willReturn(hotel);
     }
 }

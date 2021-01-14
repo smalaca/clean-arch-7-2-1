@@ -2,13 +2,12 @@ package com.smalaca.rentalapplication.infrastructure.rest.api.hotelroom;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.application.hotel.HotelDto;
-import com.smalaca.rentalapplication.application.hotelroom.HotelRoomBookingDto;
-import com.smalaca.rentalapplication.application.hotelroom.HotelRoomDto;
+import com.smalaca.rentalapplication.application.hotel.HotelRoomBookingDto;
+import com.smalaca.rentalapplication.application.hotel.HotelRoomDto;
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotel.SpringJpaHotelTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelbookinghistory.SpringJpaHotelBookingHistoryTestRepository;
-import com.smalaca.rentalapplication.infrastructure.persistence.jpa.hotelroom.SpringJpaHotelRoomTestRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -43,13 +42,11 @@ class HotelRoomRestControllerSystemTest {
     private static final String DESCRIPTION_2 = "This is even better place";
 
     private final JsonFactory jsonFactory = new JsonFactory();
-    private final List<String> hotelRoomIds = new ArrayList<>();
     private final List<String> bookingIds = new ArrayList<>();
     private String hotelId;
 
     @Autowired private MockMvc mockMvc;
     @Autowired private SpringJpaHotelTestRepository hotelRepository;
-    @Autowired private SpringJpaHotelRoomTestRepository hotelRoomRepository;
     @Autowired private SpringJpaHotelBookingHistoryTestRepository hotelBookingHistoryRepository;
     @Autowired private SpringJpaBookingTestRepository bookingRepository;
 
@@ -66,7 +63,6 @@ class HotelRoomRestControllerSystemTest {
     @AfterEach
     void deleteHotelRooms() {
         hotelRepository.deleteById(hotelId);
-        hotelRoomRepository.deleteAll(hotelRoomIds);
         bookingRepository.deleteAll(bookingIds);
 
         if (!bookingIds.isEmpty()) {
@@ -88,8 +84,8 @@ class HotelRoomRestControllerSystemTest {
     @Test
     void shouldBookHotelRoom() throws Exception {
         String url = save(givenHotelRoom1()).getResponse().getRedirectedUrl();
-        String hotelRoomId = url.replace("/hotelroom/", "");
-        HotelRoomBookingDto hotelRoomBookingDto = new HotelRoomBookingDto(hotelRoomId, "1357", asList(LocalDate.of(2020, 11, 12), LocalDate.of(2020, 12, 1)));
+        HotelRoomBookingDto hotelRoomBookingDto = new HotelRoomBookingDto(
+                hotelId, ROOM_NUMBER_1, "1357", asList(LocalDate.of(2020, 11, 12), LocalDate.of(2020, 12, 1)));
 
         MvcResult result = mockMvc.perform(put(url.replace("hotelroom/", "hotelroom/book/")).contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelRoomBookingDto)))
                 .andExpect(status().isCreated())
@@ -110,12 +106,6 @@ class HotelRoomRestControllerSystemTest {
     }
 
     private MvcResult save(HotelRoomDto hotelRoomDto) throws Exception {
-        MvcResult mvcResult = mockMvc.perform(post("/hotelroom").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelRoomDto))).andReturn();
-        hotelRoomIds.add(getHotelRoomId(mvcResult));
-        return mvcResult;
-    }
-
-    private String getHotelRoomId(MvcResult result) {
-        return result.getResponse().getRedirectedUrl().replace("/hotelroom/", "");
+        return mockMvc.perform(post("/hotelroom").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelRoomDto))).andReturn();
     }
 }

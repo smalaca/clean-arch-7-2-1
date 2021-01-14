@@ -1,17 +1,22 @@
 package com.smalaca.rentalapplication.application.hotel;
 
+import com.smalaca.rentalapplication.domain.booking.Booking;
+import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
+import com.smalaca.rentalapplication.domain.hotel.HotelEventsPublisher;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
-import org.springframework.stereotype.Service;
 
 import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
 
-@Service
 public class HotelApplicationService {
     private final HotelRepository hotelRepository;
+    private final BookingRepository bookingRepository;
+    private final HotelEventsPublisher hotelEventsPublisher;
 
-    public HotelApplicationService(HotelRepository hotelRepository) {
+    HotelApplicationService(HotelRepository hotelRepository, BookingRepository bookingRepository, HotelEventsPublisher hotelEventsPublisher) {
         this.hotelRepository = hotelRepository;
+        this.bookingRepository = bookingRepository;
+        this.hotelEventsPublisher = hotelEventsPublisher;
     }
 
     public String add(HotelDto hotelDto) {
@@ -25,5 +30,23 @@ public class HotelApplicationService {
                 .build();
 
         return hotelRepository.save(hotel);
+    }
+
+    public String add(HotelRoomDto hotelRoomDto) {
+        Hotel hotel = hotelRepository.findById(hotelRoomDto.getHotelId());
+
+        hotel.addRoom(hotelRoomDto.getNumber(), hotelRoomDto.getSpacesDefinition(), hotelRoomDto.getDescription());
+
+        hotelRepository.save(hotel);
+        return hotel.getIdOfRoom(hotelRoomDto.getNumber());
+    }
+
+    public String book(HotelRoomBookingDto hotelRoomBookingDto) {
+        Hotel hotel = hotelRepository.findById(hotelRoomBookingDto.getHotelId());
+
+        Booking booking = hotel.bookRoom(
+                hotelRoomBookingDto.getNumber(), hotelRoomBookingDto.getTenantId(), hotelRoomBookingDto.getDays(), hotelEventsPublisher);
+
+        return bookingRepository.save(booking);
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import org.assertj.core.api.Assertions;
 
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 class HotelRoomReadModelAssertion {
     private final HotelRoomReadModel actual;
@@ -16,8 +17,8 @@ class HotelRoomReadModelAssertion {
         return new HotelRoomReadModelAssertion(actual);
     }
 
-    HotelRoomReadModelAssertion hasHotelRoomIdEqualTo(String expected) {
-        Assertions.assertThat(actual.getId()).isEqualTo(expected);
+    HotelRoomReadModelAssertion hasHotelRoomIdThatIsUUID() {
+        Assertions.assertThat(actual.getId()).matches(Pattern.compile("[0-9a-z\\-]{36}"));
         return this;
     }
 
