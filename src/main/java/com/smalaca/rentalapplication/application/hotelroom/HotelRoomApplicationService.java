@@ -4,7 +4,6 @@ import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
-import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomEventsPublisher;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
 
@@ -33,9 +32,9 @@ public class HotelRoomApplicationService {
     }
 
     public String book(HotelRoomBookingDto hotelRoomBookingDto) {
-        HotelRoom hotelRoom = hotelRoomRepository.findById(hotelRoomBookingDto.getHotelRoomId());
+        Hotel hotel = hotelRepository.findById(hotelRoomBookingDto.getHotelId());
 
-        Booking booking = hotelRoom.book(hotelRoomBookingDto.getTenantId(), hotelRoomBookingDto.getDays(), hotelRoomEventsPublisher);
+        Booking booking = hotel.bookRoom(hotelRoomBookingDto.getNumber(), hotelRoomBookingDto.getTenantId(), hotelRoomBookingDto.getDays(), hotelRoomEventsPublisher);
 
         return bookingRepository.save(booking);
     }
