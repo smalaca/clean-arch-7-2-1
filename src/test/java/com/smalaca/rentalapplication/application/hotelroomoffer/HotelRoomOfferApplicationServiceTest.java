@@ -1,8 +1,9 @@
 package com.smalaca.rentalapplication.application.hotelroomoffer;
 
+import com.google.common.collect.ImmutableMap;
+import com.smalaca.rentalapplication.domain.hotel.Hotel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomNotFoundException;
-import com.smalaca.rentalapplication.domain.hotel.HotelRoomRepository;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomAvailabilityException;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferAssertion;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,7 +34,6 @@ class HotelRoomOfferApplicationServiceTest {
     private static final String HOTEL_ID = "12341234";
     private static final int ROOM_NUMBER = 42;
 
-    private final HotelRoomRepository hotelRoomRepository = mock(HotelRoomRepository.class);
     private final HotelRepository hotelRepository = mock(HotelRepository.class);
     private final HotelRoomOfferRepository hotelRoomOfferRepository = mock(HotelRoomOfferRepository.class);
     private final HotelRoomOfferApplicationService service = new HotelRoomOfferApplicationService(hotelRoomOfferRepository, hotelRepository);
@@ -131,10 +132,13 @@ class HotelRoomOfferApplicationServiceTest {
     }
 
     private void givenNotExistingHotelRoom() {
-        given(hotelRoomRepository.existById(HOTEL_ROOM_ID)).willReturn(false);
+        given(hotelRepository.findById(HOTEL_ID)).willReturn(hotel().build());
     }
 
     private void givenExistingHotelRoom() {
-        given(hotelRoomRepository.existById(HOTEL_ROOM_ID)).willReturn(true);
+        Hotel hotel = hotel().build();
+        hotel.addRoom(ROOM_NUMBER, ImmutableMap.of("Room1", 30.0), "room to rent");
+
+        given(hotelRepository.findById(HOTEL_ID)).willReturn(hotel);
     }
 }

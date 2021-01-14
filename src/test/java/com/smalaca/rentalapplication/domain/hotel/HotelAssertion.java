@@ -32,10 +32,21 @@ public class HotelAssertion {
     }
 
     public HotelAssertion hasOnlyOneHotelRoom(Consumer<HotelRoom> requirements) {
+        hasHotelRooms(1);
+        return hasHotelRoom(requirements);
+    }
+
+    public HotelAssertion hasHotelRoom(Consumer<HotelRoom> requirements) {
         Assertions.assertThat(actual).extracting("hotelRooms").satisfies(rooms -> {
-            Assertions.assertThat((List<HotelRoom>) rooms)
-                    .hasSize(1)
-                    .allSatisfy(requirements);
+            Assertions.assertThat((List<HotelRoom>) rooms).anySatisfy(requirements);
+        });
+
+        return this;
+    }
+
+    public HotelAssertion hasHotelRooms(int expected) {
+        Assertions.assertThat(actual).extracting("hotelRooms").satisfies(rooms -> {
+            Assertions.assertThat((List<HotelRoom>) rooms).hasSize(expected);
         });
 
         return this;
