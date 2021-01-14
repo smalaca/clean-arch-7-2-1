@@ -18,6 +18,6 @@ public class HotelRoomOfferDto {
     private final LocalDate end;
 
     CreateHotelRoomOffer asDto() {
-        return new CreateHotelRoomOffer(number, hotelRoomId, price, start, end);
+        return new CreateHotelRoomOffer(getNumber(), getHotelRoomId(), getPrice(), getStart(), getEnd());
     }
 }
