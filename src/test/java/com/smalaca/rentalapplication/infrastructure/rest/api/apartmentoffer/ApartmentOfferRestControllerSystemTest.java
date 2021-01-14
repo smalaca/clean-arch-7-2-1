@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.application.apartment.ApartmentDto;
 import com.smalaca.rentalapplication.application.apartmentoffer.ApartmentOfferDto;
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
+import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
+import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentoffer.SpringJpaApartmentOfferTestRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +14,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,15 +33,31 @@ class ApartmentOfferRestControllerSystemTest {
     private static final LocalDate END = LocalDate.of(2040, 10, 20);
 
     private final JsonFactory jsonFactory = new JsonFactory();
+    private final List<String> apartmentIds = new ArrayList<>();
+    private final List<String> offerIds = new ArrayList<>();
     @Autowired private MockMvc mockMvc;
+    @Autowired private SpringJpaApartmentTestRepository apartmentRepository;
+    @Autowired private SpringJpaApartmentOfferTestRepository apartmentOfferRepository;
+
+    @AfterEach
+    void deleteApartments() {
+        apartmentRepository.deleteAll(apartmentIds);
+        apartmentOfferRepository.deleteAll(offerIds);
+    }
 
     @Test
     void shouldCreateApartmentOfferForExistingApartment() throws Exception {
         String apartmentId = givenExistingApartment();
         ApartmentOfferDto dto = new ApartmentOfferDto(apartmentId, PRICE, START, END);
 
-        mockMvc.perform(post("/apartmentoffer").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(dto)))
-                .andExpect(status().isCreated());
+        MvcResult result = mockMvc.perform(post("/apartmentoffer").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(dto)))
+                .andExpect(status().isCreated())
+                .andReturn();
+        storeOfferId(result);
+    }
+
+    private String storeOfferId(MvcResult result) {
+        return result.getResponse().getRedirectedUrl().replace("/apartmentoffer/", "");
     }
 
     private String givenExistingApartment() throws Exception {
@@ -52,6 +74,7 @@ class ApartmentOfferRestControllerSystemTest {
                 .andReturn()
                 .getResponse().getRedirectedUrl().replace("/apartment/", "");
 
+        apartmentIds.add(apartmentId);
         return apartmentId;
     }
 }
