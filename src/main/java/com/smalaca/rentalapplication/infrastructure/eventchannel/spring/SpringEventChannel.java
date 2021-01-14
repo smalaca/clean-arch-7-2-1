@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.infrastructure.eventchannel.spring;
 
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
+import com.smalaca.rentalapplication.domain.booking.BookingRejected;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
 import org.springframework.context.ApplicationEventPublisher;
@@ -28,5 +29,10 @@ class SpringEventChannel implements EventChannel {
     @Override
     public void publish(BookingAccepted bookingAccepted) {
         publisher.publishEvent(bookingAccepted);
+    }
+
+    @Override
+    public void publish(BookingRejected bookingRejected) {
+
     }
 }

@@ -53,16 +53,30 @@ class BookingDomainServiceTest {
     }
 
     @Test
-    void shouldRejectBookingWhenOtherWithCollisionFound() {
+    void shouldRejectBookingWhenOtherWithDaysCollisionFound() {
         Booking booking = givenBooking();
-        List<Booking> bookings = asList(givenBookingWithCollision());
 
-        service.accept(booking, bookings);
+        service.accept(booking, asList(givenBookingWithDaysCollision()));
 
         BookingAssertion.assertThat(booking).isRejected();
     }
 
-    private Booking givenBookingWithCollision() {
+    @Test
+    void shouldPublishBookingRejectedEventWhenBookingIsRejected() {
+        ArgumentCaptor<BookingRejected> captor = ArgumentCaptor.forClass(BookingRejected.class);
+        Booking booking = givenBooking();
+
+        service.accept(booking, asList(givenBookingWithDaysCollision()));
+
+        BDDMockito.then(eventChannel).should().publish(captor.capture());
+        BookingRejected actual = captor.getValue();
+        Assertions.assertThat(actual.getRentalType()).isEqualTo("HOTEL_ROOM");
+        Assertions.assertThat(actual.getRentalPlaceId()).isEqualTo(RENTAL_PLACE_ID);
+        Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_ID_1);
+        Assertions.assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
+    }
+
+    private Booking givenBookingWithDaysCollision() {
         return Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITH_COLLISION);
     }
 
