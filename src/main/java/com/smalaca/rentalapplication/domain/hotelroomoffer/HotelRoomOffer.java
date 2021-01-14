@@ -32,7 +32,7 @@ public class HotelRoomOffer {
         return id;
     }
 
-    public static class Builder {
+    static class Builder {
         private static final LocalDate NO_END_DATE = null;
 
         private String hotelRoomId;
@@ -42,27 +42,27 @@ public class HotelRoomOffer {
 
         private Builder() {}
 
-        public static Builder hotelRoomOffer() {
+        static Builder hotelRoomOffer() {
             return new Builder();
         }
 
-        public Builder withHotelRoomId(String hotelRoomId) {
+        Builder withHotelRoomId(String hotelRoomId) {
             this.hotelRoomId = hotelRoomId;
             return this;
         }
 
-        public Builder withPrice(BigDecimal price) {
+        Builder withPrice(BigDecimal price) {
             this.price = price;
             return this;
         }
 
-        public Builder withAvailability(LocalDate start, LocalDate end) {
+        Builder withAvailability(LocalDate start, LocalDate end) {
             this.start = start;
             this.end = end;
             return this;
         }
 
-        public HotelRoomOffer build() {
+        HotelRoomOffer build() {
             return new HotelRoomOffer(hotelRoomId, money(), hotelRoomAvailability());
         }
 

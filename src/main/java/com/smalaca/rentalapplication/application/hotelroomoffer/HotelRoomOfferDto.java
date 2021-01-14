@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.application.hotelroomoffer;
 
+import com.smalaca.rentalapplication.domain.hotelroomoffer.CreateHotelRoomOffer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,4 +16,8 @@ public class HotelRoomOfferDto {
     private final BigDecimal price;
     private final LocalDate start;
     private final LocalDate end;
+
+    CreateHotelRoomOffer asDto() {
+        return new CreateHotelRoomOffer(getNumber(), getHotelRoomId(), getPrice(), getStart(), getEnd());
+    }
 }
