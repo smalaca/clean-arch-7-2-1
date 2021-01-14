@@ -5,7 +5,7 @@ import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 
 public class BookingDomainServiceFactory {
-    BookingDomainService create(EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
+    public BookingDomainService create(EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
         BookingEventsPublisher bookingEventsPublisher = new BookingEventsPublisher(eventIdFactory, clock, eventChannel);
         return new BookingDomainService(bookingEventsPublisher);
     }

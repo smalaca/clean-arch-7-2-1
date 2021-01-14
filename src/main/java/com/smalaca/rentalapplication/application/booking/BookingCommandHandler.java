@@ -1,16 +1,19 @@
 package com.smalaca.rentalapplication.application.booking;
 
 import com.smalaca.rentalapplication.domain.booking.Booking;
+import com.smalaca.rentalapplication.domain.booking.BookingDomainService;
 import com.smalaca.rentalapplication.domain.booking.BookingEventsPublisher;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import org.springframework.context.event.EventListener;
 
 public class BookingCommandHandler {
     private final BookingRepository bookingRepository;
+    private final BookingDomainService bookingDomainService;
     private final BookingEventsPublisher bookingEventsPublisher;
 
-    BookingCommandHandler(BookingRepository bookingRepository, BookingEventsPublisher bookingEventsPublisher) {
+    BookingCommandHandler(BookingRepository bookingRepository, BookingDomainService bookingDomainService, BookingEventsPublisher bookingEventsPublisher) {
         this.bookingRepository = bookingRepository;
+        this.bookingDomainService = bookingDomainService;
         this.bookingEventsPublisher = bookingEventsPublisher;
     }
 
