@@ -90,7 +90,7 @@ class ApartmentRestControllerSystemTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        apartmentIds.add(getHotelId(mvcResult));
+        apartmentIds.add(getApartmentId(mvcResult));
         mockMvc.perform(get(mvcResult.getResponse().getRedirectedUrl()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.apartment.ownerId").value(OWNER_ID_1))
@@ -141,12 +141,12 @@ class ApartmentRestControllerSystemTest {
 
     private MvcResult save(ApartmentDto apartmentDto) throws Exception {
         MvcResult result = mockMvc.perform(post("/apartment").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentDto))).andReturn();
-        apartmentIds.add(getHotelId(result));
+        apartmentIds.add(getApartmentId(result));
 
         return result;
     }
 
-    private String getHotelId(MvcResult result) {
+    private String getApartmentId(MvcResult result) {
         return result.getResponse().getRedirectedUrl().replace("/apartment/", "");
     }
 

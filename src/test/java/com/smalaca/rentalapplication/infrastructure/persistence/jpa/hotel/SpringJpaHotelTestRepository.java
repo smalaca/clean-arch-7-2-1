@@ -14,6 +14,10 @@ public class SpringJpaHotelTestRepository {
     }
 
     public void deleteAll(List<String> ids) {
-        ids.forEach(id -> repository.deleteById(UUID.fromString(id)));
+        ids.forEach(this::deleteById);
+    }
+
+    public void deleteById(String hotelId) {
+        repository.deleteById(UUID.fromString(hotelId));
     }
 }
