@@ -102,7 +102,7 @@ class HotelRoomApplicationServiceTest {
     }
 
     private HotelRoomBookingDto givenHotelRoomBookingDto(String hotelRoomId) {
-        return new HotelRoomBookingDto(hotelRoomId, TENANT_ID, DAYS);
+        return new HotelRoomBookingDto(HOTEL_ID, ROOM_NUMBER, hotelRoomId, TENANT_ID, DAYS);
     }
 
     private void thenBookingShouldBeCreated() {
