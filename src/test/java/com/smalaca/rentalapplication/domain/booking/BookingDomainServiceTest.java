@@ -29,6 +29,7 @@ class BookingDomainServiceTest {
     private final Clock clock = mock(Clock.class);
     private final EventChannel eventChannel = mock(EventChannel.class);
     private final BookingDomainService service = new BookingDomainServiceFactory().create(eventIdFactory, clock, eventChannel);
+    private final BookingEventsPublisher bookingEventsPublisher = new BookingEventsPublisher(eventIdFactory, clock, eventChannel);
 
     @Test
     void shouldAcceptBookingWhenNoOtherBookingsFound() {
@@ -87,11 +88,16 @@ class BookingDomainServiceTest {
     }
 
     private Booking givenBookingWithoutDaysCollision() {
-        return Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITHOUT_COLLISION);
+        Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITHOUT_COLLISION);
+        booking.accept(bookingEventsPublisher);
+
+        return booking;
     }
 
     private Booking givenBookingWithDaysCollision() {
-        return Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITH_COLLISION);
+        Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID_2, DAYS_WITH_COLLISION);
+        booking.accept(bookingEventsPublisher);
+        return booking;
     }
 
     private Booking givenBooking() {
