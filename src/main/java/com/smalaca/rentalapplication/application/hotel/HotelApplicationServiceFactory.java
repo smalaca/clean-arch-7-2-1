@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-class HotelRoomApplicationServiceFactory {
+class HotelApplicationServiceFactory {
     @Bean
     @SuppressWarnings("checkstyle:ParameterNumber")
-    HotelRoomApplicationService hotelRoomApplicationService(
+    HotelApplicationService hotelApplicationService(
             HotelRepository hotelRepository, BookingRepository bookingRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
         HotelEventsPublisher hotelEventsPublisher = new HotelEventsPublisher(eventIdFactory, clock, eventChannel);
 
-        return new HotelRoomApplicationService(hotelRepository, bookingRepository, hotelEventsPublisher);
+        return new HotelApplicationService(hotelRepository, bookingRepository, hotelEventsPublisher);
     }
 }

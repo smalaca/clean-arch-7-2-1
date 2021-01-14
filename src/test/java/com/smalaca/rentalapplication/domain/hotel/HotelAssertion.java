@@ -2,6 +2,9 @@ package com.smalaca.rentalapplication.domain.hotel;
 
 import org.assertj.core.api.Assertions;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 public class HotelAssertion {
     private final Hotel actual;
 
@@ -25,6 +28,16 @@ public class HotelAssertion {
                 .hasFieldOrPropertyWithValue("buildingNumber", buildingNumber)
                 .hasFieldOrPropertyWithValue("city", city)
                 .hasFieldOrPropertyWithValue("country", country);
+        return this;
+    }
+
+    public HotelAssertion hasOnlyOneHotelRoom(Consumer<HotelRoom> requirements) {
+        Assertions.assertThat(actual).extracting("hotelRooms").satisfies(rooms -> {
+            Assertions.assertThat((List<HotelRoom>) rooms)
+                    .hasSize(1)
+                    .allSatisfy(requirements);
+        });
+
         return this;
     }
 }

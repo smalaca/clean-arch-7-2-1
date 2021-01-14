@@ -1,7 +1,7 @@
 package com.smalaca.rentalapplication.infrastructure.rest.api.hotelroom;
 
+import com.smalaca.rentalapplication.application.hotel.HotelApplicationService;
 import com.smalaca.rentalapplication.application.hotel.HotelRoomBookingDto;
-import com.smalaca.rentalapplication.application.hotel.HotelRoomApplicationService;
 import com.smalaca.rentalapplication.application.hotel.HotelRoomDto;
 import com.smalaca.rentalapplication.query.hotelroom.HotelRoomReadModel;
 import com.smalaca.rentalapplication.query.hotelroom.QueryHotelRoomRepository;
@@ -19,25 +19,24 @@ import java.net.URI;
 @RestController
 @RequestMapping("/hotelroom")
 public class HotelRoomRestController {
-    private final HotelRoomApplicationService hotelRoomApplicationService;
+    private final HotelApplicationService hotelApplicationService;
     private final QueryHotelRoomRepository queryHotelRoomRepository;
 
-    public HotelRoomRestController(
-            HotelRoomApplicationService hotelRoomApplicationService, QueryHotelRoomRepository queryHotelRoomRepository) {
-        this.hotelRoomApplicationService = hotelRoomApplicationService;
+    public HotelRoomRestController(HotelApplicationService hotelApplicationService, QueryHotelRoomRepository queryHotelRoomRepository) {
+        this.hotelApplicationService = hotelApplicationService;
         this.queryHotelRoomRepository = queryHotelRoomRepository;
     }
 
     @PostMapping
     public ResponseEntity<String> add(@RequestBody HotelRoomDto hotelRoomDto) {
-        String id = hotelRoomApplicationService.add(hotelRoomDto);
+        String id = hotelApplicationService.add(hotelRoomDto);
 
         return ResponseEntity.created(URI.create("/hotelroom/" + id)).build();
     }
 
     @PutMapping("/book/{id}")
     public ResponseEntity<String> book(@PathVariable String id, @RequestBody HotelRoomBookingDto hotelRoomBookingDto) {
-        String bookingId = hotelRoomApplicationService.book(hotelRoomBookingDto);
+        String bookingId = hotelApplicationService.book(hotelRoomBookingDto);
 
         return ResponseEntity.created(URI.create("/booking/" + bookingId)).build();
     }

@@ -44,12 +44,20 @@ public class HotelRoom {
     }
 
     Booking book(String tenantId, List<LocalDate> days, HotelEventsPublisher hotelEventsPublisher) {
-        hotelEventsPublisher.publishHotelRoomBooked(id(), hotelId.toString(), tenantId, days);
+        hotelEventsPublisher.publishHotelRoomBooked(id(), hotelId(), tenantId, days);
 
         return Booking.hotelRoom(id(), tenantId, days);
     }
 
+    private String hotelId() {
+        return getNullable(hotelId);
+    }
+
     public String id() {
+        return getNullable(id);
+    }
+
+    private String getNullable(UUID id) {
         if (id == null) {
             return null;
         }
