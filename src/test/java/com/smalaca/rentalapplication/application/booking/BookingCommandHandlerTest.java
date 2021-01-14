@@ -4,6 +4,8 @@ import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
+import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
+import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifierTestFactory;
 import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
@@ -34,7 +36,8 @@ class BookingCommandHandlerTest {
             bookingRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
-    void shouldAcceptBooking() {
+    void shouldAcceptBookingWhenBookingsWithCollisionNotFound() {
+        givenBookingsWithoutCollision();
         givenOpenBooking();
 
         commandHandler.accept(new BookingAccept(BOOKING_ID));
@@ -45,6 +48,7 @@ class BookingCommandHandlerTest {
 
     @Test
     void shouldPublishBookingAcceptedOnceAccepted() {
+        givenBookingsWithoutCollision();
         ArgumentCaptor<BookingAccepted> captor = ArgumentCaptor.forClass(BookingAccepted.class);
         givenOpenBooking();
 
@@ -56,6 +60,15 @@ class BookingCommandHandlerTest {
         Assertions.assertThat(actual.getRentalPlaceId()).isEqualTo(RENTAL_PLACE_ID);
         Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
         Assertions.assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
+    }
+
+    private void givenBookingsWithoutCollision() {
+        RentalPlaceIdentifier identifier = RentalPlaceIdentifierTestFactory.hotelRoom(RENTAL_PLACE_ID);
+        List<Booking> bookings = asList(
+                Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS),
+                Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS));
+
+        given(bookingRepository.findAllBy(identifier)).willReturn(bookings);
     }
 
     @Test
