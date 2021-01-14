@@ -9,6 +9,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 public class HotelRoomOfferDto {
+    private final String hotelId;
+    private final int number;
     private final String hotelRoomId;
     private final BigDecimal price;
     private final LocalDate start;
