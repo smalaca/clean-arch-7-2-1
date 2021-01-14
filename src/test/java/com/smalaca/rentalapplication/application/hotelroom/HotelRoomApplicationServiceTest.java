@@ -45,7 +45,7 @@ class HotelRoomApplicationServiceTest {
     private final BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);
     private final EventChannel eventChannel = Mockito.mock(EventChannel.class);
     private final HotelRoomApplicationService service = new HotelRoomApplicationServiceFactory().hotelRoomApplicationService(
-            hotelRepository, hotelRoomRepository, bookingRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
+            hotelRepository, bookingRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
     void shouldCreateHotelRoom() {
