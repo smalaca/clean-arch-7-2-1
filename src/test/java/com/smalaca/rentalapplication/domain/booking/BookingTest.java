@@ -1,6 +1,7 @@
 package com.smalaca.rentalapplication.domain.booking;
 
 import com.smalaca.rentalapplication.domain.period.Period;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import static com.smalaca.rentalapplication.domain.booking.BookingAssertion.assertThat;
 import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
@@ -48,7 +50,7 @@ class BookingTest {
 
     @Test
     void shouldChangeStatusOfBookingOnceAccepted() {
-        Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS);
+        Booking booking = givenBooking();
 
         booking.accept(bookingEventsPublisher);
 
@@ -57,7 +59,7 @@ class BookingTest {
 
     @Test
     void shouldPublishBookingAcceptedOnceAccepted() {
-        Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS);
+        Booking booking = givenBooking();
 
         booking.accept(bookingEventsPublisher);
 
@@ -65,11 +67,37 @@ class BookingTest {
     }
 
     @Test
+    void shouldNotAllowToRejectAlreadyAcceptedBooking() {
+        Booking booking = givenBooking();
+        booking.accept(bookingEventsPublisher);
+
+        NotAllowedBookingStatusTransitionException actual = assertThrows(NotAllowedBookingStatusTransitionException.class, booking::reject);
+
+        Assertions.assertThat(actual).hasMessage("Not allowed transition from ACCEPTED to REJECTED booking");
+        assertThat(booking).isAccepted();
+    }
+
+    @Test
     void shouldChangeStatusOfBookingOnceRejected() {
-        Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS);
+        Booking booking = givenBooking();
 
         booking.reject();
 
         assertThat(booking).isRejected();
+    }
+
+    @Test
+    void shouldNotAllowToAcceptAlreadyRejectedBooking() {
+        Booking booking = givenBooking();
+        booking.reject();
+
+        NotAllowedBookingStatusTransitionException actual = assertThrows(NotAllowedBookingStatusTransitionException.class, () -> booking.accept(bookingEventsPublisher));
+
+        Assertions.assertThat(actual).hasMessage("Not allowed transition from REJECTED to ACCEPTED booking");
+        assertThat(booking).isRejected();
+    }
+
+    private Booking givenBooking() {
+        return Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS);
     }
 }
