@@ -83,7 +83,7 @@ class HotelRoomOfferRestControllerSystemTest {
     }
 
     private HotelRoomDto givenHotelRoom() {
-        return new HotelRoomDto("5678", 42, ImmutableMap.of("Room1", 30.0), "This is very nice place");
+        return new HotelRoomDto(hotelId, 42, ImmutableMap.of("Room1", 30.0), "This is very nice place");
     }
 
     private String save(HotelRoomDto hotelRoomDto) throws Exception {
