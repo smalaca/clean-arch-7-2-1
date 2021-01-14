@@ -64,8 +64,8 @@ public class Hotel {
         return getHotelRoom(number).id();
     }
 
-    public Booking bookRoom(int number, String tenantId, List<LocalDate> days, HotelRoomEventsPublisher hotelRoomEventsPublisher) {
-        return getHotelRoom(number).book(tenantId, days, hotelRoomEventsPublisher);
+    public Booking bookRoom(int number, String tenantId, List<LocalDate> days, HotelEventsPublisher hotelEventsPublisher) {
+        return getHotelRoom(number).book(tenantId, days, hotelEventsPublisher);
     }
 
     private HotelRoom getHotelRoom(int number) {

@@ -5,17 +5,18 @@ import com.smalaca.rentalapplication.domain.clock.Clock;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
-import com.smalaca.rentalapplication.domain.hotel.HotelRoomEventsPublisher;
+import com.smalaca.rentalapplication.domain.hotel.HotelEventsPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 class HotelRoomApplicationServiceFactory {
     @Bean
+    @SuppressWarnings("checkstyle:ParameterNumber")
     HotelRoomApplicationService hotelRoomApplicationService(
             HotelRepository hotelRepository, BookingRepository bookingRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
-        HotelRoomEventsPublisher hotelRoomEventsPublisher = new HotelRoomEventsPublisher(eventIdFactory, clock, eventChannel);
+        HotelEventsPublisher hotelEventsPublisher = new HotelEventsPublisher(eventIdFactory, clock, eventChannel);
 
-        return new HotelRoomApplicationService(hotelRepository, bookingRepository, hotelRoomEventsPublisher);
+        return new HotelRoomApplicationService(hotelRepository, bookingRepository, hotelEventsPublisher);
     }
 }

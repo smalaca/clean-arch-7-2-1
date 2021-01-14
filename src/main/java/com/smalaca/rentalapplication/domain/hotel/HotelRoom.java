@@ -43,8 +43,8 @@ public class HotelRoom {
         this.description = description;
     }
 
-    Booking book(String tenantId, List<LocalDate> days, HotelRoomEventsPublisher hotelRoomEventsPublisher) {
-        hotelRoomEventsPublisher.publishHotelRoomBooked(id(), hotelId.toString(), tenantId, days);
+    Booking book(String tenantId, List<LocalDate> days, HotelEventsPublisher hotelEventsPublisher) {
+        hotelEventsPublisher.publishHotelRoomBooked(id(), hotelId.toString(), tenantId, days);
 
         return Booking.hotelRoom(id(), tenantId, days);
     }

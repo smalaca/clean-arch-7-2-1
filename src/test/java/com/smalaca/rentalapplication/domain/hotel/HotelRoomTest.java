@@ -24,7 +24,7 @@ class HotelRoomTest {
     private static final String DESCRIPTION = "What a lovely place";
     private static final String TENANT_ID = "325426";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
-    private final HotelRoomEventsPublisher hotelRoomEventsPublisher = mock(HotelRoomEventsPublisher.class);
+    private final HotelEventsPublisher hotelEventsPublisher = mock(HotelEventsPublisher.class);
 
     @Test
     void shouldCreateHotelRoomWithAllRequiredInformation() {
@@ -46,7 +46,7 @@ class HotelRoomTest {
     void shouldCreateBookingOnceBooked() {
         HotelRoom hotelRoom = givenHotelRoom();
 
-        Booking actual = hotelRoom.book(TENANT_ID, DAYS, hotelRoomEventsPublisher);
+        Booking actual = hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
         BookingAssertion.assertThat(actual)
                 .isHotelRoom()
@@ -58,9 +58,9 @@ class HotelRoomTest {
     void shouldPublishHotelRoomBooked() {
         HotelRoom hotelRoom = givenHotelRoom();
 
-        hotelRoom.book(TENANT_ID, DAYS, hotelRoomEventsPublisher);
+        hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
-        BDDMockito.then(hotelRoomEventsPublisher).should().publishHotelRoomBooked(any(), eq(HOTEL_ID), eq(TENANT_ID), eq(DAYS));
+        BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(any(), eq(HOTEL_ID), eq(TENANT_ID), eq(DAYS));
     }
 
     private HotelRoom givenHotelRoom() {

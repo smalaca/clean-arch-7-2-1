@@ -4,17 +4,17 @@ import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
-import com.smalaca.rentalapplication.domain.hotel.HotelRoomEventsPublisher;
+import com.smalaca.rentalapplication.domain.hotel.HotelEventsPublisher;
 
 public class HotelRoomApplicationService {
     private final HotelRepository hotelRepository;
     private final BookingRepository bookingRepository;
-    private final HotelRoomEventsPublisher hotelRoomEventsPublisher;
+    private final HotelEventsPublisher hotelEventsPublisher;
 
-    HotelRoomApplicationService(HotelRepository hotelRepository, BookingRepository bookingRepository, HotelRoomEventsPublisher hotelRoomEventsPublisher) {
+    HotelRoomApplicationService(HotelRepository hotelRepository, BookingRepository bookingRepository, HotelEventsPublisher hotelEventsPublisher) {
         this.hotelRepository = hotelRepository;
         this.bookingRepository = bookingRepository;
-        this.hotelRoomEventsPublisher = hotelRoomEventsPublisher;
+        this.hotelEventsPublisher = hotelEventsPublisher;
     }
 
     public String add(HotelRoomDto hotelRoomDto) {
@@ -29,7 +29,7 @@ public class HotelRoomApplicationService {
     public String book(HotelRoomBookingDto hotelRoomBookingDto) {
         Hotel hotel = hotelRepository.findById(hotelRoomBookingDto.getHotelId());
 
-        Booking booking = hotel.bookRoom(hotelRoomBookingDto.getNumber(), hotelRoomBookingDto.getTenantId(), hotelRoomBookingDto.getDays(), hotelRoomEventsPublisher);
+        Booking booking = hotel.bookRoom(hotelRoomBookingDto.getNumber(), hotelRoomBookingDto.getTenantId(), hotelRoomBookingDto.getDays(), hotelEventsPublisher);
 
         return bookingRepository.save(booking);
     }

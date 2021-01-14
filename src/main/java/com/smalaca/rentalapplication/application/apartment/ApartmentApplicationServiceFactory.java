@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class ApartmentApplicationServiceFactory {
     @Bean
+    @SuppressWarnings("checkstyle:ParameterNumber")
     ApartmentApplicationService apartmentApplicationService(
             ApartmentRepository apartmentRepository, BookingRepository bookingRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
         ApartmentEventsPublisher apartmentEventsPublisher = new ApartmentEventsPublisher(eventIdFactory, clock, eventChannel);
