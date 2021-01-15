@@ -5,6 +5,7 @@ import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentAssertion;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
+import com.smalaca.rentalapplication.domain.apartment.ApartmentRequirements;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
@@ -56,9 +57,12 @@ class ApartmentApplicationServiceTest {
 
         then(apartmentRepository).should().save(captor.capture());
         ApartmentAssertion.assertThat(captor.getValue())
-                .hasOwnerIdEqualsTo(OWNER_ID)
+                .isEqualTo(ApartmentRequirements.apartment()
+                        .withOwnerId(OWNER_ID)
+                        .withApartmentNumber(APARTMENT_NUMBER)
+                        .withAddress(STREET, POSTAL_CODE, HOUSE_NUMBER, CITY, COUNTRY)
+                )
                 .hasDescriptionEqualsTo(DESCRIPTION)
-                .hasAddressEqualsTo(STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY)
                 .hasSpacesEqualsTo(SPACES_DEFINITION);
     }
 

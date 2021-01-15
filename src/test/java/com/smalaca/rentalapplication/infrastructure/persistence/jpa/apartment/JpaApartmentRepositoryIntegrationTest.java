@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentAssertion;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
+import com.smalaca.rentalapplication.domain.apartment.ApartmentRequirements;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -80,9 +81,12 @@ class JpaApartmentRepositoryIntegrationTest {
         Apartment actual = apartmentRepository.findById(existingId);
 
         ApartmentAssertion.assertThat(actual)
-                .hasOwnerIdEqualsTo(OWNER_ID)
+                .isEqualTo(ApartmentRequirements.apartment()
+                        .withOwnerId(OWNER_ID)
+                        .withApartmentNumber(APARTMENT_NUMBER)
+                        .withAddress(STREET, POSTAL_CODE, HOUSE_NUMBER, CITY, COUNTRY)
+                )
                 .hasDescriptionEqualsTo(DESCRIPTION)
-                .hasAddressEqualsTo(STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY)
                 .hasSpacesEqualsTo(SPACES_DEFINITION);
     }
 
@@ -130,9 +134,12 @@ class JpaApartmentRepositoryIntegrationTest {
         Apartment actual = apartmentRepository.findById(existingId);
 
         ApartmentAssertion.assertThat(actual)
-                .hasOwnerIdEqualsTo(OWNER_ID)
+                .isEqualTo(ApartmentRequirements.apartment()
+                        .withOwnerId(OWNER_ID)
+                        .withApartmentNumber(APARTMENT_NUMBER)
+                        .withAddress(STREET, POSTAL_CODE, HOUSE_NUMBER, CITY, COUNTRY)
+                )
                 .hasDescriptionEqualsTo(DESCRIPTION)
-                .hasAddressEqualsTo(STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY)
                 .hasSpacesEqualsTo(SPACES_DEFINITION);
     }
 
