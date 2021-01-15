@@ -3,7 +3,10 @@ package com.smalaca.rentalapplication.application.booking;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
+import com.smalaca.rentalapplication.domain.booking.BookingEventsPublisher;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
+import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
+import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifierTestFactory;
 import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
@@ -30,11 +33,14 @@ class BookingCommandHandlerTest {
 
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
     private final EventChannel eventChannel = mock(EventChannel.class);
+    private final FakeEventIdFactory eventIdFactory = new FakeEventIdFactory();
+    private final FakeClock clock = new FakeClock();
     private final BookingCommandHandler commandHandler = new BookingCommandHandlerFactory().bookingCommandHandler(
-            bookingRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
+            bookingRepository, eventIdFactory, clock, eventChannel);
 
     @Test
-    void shouldAcceptBooking() {
+    void shouldAcceptBookingWhenBookingsWithCollisionNotFound() {
+        givenBookingsWithoutCollision();
         givenOpenBooking();
 
         commandHandler.accept(new BookingAccept(BOOKING_ID));
@@ -45,6 +51,7 @@ class BookingCommandHandlerTest {
 
     @Test
     void shouldPublishBookingAcceptedOnceAccepted() {
+        givenBookingsWithoutCollision();
         ArgumentCaptor<BookingAccepted> captor = ArgumentCaptor.forClass(BookingAccepted.class);
         givenOpenBooking();
 
@@ -56,6 +63,34 @@ class BookingCommandHandlerTest {
         Assertions.assertThat(actual.getRentalPlaceId()).isEqualTo(RENTAL_PLACE_ID);
         Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
         Assertions.assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
+    }
+
+    private void givenBookingsWithoutCollision() {
+        givenBookings(asList(
+                Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS),
+                Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS)));
+    }
+
+    @Test
+    void shouldRejectBookingWhenBookingsWithCollisionFound() {
+        givenBookingsWithCollision();
+        givenOpenBooking();
+
+        commandHandler.accept(new BookingAccept(BOOKING_ID));
+
+        then(bookingRepository).should().save(captor.capture());
+        BookingAssertion.assertThat(captor.getValue()).isRejected();
+    }
+
+    private void givenBookingsWithCollision() {
+        Booking booking = Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS);
+        booking.accept(new BookingEventsPublisher(eventIdFactory, clock, eventChannel));
+        givenBookings(asList(booking, Booking.hotelRoom(RENTAL_PLACE_ID, TENANT_ID, DAYS)));
+    }
+
+    private void givenBookings(List<Booking> bookings) {
+        RentalPlaceIdentifier identifier = RentalPlaceIdentifierTestFactory.hotelRoom(RENTAL_PLACE_ID);
+        given(bookingRepository.findAllBy(identifier)).willReturn(bookings);
     }
 
     @Test

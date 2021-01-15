@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.application.booking;
 
+import com.smalaca.rentalapplication.domain.booking.BookingDomainService;
+import com.smalaca.rentalapplication.domain.booking.BookingDomainServiceFactory;
 import com.smalaca.rentalapplication.domain.booking.BookingEventsPublisher;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.clock.Clock;
@@ -13,6 +15,7 @@ class BookingCommandHandlerFactory {
     @Bean
     BookingCommandHandler bookingCommandHandler(
             BookingRepository bookingRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
-        return new BookingCommandHandler(bookingRepository, new BookingEventsPublisher(eventIdFactory, clock, eventChannel));
+        BookingDomainService bookingDomainService = new BookingDomainServiceFactory().create(eventIdFactory, clock, eventChannel);
+        return new BookingCommandHandler(bookingRepository, bookingDomainService, new BookingEventsPublisher(eventIdFactory, clock, eventChannel));
     }
 }

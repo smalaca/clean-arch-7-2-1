@@ -50,8 +50,10 @@ public class Booking {
         return new Booking(RentalType.HOTEL_ROOM, rentalPlaceId, tenantId, days);
     }
 
-    public void reject() {
+    public void reject(BookingEventsPublisher bookingEventsPublisher) {
         bookingStatus = bookingStatus.moveTo(REJECTED);
+
+        bookingEventsPublisher.bookingRejected(rentalType, rentalPlaceId, tenantId, days);
     }
 
     public void accept(BookingEventsPublisher bookingEventsPublisher) {
@@ -62,5 +64,17 @@ public class Booking {
 
     public String id() {
         return id.toString();
+    }
+
+    boolean hasCollisionWith(Booking booking) {
+        return bookingStatus.equals(ACCEPTED) && hasDaysCollisionWith(booking);
+    }
+
+    private boolean hasDaysCollisionWith(Booking booking) {
+        return days.stream().anyMatch(day -> booking.days.contains(day));
+    }
+
+    public RentalPlaceIdentifier rentalPlaceIdentifier() {
+        return new RentalPlaceIdentifier(rentalType, rentalPlaceId);
     }
 }
