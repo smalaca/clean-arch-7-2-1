@@ -16,7 +16,8 @@ import java.util.UUID;
 @SpringBootTest
 @Tag("DomainRepositoryIntegrationTest")
 class JpaHotelRoomOfferRepositoryIntegrationTest {
-    private static final String HOTEL_ROOM_ID = "213131";
+    private static final String HOTEL_ID = "1234";
+    private static final int HOTEL_ROOM_NUMBER = 213131;
     private static final BigDecimal PRICE = BigDecimal.valueOf(42.13);
     private static final LocalDate START = LocalDate.of(2040, 12, 10);
     private static final LocalDate END = LocalDate.of(2041, 12, 20);
@@ -33,13 +34,14 @@ class JpaHotelRoomOfferRepositoryIntegrationTest {
 
     @Test
     void shouldSaveHotelRoomOffer() {
-        HotelRoomOffer hotelRoomOffer = HotelRoomOfferTestFactory.create(HOTEL_ROOM_ID, PRICE, START, END);
+        HotelRoomOffer hotelRoomOffer = HotelRoomOfferTestFactory.create(HOTEL_ID, HOTEL_ROOM_NUMBER, PRICE, START, END);
 
         hotelRoomOfferId = jpaHotelRoomOfferRepository.save(hotelRoomOffer);
 
         HotelRoomOfferAssertion.assertThat(springJpaHotelRoomOfferRepository.findById(hotelRoomOfferId).get())
                 .hasIdEqualTo(hotelRoomOfferId)
-                .hasHotelRoomEqualTo(HOTEL_ROOM_ID)
+                .hasHotelIdEqualTo(HOTEL_ID)
+                .hasHotelRoomNumberEqualTo(HOTEL_ROOM_NUMBER)
                 .hasPriceEqualTo(PRICE)
                 .hasAvailabilityEqualTo(START, END);
     }

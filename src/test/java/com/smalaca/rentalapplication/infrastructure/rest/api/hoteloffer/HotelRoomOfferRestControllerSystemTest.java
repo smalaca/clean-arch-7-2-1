@@ -61,8 +61,8 @@ class HotelRoomOfferRestControllerSystemTest {
 
     @Test
     void shouldCreateApartmentOfferForExistingApartment() throws Exception {
-        String hotelRoomId = givenExistingHotelRoom();
-        HotelRoomOfferDto dto = new HotelRoomOfferDto(hotelId, ROOM_NUMBER, hotelRoomId, PRICE, START, END);
+        givenExistingHotelRoom();
+        HotelRoomOfferDto dto = new HotelRoomOfferDto(hotelId, ROOM_NUMBER, PRICE, START, END);
 
         MvcResult result = mockMvc.perform(post("/hotelroomoffer").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(dto)))
                 .andExpect(status().isCreated())
@@ -74,17 +74,15 @@ class HotelRoomOfferRestControllerSystemTest {
         offerIds.add(result.getResponse().getRedirectedUrl().replace("/hotelroomoffer/", ""));
     }
 
-    private String givenExistingHotelRoom() throws Exception {
-        return save(givenHotelRoom());
+    private void givenExistingHotelRoom() throws Exception {
+        save(givenHotelRoom());
     }
 
     private HotelRoomDto givenHotelRoom() {
         return new HotelRoomDto(hotelId, ROOM_NUMBER, ImmutableMap.of("Room1", 30.0), "This is very nice place");
     }
 
-    private String save(HotelRoomDto hotelRoomDto) throws Exception {
-        return mockMvc.perform(post("/hotelroom").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelRoomDto)))
-                .andReturn()
-                .getResponse().getRedirectedUrl().replace("/hotelroom/", "");
+    private void save(HotelRoomDto hotelRoomDto) throws Exception {
+        mockMvc.perform(post("/hotelroom").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelRoomDto)));
     }
 }
