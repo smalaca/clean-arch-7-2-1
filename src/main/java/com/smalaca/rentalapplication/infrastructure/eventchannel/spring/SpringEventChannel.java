@@ -33,6 +33,6 @@ class SpringEventChannel implements EventChannel {
 
     @Override
     public void publish(BookingRejected bookingRejected) {
-
+        publisher.publishEvent(bookingRejected);
     }
 }
