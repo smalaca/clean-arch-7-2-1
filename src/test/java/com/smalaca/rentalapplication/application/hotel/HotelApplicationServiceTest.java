@@ -45,7 +45,6 @@ class HotelApplicationServiceTest {
     private static final String DESCRIPTION = "What a lovely place";
     private static final String TENANT_ID = "4321";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
-    private static final String HOTEL_ROOM_ID = "7821321";
 
     private final HotelRepository hotelRepository = mock(HotelRepository.class);
     private final BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);
