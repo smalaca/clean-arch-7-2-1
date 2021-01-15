@@ -21,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 class HotelRoomTest {
-    private static final String HOTEL_ID_1 = UUID.randomUUID().toString();
+    private static final UUID HOTEL_ID_1 = UUID.randomUUID();
     private static final int ROOM_NUMBER_1 = 42;
     private static final ImmutableMap<String, Double> SPACES_DEFINITION_1 = ImmutableMap.of("Room1", 30.0);
     private static final String DESCRIPTION_1 = "This is very nice place";
-    private static final String HOTEL_ID_2 = UUID.randomUUID().toString();
+    private static final UUID HOTEL_ID_2 = UUID.randomUUID();
     private static final int ROOM_NUMBER_2 = 13;
     private static final ImmutableMap<String, Double> SPACES_DEFINITION_2 = ImmutableMap.of("RoomOne", 10.0, "RoomTwo", 25.0);
     private static final String DESCRIPTION_2 = "This is even better place";
@@ -44,8 +44,10 @@ class HotelRoomTest {
                 .build();
 
         HotelRoomAssertion.assertThat(actual)
-                .hasHotelIdEqualTo(HOTEL_ID_1)
-                .hasRoomNumberEqualTo(ROOM_NUMBER_1)
+                .isEqualTo(HotelRoomRequirements.hotelRoom()
+                        .withHotelId(HOTEL_ID_1)
+                        .withRoomNumber(ROOM_NUMBER_1)
+                )
                 .hasSpacesDefinitionEqualTo(SPACES_DEFINITION_1)
                 .hasDescriptionEqualTo(DESCRIPTION_1);
     }
@@ -80,7 +82,7 @@ class HotelRoomTest {
 
         hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
-        BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(HOTEL_ID_1, ROOM_NUMBER_1, TENANT_ID, DAYS);
+        BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(HOTEL_ID_1.toString(), ROOM_NUMBER_1, TENANT_ID, DAYS);
     }
 
     @Test

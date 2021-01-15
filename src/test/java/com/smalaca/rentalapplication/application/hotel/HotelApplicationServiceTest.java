@@ -12,6 +12,7 @@ import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomAssertion;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomRequirements;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -96,7 +97,7 @@ class HotelApplicationServiceTest {
         HotelAssertion.assertThat(captor.getValue())
                 .hasOnlyOneHotelRoom(hotelRoom -> {
                     HotelRoomAssertion.assertThat(hotelRoom)
-                            .hasRoomNumberEqualTo(ROOM_NUMBER)
+                            .isEqualTo(HotelRoomRequirements.hotelRoom().withRoomNumber(ROOM_NUMBER))
                             .hasSpacesDefinitionEqualTo(SPACES_DEFINITION)
                             .hasDescriptionEqualTo(DESCRIPTION);
                 });
