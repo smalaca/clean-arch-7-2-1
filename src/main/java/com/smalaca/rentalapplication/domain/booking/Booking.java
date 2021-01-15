@@ -50,12 +50,8 @@ public class Booking {
         return new Booking(RentalType.HOTEL_ROOM, rentalPlaceId, tenantId, days);
     }
 
-    public void reject() {
+    public void reject(BookingEventsPublisher bookingEventsPublisher) {
         bookingStatus = bookingStatus.moveTo(REJECTED);
-    }
-
-    void reject(BookingEventsPublisher bookingEventsPublisher) {
-        reject();
 
         bookingEventsPublisher.bookingRejected(rentalType, rentalPlaceId, tenantId, days);
     }
