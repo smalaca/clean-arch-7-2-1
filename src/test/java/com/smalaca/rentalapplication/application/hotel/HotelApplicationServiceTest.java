@@ -95,15 +95,6 @@ class HotelApplicationServiceTest {
                 });
     }
 
-    @Test
-    void shouldReturnIdOfNewHotelRoom() {
-        givenExistingHotel();
-
-        String actual = service.add(givenHotelRoomDto());
-
-        Assertions.assertThat(actual).isNull();
-    }
-
     private HotelRoomDto givenHotelRoomDto() {
         return new HotelRoomDto(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
     }

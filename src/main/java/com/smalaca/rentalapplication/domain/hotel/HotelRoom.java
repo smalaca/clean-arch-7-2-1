@@ -56,7 +56,7 @@ public class HotelRoom {
         return getNullable(hotelId);
     }
 
-    public String id() {
+    private String id() {
         return getNullable(id);
     }
 
