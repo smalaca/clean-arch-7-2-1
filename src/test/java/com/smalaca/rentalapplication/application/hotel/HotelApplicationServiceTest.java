@@ -9,7 +9,6 @@ import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
 import com.smalaca.rentalapplication.domain.hotel.HotelAssertion;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
-import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomAssertion;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomRequirements;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
-import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -145,15 +143,6 @@ class HotelApplicationServiceTest {
                 .isHotelRoom()
                 .hasTenantIdEqualTo(TENANT_ID)
                 .containsAllDays(DAYS);
-    }
-
-    private HotelRoom createHotelRoom() {
-        return hotelRoom()
-                .withHotelId(HOTEL_ID)
-                .withNumber(ROOM_NUMBER)
-                .withSpacesDefinition(SPACES_DEFINITION)
-                .withDescription(DESCRIPTION)
-                .build();
     }
 
     private Hotel givenExistingHotel() {
