@@ -30,6 +30,11 @@ public class BookingAssertion {
         return hasBookingStatusEqualTo(BookingStatus.REJECTED);
     }
 
+    public BookingAssertion hasIdEqualTo(String expected) {
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("id", expected);
+        return this;
+    }
+
     private BookingAssertion hasBookingStatusEqualTo(BookingStatus expected) {
         Assertions.assertThat(actual).hasFieldOrPropertyWithValue("bookingStatus", expected);
         return this;

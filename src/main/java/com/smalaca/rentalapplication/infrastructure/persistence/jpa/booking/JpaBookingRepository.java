@@ -28,6 +28,6 @@ class JpaBookingRepository implements BookingRepository {
 
     @Override
     public List<Booking> findAllBy(RentalPlaceIdentifier identifier) {
-        return null;
+        return springJpaBookingRepository.findAllByRentalTypeAndRentalPlaceId(identifier.getRentalType(), identifier.getRentalPlaceId());
     }
 }

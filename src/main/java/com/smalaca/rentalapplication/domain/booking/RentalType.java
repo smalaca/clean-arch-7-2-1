@@ -1,5 +1,5 @@
 package com.smalaca.rentalapplication.domain.booking;
 
-enum RentalType {
+public enum RentalType {
     HOTEL_ROOM, APARTMENT
 }
