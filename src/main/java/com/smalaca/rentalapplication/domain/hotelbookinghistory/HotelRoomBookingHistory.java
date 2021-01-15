@@ -29,8 +29,8 @@ class HotelRoomBookingHistory {
         this.hotelRoomNumber = hotelRoomNumber;
     }
 
-    boolean hasNumberEqualTo(int hotelRoomId) {
-        return this.hotelRoomNumber == hotelRoomId;
+    boolean hasNumberEqualTo(int hotelRoomNumber) {
+        return this.hotelRoomNumber == hotelRoomNumber;
     }
 
     void add(LocalDateTime bookingDateTime, String tenantId, List<LocalDate> days) {
