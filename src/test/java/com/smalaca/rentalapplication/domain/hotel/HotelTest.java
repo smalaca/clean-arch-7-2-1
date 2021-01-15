@@ -1,6 +1,5 @@
 package com.smalaca.rentalapplication.domain.hotel;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -8,7 +7,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
-import static com.smalaca.rentalapplication.domain.hotel.HotelAssertion.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class HotelTest {
     private static final String NAME_1 = "Great hotel";
@@ -25,20 +24,11 @@ class HotelTest {
     private static final String COUNTRY_2 = "Germany";
 
     @Test
-    void shouldCreateHotelWithAllInformation() {
-        Hotel actual = givenHotel();
-
-        assertThat(actual)
-                .hasNameEqualsTo(NAME_1)
-                .hasAddressEqualsTo(STREET_1, POSTAL_CODE_1, BUILDING_NUMBER_1, CITY_1, COUNTRY_1);
-    }
-
-    @Test
     void shouldRecognizeTheSameInstanceAsTheSameAggregate() {
         Hotel actual = givenHotel();
 
-        Assertions.assertThat(actual.equals(actual)).isTrue();
-        Assertions.assertThat(actual.hashCode()).isEqualTo(actual.hashCode());
+        assertThat(actual.equals(actual)).isTrue();
+        assertThat(actual.hashCode()).isEqualTo(actual.hashCode());
     }
 
     @Test
@@ -47,15 +37,15 @@ class HotelTest {
 
         Hotel actual = givenHotel();
 
-        Assertions.assertThat(actual.equals(toCompare)).isTrue();
-        Assertions.assertThat(actual.hashCode()).isEqualTo(toCompare.hashCode());
+        assertThat(actual.equals(toCompare)).isTrue();
+        assertThat(actual.hashCode()).isEqualTo(toCompare.hashCode());
     }
 
     @Test
     void shouldRecognizeNullIsNotTheSameAsHotel() {
         Hotel actual = givenHotel();
 
-        Assertions.assertThat(actual.equals(null)).isFalse();
+        assertThat(actual.equals(null)).isFalse();
     }
 
     @ParameterizedTest
@@ -63,8 +53,8 @@ class HotelTest {
     void shouldRecognizeHotelDoesNotRepresentTheSameAggregate(Object toCompare) {
         Hotel actual = givenHotel();
 
-        Assertions.assertThat(actual.equals(toCompare)).isFalse();
-        Assertions.assertThat(actual.hashCode()).isNotEqualTo(toCompare.hashCode());
+        assertThat(actual.equals(toCompare)).isFalse();
+        assertThat(actual.hashCode()).isNotEqualTo(toCompare.hashCode());
     }
 
     private Hotel givenHotel() {

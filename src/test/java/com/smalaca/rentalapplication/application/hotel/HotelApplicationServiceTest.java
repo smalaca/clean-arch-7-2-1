@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
-import static com.smalaca.rentalapplication.domain.hotel.HotelAssertion.assertThat;
 import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
@@ -59,9 +58,18 @@ class HotelApplicationServiceTest {
         service.add(givenHotelDto());
 
         then(hotelRepository).should().save(captor.capture());
-        assertThat(captor.getValue())
-                .hasNameEqualsTo(NAME)
-                .hasAddressEqualsTo(STREET, POSTAL_CODE, BUILDING_NUMBER, CITY, COUNTRY);
+        Assertions.assertThat(captor.getValue()).isEqualTo(expected());
+    }
+
+    private Hotel expected() {
+        return hotel()
+                .withName(NAME)
+                .withStreet(STREET)
+                .withPostalCode(POSTAL_CODE)
+                .withBuildingNumber(BUILDING_NUMBER)
+                .withCity(CITY)
+                .withCountry(COUNTRY)
+                .build();
     }
 
     @Test
