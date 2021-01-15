@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@SuppressWarnings("PMD.UnusedPrivateField")
 class HotelRoomBookingHistory {
     @Id
     @GeneratedValue
