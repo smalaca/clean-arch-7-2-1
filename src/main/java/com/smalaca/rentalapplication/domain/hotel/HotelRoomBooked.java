@@ -7,16 +7,16 @@ import java.util.List;
 public class HotelRoomBooked {
     private final String eventId;
     private final LocalDateTime eventCreationDateTime;
-    private final String hotelRoomId;
+    private final int hotelRoomNumber;
     private final String hotelId;
     private final String tenantId;
     private final List<LocalDate> days;
 
     HotelRoomBooked(
-            String eventId, LocalDateTime eventCreationDateTime, String hotelRoomId, String hotelId, String tenantId, List<LocalDate> days) {
+            String eventId, LocalDateTime eventCreationDateTime, String hotelId, int hotelRoomNumber, String tenantId, List<LocalDate> days) {
         this.eventId = eventId;
         this.eventCreationDateTime = eventCreationDateTime;
-        this.hotelRoomId = hotelRoomId;
+        this.hotelRoomNumber = hotelRoomNumber;
         this.hotelId = hotelId;
         this.tenantId = tenantId;
         this.days = days;
@@ -30,8 +30,8 @@ public class HotelRoomBooked {
         return eventCreationDateTime;
     }
 
-    public String getHotelRoomId() {
-        return hotelRoomId;
+    public int getHotelRoomNumber() {
+        return hotelRoomNumber;
     }
 
     public String getHotelId() {

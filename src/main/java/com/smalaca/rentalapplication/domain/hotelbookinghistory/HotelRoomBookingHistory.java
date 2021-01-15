@@ -2,29 +2,34 @@ package com.smalaca.rentalapplication.domain.hotelbookinghistory;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 class HotelRoomBookingHistory {
     @Id
-    private String hotelRoomId;
+    @GeneratedValue
+    private UUID id;
+
+    private int hotelRoomNumber;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<HotelRoomBooking> bookings = new ArrayList<>();
 
     private HotelRoomBookingHistory() {}
 
-    HotelRoomBookingHistory(String hotelRoomId) {
-        this.hotelRoomId = hotelRoomId;
+    HotelRoomBookingHistory(int hotelRoomNumber) {
+        this.hotelRoomNumber = hotelRoomNumber;
     }
 
-    boolean hasIdEqualTo(String hotelRoomId) {
-        return this.hotelRoomId.equals(hotelRoomId);
+    boolean hasNumberEqualTo(int hotelRoomId) {
+        return this.hotelRoomNumber == hotelRoomId;
     }
 
     void add(LocalDateTime bookingDateTime, String tenantId, List<LocalDate> days) {

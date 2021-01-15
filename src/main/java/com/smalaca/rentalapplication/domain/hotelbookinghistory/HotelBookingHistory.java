@@ -25,18 +25,18 @@ public class HotelBookingHistory {
         this.hotelId = hotelId;
     }
 
-    public void add(String hotelRoomId, LocalDateTime bookingDateTime, String tenantId, List<LocalDate> days) {
-        HotelRoomBookingHistory hotelRoomBookingHistory = findFor(hotelRoomId);
+    public void add(int hotelRoomNumber, LocalDateTime bookingDateTime, String tenantId, List<LocalDate> days) {
+        HotelRoomBookingHistory hotelRoomBookingHistory = findFor(hotelRoomNumber);
         hotelRoomBookingHistory.add(bookingDateTime, tenantId, days);
     }
 
-    private HotelRoomBookingHistory findFor(String hotelRoomId) {
+    private HotelRoomBookingHistory findFor(int hotelRoomNumber) {
         Optional<HotelRoomBookingHistory> history = hotelRoomBookingHistories.stream()
-                .filter(hotelRoomBookingHistory -> hotelRoomBookingHistory.hasIdEqualTo(hotelRoomId))
+                .filter(hotelRoomBookingHistory -> hotelRoomBookingHistory.hasNumberEqualTo(hotelRoomNumber))
                 .findFirst();
 
         if (history.isEmpty()) {
-            HotelRoomBookingHistory hotelRoomBookingHistory = new HotelRoomBookingHistory(hotelRoomId);
+            HotelRoomBookingHistory hotelRoomBookingHistory = new HotelRoomBookingHistory(hotelRoomNumber);
             hotelRoomBookingHistories.add(hotelRoomBookingHistory);
             return hotelRoomBookingHistory;
         } else {

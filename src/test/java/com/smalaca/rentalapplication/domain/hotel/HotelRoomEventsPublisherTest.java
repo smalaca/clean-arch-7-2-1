@@ -21,18 +21,18 @@ class HotelRoomEventsPublisherTest {
     @Test
     void shouldPublishHotelRoomBookedEvent() {
         ArgumentCaptor<HotelRoomBooked> captor = ArgumentCaptor.forClass(HotelRoomBooked.class);
-        String hotelRoomId = "1234";
+        int hotelRoomNumber = 1234;
         String hotelId = "5678";
         String tenantId = "3456";
         List<LocalDate> days = asList(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2), LocalDate.of(2020, 1, 3));
 
-        publisher.publishHotelRoomBooked(hotelRoomId, hotelId, tenantId, days);
+        publisher.publishHotelRoomBooked(hotelId, hotelRoomNumber, tenantId, days);
 
         then(eventChannel).should().publish(captor.capture());
         HotelRoomBooked actual = captor.getValue();
         assertThat(actual.getEventId()).isEqualTo(FakeEventIdFactory.UUID);
         assertThat(actual.getEventCreationDateTime()).isEqualTo(FakeClock.NOW);
-        assertThat(actual.getHotelRoomId()).isEqualTo(hotelRoomId);
+        assertThat(actual.getHotelRoomNumber()).isEqualTo(hotelRoomNumber);
         assertThat(actual.getHotelId()).isEqualTo(hotelId);
         assertThat(actual.getTenantId()).isEqualTo(tenantId);
         assertThat(actual.getDays()).containsExactlyElementsOf(days);

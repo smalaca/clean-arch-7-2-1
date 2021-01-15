@@ -18,8 +18,6 @@ import java.util.stream.Stream;
 import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 
 class HotelRoomTest {
@@ -82,7 +80,7 @@ class HotelRoomTest {
 
         hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
-        BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(any(), eq(HOTEL_ID_1), eq(TENANT_ID), eq(DAYS));
+        BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(HOTEL_ID_1, ROOM_NUMBER_1, TENANT_ID, DAYS);
     }
 
     @Test

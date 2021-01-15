@@ -19,8 +19,8 @@ class HotelRoomBookingHistoryAssertion {
         return new HotelRoomBookingHistoryAssertion(actual);
     }
 
-    HotelRoomBookingHistoryAssertion hasHotelRoomIdEqualTo(String expected) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("hotelRoomId", expected);
+    HotelRoomBookingHistoryAssertion hasHotelRoomNumberEqualTo(int expected) {
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("hotelRoomNumber", expected);
         return this;
     }
 
