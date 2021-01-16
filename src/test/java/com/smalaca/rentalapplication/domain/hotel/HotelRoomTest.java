@@ -32,6 +32,8 @@ class HotelRoomTest {
     private static final int DIFFERENT_ROOM_NUMBER = ROOM_NUMBER_2;
     private static final String TENANT_ID = "325426";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
+    private static final String NO_ID = null;
+
     private final HotelEventsPublisher hotelEventsPublisher = mock(HotelEventsPublisher.class);
 
     @Test
@@ -70,10 +72,7 @@ class HotelRoomTest {
 
         Booking actual = hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
-        BookingAssertion.assertThat(actual)
-                .isHotelRoom()
-                .hasTenantIdEqualTo(TENANT_ID)
-                .containsAllDays(DAYS);
+        BookingAssertion.assertThat(actual).isEqualToBookingHotelRoom(NO_ID, TENANT_ID, DAYS);
     }
 
     @Test

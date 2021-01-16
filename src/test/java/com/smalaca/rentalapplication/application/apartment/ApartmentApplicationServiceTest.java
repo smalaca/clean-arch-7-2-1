@@ -11,6 +11,7 @@ import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -88,9 +89,7 @@ class ApartmentApplicationServiceTest {
 
         then(bookingRepository).should().save(captor.capture());
         BookingAssertion.assertThat(captor.getValue())
-                .isApartment()
-                .hasTenantIdEqualTo(TENANT_ID)
-                .containsAllDays(START, MIDDLE, END);
+                .isEqualToBookingApartment(APARTMENT_ID, TENANT_ID, new Period(START, END));
     }
 
     @Test

@@ -45,6 +45,7 @@ class ApartmentTest {
     private static final LocalDate MIDDLE = LocalDate.of(2020, 3, 5);
     private static final LocalDate END = LocalDate.of(2020, 3, 6);
     private static final Period PERIOD = new Period(START, END);
+    private static final String NO_ID = null;
 
     private final ApartmentEventsPublisher apartmentEventsPublisher = Mockito.mock(ApartmentEventsPublisher.class);
 
@@ -86,9 +87,7 @@ class ApartmentTest {
         Booking actual = apartment.book(TENANT_ID, PERIOD, apartmentEventsPublisher);
 
         BookingAssertion.assertThat(actual)
-                .isApartment()
-                .hasTenantIdEqualTo(TENANT_ID)
-                .containsAllDays(START, MIDDLE, END);
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
     }
 
     @Test

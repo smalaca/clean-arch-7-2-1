@@ -43,6 +43,7 @@ class HotelApplicationServiceTest {
     private static final String DESCRIPTION = "What a lovely place";
     private static final String TENANT_ID = "4321";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
+    private static final String NO_ID = null;
 
     private final HotelRepository hotelRepository = mock(HotelRepository.class);
     private final BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);
@@ -139,10 +140,7 @@ class HotelApplicationServiceTest {
         ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
         BDDMockito.then(bookingRepository).should().save(captor.capture());
 
-        BookingAssertion.assertThat(captor.getValue())
-                .isHotelRoom()
-                .hasTenantIdEqualTo(TENANT_ID)
-                .containsAllDays(DAYS);
+        BookingAssertion.assertThat(captor.getValue()).isEqualToBookingHotelRoom(NO_ID, TENANT_ID, DAYS);
     }
 
     private Hotel givenExistingHotel() {
