@@ -1,5 +1,8 @@
 package com.smalaca.rentalapplication.domain.hotelroomoffer;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,6 +38,27 @@ public class HotelRoomOffer {
 
     public UUID id() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        HotelRoomOffer that = (HotelRoomOffer) o;
+
+        return new EqualsBuilder().append(hotelRoomNumber, that.hotelRoomNumber).append(hotelId, that.hotelId).isEquals();
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(hotelId).append(hotelRoomNumber).toHashCode();
     }
 
     static class Builder {
