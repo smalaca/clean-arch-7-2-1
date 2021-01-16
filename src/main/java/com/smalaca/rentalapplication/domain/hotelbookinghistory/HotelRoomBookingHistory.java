@@ -1,5 +1,8 @@
 package com.smalaca.rentalapplication.domain.hotelbookinghistory;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,5 +38,26 @@ class HotelRoomBookingHistory {
 
     void add(LocalDateTime bookingDateTime, String tenantId, List<LocalDate> days) {
         bookings.add(new HotelRoomBooking(bookingDateTime, tenantId, days));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        HotelRoomBookingHistory that = (HotelRoomBookingHistory) o;
+
+        return new EqualsBuilder().append(hotelRoomNumber, that.hotelRoomNumber).isEquals();
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(hotelRoomNumber).toHashCode();
     }
 }

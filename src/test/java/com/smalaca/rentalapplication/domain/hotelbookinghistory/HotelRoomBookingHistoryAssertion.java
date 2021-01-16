@@ -26,10 +26,7 @@ class HotelRoomBookingHistoryAssertion {
 
     HotelRoomBookingHistoryAssertion hasHotelRoomBookingFor(LocalDateTime bookingDateTime, String tenantId, List<LocalDate> days) {
         return hasHotelRoomBookingFor(hotelRoomBooking -> {
-            Assertions.assertThat(hotelRoomBooking)
-                    .hasFieldOrPropertyWithValue("bookingDateTime", bookingDateTime)
-                    .hasFieldOrPropertyWithValue("tenantId", tenantId)
-                    .hasFieldOrPropertyWithValue("days", days);
+            Assertions.assertThat(hotelRoomBooking).isEqualTo(new HotelRoomBooking(bookingDateTime, tenantId, days));
         });
     }
 

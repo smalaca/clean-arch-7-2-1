@@ -1,5 +1,8 @@
 package com.smalaca.rentalapplication.domain.hotelbookinghistory;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -42,5 +45,26 @@ public class HotelBookingHistory {
         } else {
             return history.get();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        HotelBookingHistory that = (HotelBookingHistory) o;
+
+        return new EqualsBuilder().append(hotelId, that.hotelId).isEquals();
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(hotelId).toHashCode();
     }
 }

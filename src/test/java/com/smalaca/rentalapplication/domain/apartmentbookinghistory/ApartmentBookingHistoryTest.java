@@ -88,7 +88,7 @@ class ApartmentBookingHistoryTest {
     }
 
     @ParameterizedTest
-    @MethodSource("notTeSameApartmentBookingHistorys")
+    @MethodSource("notTeSameApartmentBookingHistories")
     void shouldRecognizeApartmentBookingHistoriesDoesNotRepresentTheSameAggregate(Object toCompare) {
         ApartmentBookingHistory actual = givenApartmentBookingHistory();
 
@@ -104,7 +104,7 @@ class ApartmentBookingHistoryTest {
         return apartmentBookingHistory;
     }
 
-    private static Stream<Object> notTeSameApartmentBookingHistorys() {
+    private static Stream<Object> notTeSameApartmentBookingHistories() {
         return Stream.of(
                 new ApartmentBookingHistory(DIFFERENT_APARTMENT_ID),
                 new Object()
