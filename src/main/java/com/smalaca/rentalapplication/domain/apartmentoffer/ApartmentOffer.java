@@ -1,5 +1,8 @@
 package com.smalaca.rentalapplication.domain.apartmentoffer;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,6 +33,27 @@ public class ApartmentOffer {
 
     public UUID id() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ApartmentOffer that = (ApartmentOffer) o;
+
+        return new EqualsBuilder().append(apartmentId, that.apartmentId).isEquals();
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(apartmentId).toHashCode();
     }
 
     public static class Builder {
