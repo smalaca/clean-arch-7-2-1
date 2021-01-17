@@ -19,17 +19,14 @@ class HotelRoomBookingHistoryAssertion {
         return new HotelRoomBookingHistoryAssertion(actual);
     }
 
-    HotelRoomBookingHistoryAssertion hasHotelRoomIdEqualTo(String expected) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("hotelRoomId", expected);
+    HotelRoomBookingHistoryAssertion hasHotelRoomNumberEqualTo(int expected) {
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("hotelRoomNumber", expected);
         return this;
     }
 
     HotelRoomBookingHistoryAssertion hasHotelRoomBookingFor(LocalDateTime bookingDateTime, String tenantId, List<LocalDate> days) {
         return hasHotelRoomBookingFor(hotelRoomBooking -> {
-            Assertions.assertThat(hotelRoomBooking)
-                    .hasFieldOrPropertyWithValue("bookingDateTime", bookingDateTime)
-                    .hasFieldOrPropertyWithValue("tenantId", tenantId)
-                    .hasFieldOrPropertyWithValue("days", days);
+            Assertions.assertThat(hotelRoomBooking).isEqualTo(new HotelRoomBooking(bookingDateTime, tenantId, days));
         });
     }
 

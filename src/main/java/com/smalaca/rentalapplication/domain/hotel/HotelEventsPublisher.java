@@ -18,8 +18,8 @@ public class HotelEventsPublisher {
         this.eventChannel = eventChannel;
     }
 
-    void publishHotelRoomBooked(String hotelRoomId, String hotelId, String tenantId, List<LocalDate> days) {
-        HotelRoomBooked hotelRoomBooked = new HotelRoomBooked(eventIdFactory.create(), clock.now(), hotelRoomId, hotelId, tenantId, days);
+    void publishHotelRoomBooked(String hotelId, int hotelRoomNumber, String tenantId, List<LocalDate> days) {
+        HotelRoomBooked hotelRoomBooked = new HotelRoomBooked(eventIdFactory.create(), clock.now(), hotelId, hotelRoomNumber, tenantId, days);
         eventChannel.publish(hotelRoomBooked);
     }
 }

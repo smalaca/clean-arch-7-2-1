@@ -28,7 +28,7 @@ import static java.util.Arrays.asList;
 @SpringBootTest
 @Tag("IntegrationTest")
 class HotelBookingHistoryEventListenerIntegrationTest {
-    private static final int HOTEL_NUMBER = 13;
+    private static final int HOTEL_ROOM_NUMBER = 13;
     private static final Map<String, Double> SPACES_DEFINITION = ImmutableMap.of("RoomOne", 20.0, "RoomTwo", 20.0);
     private static final String DESCRIPTION = "What a lovely place";
 
@@ -45,7 +45,7 @@ class HotelBookingHistoryEventListenerIntegrationTest {
         Hotel hotel = hotel().withName("Great hotel").build();
         hotelId = hotelRepository.save(hotel);
 
-        hotel.addRoom(HOTEL_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+        hotel.addRoom(HOTEL_ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
         hotelRepository.save(hotel);
     }
 
@@ -60,11 +60,11 @@ class HotelBookingHistoryEventListenerIntegrationTest {
     void shouldUpdateHotelBookingHistory() {
         String tenantId = "11223344";
         List<LocalDate> days = asList(LocalDate.of(2020, 1, 13), LocalDate.of(2020, 1, 14));
-        HotelRoomBookingDto hotelRoomBookingDto = new HotelRoomBookingDto(hotelId, HOTEL_NUMBER, tenantId, days);
+        HotelRoomBookingDto hotelRoomBookingDto = new HotelRoomBookingDto(hotelId, HOTEL_ROOM_NUMBER, tenantId, days);
 
         hotelApplicationService.book(hotelRoomBookingDto);
         HotelBookingHistory actual = hotelBookingHistoryRepository.findFor(hotelId);
 
-        HotelBookingHistoryAssertion.assertThat(actual).hasHotelRoomBookingHistoryFor(HOTEL_NUMBER, tenantId, days);
+        HotelBookingHistoryAssertion.assertThat(actual).hasHotelRoomBookingHistoryFor(HOTEL_ROOM_NUMBER, tenantId, days);
     }
 }

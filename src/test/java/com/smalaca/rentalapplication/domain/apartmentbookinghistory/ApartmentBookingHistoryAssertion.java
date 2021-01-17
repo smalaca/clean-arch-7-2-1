@@ -17,8 +17,8 @@ public class ApartmentBookingHistoryAssertion {
         return new ApartmentBookingHistoryAssertion(actual);
     }
 
-    ApartmentBookingHistoryAssertion hasApartmentIdEqualsTo(String expected) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("apartmentId", expected);
+    ApartmentBookingHistoryAssertion isEqualTo(ApartmentBookingHistory expected) {
+        Assertions.assertThat(actual).isEqualTo(expected);
         return this;
     }
 
@@ -32,6 +32,17 @@ public class ApartmentBookingHistoryAssertion {
         });
 
         return this;
+    }
+
+    ApartmentBookingHistoryAssertion hasApartmentBookingEqualTo(ApartmentBooking expected) {
+        hasApartmentBookings().satisfies(actualBookings -> {
+            Assertions.assertThat(asApartmentBookings(actualBookings)).anySatisfy(apartmentBooking -> {
+                Assertions.assertThat(apartmentBooking).isEqualTo(expected);
+            });
+        });
+
+        return this;
+
     }
 
     public ApartmentBookingHistoryAssertion hasApartmentBookingThatSatisfies(Consumer<ApartmentBooking> requirements) {

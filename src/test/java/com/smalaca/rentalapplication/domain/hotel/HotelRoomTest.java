@@ -18,22 +18,22 @@ import java.util.stream.Stream;
 import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 
 class HotelRoomTest {
-    private static final String HOTEL_ID_1 = UUID.randomUUID().toString();
+    private static final UUID HOTEL_ID_1 = UUID.randomUUID();
     private static final int ROOM_NUMBER_1 = 42;
     private static final ImmutableMap<String, Double> SPACES_DEFINITION_1 = ImmutableMap.of("Room1", 30.0);
     private static final String DESCRIPTION_1 = "This is very nice place";
-    private static final String HOTEL_ID_2 = UUID.randomUUID().toString();
+    private static final UUID HOTEL_ID_2 = UUID.randomUUID();
     private static final int ROOM_NUMBER_2 = 13;
     private static final ImmutableMap<String, Double> SPACES_DEFINITION_2 = ImmutableMap.of("RoomOne", 10.0, "RoomTwo", 25.0);
     private static final String DESCRIPTION_2 = "This is even better place";
     private static final int DIFFERENT_ROOM_NUMBER = ROOM_NUMBER_2;
     private static final String TENANT_ID = "325426";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
+    private static final String NO_ID = null;
+
     private final HotelEventsPublisher hotelEventsPublisher = mock(HotelEventsPublisher.class);
 
     @Test
@@ -46,8 +46,10 @@ class HotelRoomTest {
                 .build();
 
         HotelRoomAssertion.assertThat(actual)
-                .hasHotelIdEqualTo(HOTEL_ID_1)
-                .hasRoomNumberEqualTo(ROOM_NUMBER_1)
+                .isEqualTo(HotelRoomRequirements.hotelRoom()
+                        .withHotelId(HOTEL_ID_1)
+                        .withRoomNumber(ROOM_NUMBER_1)
+                )
                 .hasSpacesDefinitionEqualTo(SPACES_DEFINITION_1)
                 .hasDescriptionEqualTo(DESCRIPTION_1);
     }
@@ -70,10 +72,7 @@ class HotelRoomTest {
 
         Booking actual = hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
-        BookingAssertion.assertThat(actual)
-                .isHotelRoom()
-                .hasTenantIdEqualTo(TENANT_ID)
-                .containsAllDays(DAYS);
+        BookingAssertion.assertThat(actual).isEqualToBookingHotelRoom(NO_ID, TENANT_ID, DAYS);
     }
 
     @Test
@@ -82,7 +81,7 @@ class HotelRoomTest {
 
         hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
 
-        BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(any(), eq(HOTEL_ID_1), eq(TENANT_ID), eq(DAYS));
+        BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(HOTEL_ID_1.toString(), ROOM_NUMBER_1, TENANT_ID, DAYS);
     }
 
     @Test

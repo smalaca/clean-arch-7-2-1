@@ -32,13 +32,12 @@ public class HotelApplicationService {
         return hotelRepository.save(hotel);
     }
 
-    public String add(HotelRoomDto hotelRoomDto) {
+    public void add(HotelRoomDto hotelRoomDto) {
         Hotel hotel = hotelRepository.findById(hotelRoomDto.getHotelId());
 
         hotel.addRoom(hotelRoomDto.getNumber(), hotelRoomDto.getSpacesDefinition(), hotelRoomDto.getDescription());
 
         hotelRepository.save(hotel);
-        return hotel.getIdOfRoom(hotelRoomDto.getNumber());
     }
 
     public String book(HotelRoomBookingDto hotelRoomBookingDto) {

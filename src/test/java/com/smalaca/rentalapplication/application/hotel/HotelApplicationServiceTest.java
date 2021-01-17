@@ -9,9 +9,9 @@ import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
 import com.smalaca.rentalapplication.domain.hotel.HotelAssertion;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
-import com.smalaca.rentalapplication.domain.hotel.HotelRoom;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomAssertion;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomRequirements;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
-import static com.smalaca.rentalapplication.domain.hotel.HotelAssertion.assertThat;
-import static com.smalaca.rentalapplication.domain.hotel.HotelRoom.Builder.hotelRoom;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -45,7 +43,7 @@ class HotelApplicationServiceTest {
     private static final String DESCRIPTION = "What a lovely place";
     private static final String TENANT_ID = "4321";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
-    private static final String HOTEL_ROOM_ID = "7821321";
+    private static final String NO_ID = null;
 
     private final HotelRepository hotelRepository = mock(HotelRepository.class);
     private final BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);
@@ -60,9 +58,18 @@ class HotelApplicationServiceTest {
         service.add(givenHotelDto());
 
         then(hotelRepository).should().save(captor.capture());
-        assertThat(captor.getValue())
-                .hasNameEqualsTo(NAME)
-                .hasAddressEqualsTo(STREET, POSTAL_CODE, BUILDING_NUMBER, CITY, COUNTRY);
+        Assertions.assertThat(captor.getValue()).isEqualTo(expected());
+    }
+
+    private Hotel expected() {
+        return hotel()
+                .withName(NAME)
+                .withStreet(STREET)
+                .withPostalCode(POSTAL_CODE)
+                .withBuildingNumber(BUILDING_NUMBER)
+                .withCity(CITY)
+                .withCountry(COUNTRY)
+                .build();
     }
 
     @Test
@@ -89,19 +96,10 @@ class HotelApplicationServiceTest {
         HotelAssertion.assertThat(captor.getValue())
                 .hasOnlyOneHotelRoom(hotelRoom -> {
                     HotelRoomAssertion.assertThat(hotelRoom)
-                            .hasRoomNumberEqualTo(ROOM_NUMBER)
+                            .isEqualTo(HotelRoomRequirements.hotelRoom().withRoomNumber(ROOM_NUMBER))
                             .hasSpacesDefinitionEqualTo(SPACES_DEFINITION)
                             .hasDescriptionEqualTo(DESCRIPTION);
                 });
-    }
-
-    @Test
-    void shouldReturnIdOfNewHotelRoom() {
-        givenExistingHotel();
-
-        String actual = service.add(givenHotelRoomDto());
-
-        Assertions.assertThat(actual).isNull();
     }
 
     private HotelRoomDto givenHotelRoomDto() {
@@ -142,19 +140,7 @@ class HotelApplicationServiceTest {
         ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
         BDDMockito.then(bookingRepository).should().save(captor.capture());
 
-        BookingAssertion.assertThat(captor.getValue())
-                .isHotelRoom()
-                .hasTenantIdEqualTo(TENANT_ID)
-                .containsAllDays(DAYS);
-    }
-
-    private HotelRoom createHotelRoom() {
-        return hotelRoom()
-                .withHotelId(HOTEL_ID)
-                .withNumber(ROOM_NUMBER)
-                .withSpacesDefinition(SPACES_DEFINITION)
-                .withDescription(DESCRIPTION)
-                .build();
+        BookingAssertion.assertThat(captor.getValue()).isEqualToBookingHotelRoom(NO_ID, TENANT_ID, DAYS);
     }
 
     private Hotel givenExistingHotel() {

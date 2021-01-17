@@ -5,11 +5,13 @@ import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentAssertion;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
+import com.smalaca.rentalapplication.domain.apartment.ApartmentRequirements;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,7 @@ class ApartmentApplicationServiceTest {
     private static final LocalDate MIDDLE = LocalDate.of(2020, 3, 5);
     private static final LocalDate END = LocalDate.of(2020, 3, 6);
     private static final String BOOKING_ID = "8394234";
+    private static final String NO_ID = null;
 
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
     private final EventChannel eventChannel = mock(EventChannel.class);
@@ -56,9 +59,12 @@ class ApartmentApplicationServiceTest {
 
         then(apartmentRepository).should().save(captor.capture());
         ApartmentAssertion.assertThat(captor.getValue())
-                .hasOwnerIdEqualsTo(OWNER_ID)
+                .isEqualTo(ApartmentRequirements.apartment()
+                        .withOwnerId(OWNER_ID)
+                        .withApartmentNumber(APARTMENT_NUMBER)
+                        .withAddress(STREET, POSTAL_CODE, HOUSE_NUMBER, CITY, COUNTRY)
+                )
                 .hasDescriptionEqualsTo(DESCRIPTION)
-                .hasAddressEqualsTo(STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY)
                 .hasSpacesEqualsTo(SPACES_DEFINITION);
     }
 
@@ -84,9 +90,7 @@ class ApartmentApplicationServiceTest {
 
         then(bookingRepository).should().save(captor.capture());
         BookingAssertion.assertThat(captor.getValue())
-                .isApartment()
-                .hasTenantIdEqualTo(TENANT_ID)
-                .containsAllDays(START, MIDDLE, END);
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
     }
 
     @Test

@@ -47,7 +47,7 @@ public class HotelRoom {
     }
 
     Booking book(String tenantId, List<LocalDate> days, HotelEventsPublisher hotelEventsPublisher) {
-        hotelEventsPublisher.publishHotelRoomBooked(id(), hotelId(), tenantId, days);
+        hotelEventsPublisher.publishHotelRoomBooked(hotelId(), number, tenantId, days);
 
         return Booking.hotelRoom(id(), tenantId, days);
     }
@@ -56,7 +56,7 @@ public class HotelRoom {
         return getNullable(hotelId);
     }
 
-    public String id() {
+    private String id() {
         return getNullable(id);
     }
 
@@ -93,7 +93,7 @@ public class HotelRoom {
         return new HashCodeBuilder(17, 37).append(hotelId).append(number).toHashCode();
     }
 
-    public static class Builder {
+    static class Builder {
         private UUID hotelId;
         private int number;
         private Map<String, Double> spacesDefinition = new HashMap<>();
@@ -101,7 +101,7 @@ public class HotelRoom {
 
         private Builder() {}
 
-        public static Builder hotelRoom() {
+        static Builder hotelRoom() {
             return new Builder();
         }
 
@@ -110,26 +110,22 @@ public class HotelRoom {
             return this;
         }
 
-        public Builder withHotelId(String hotelId) {
-            return withHotelId(UUID.fromString(hotelId));
-        }
-
-        public Builder withNumber(int number) {
+        Builder withNumber(int number) {
             this.number = number;
             return this;
         }
 
-        public Builder withSpacesDefinition(Map<String, Double> spacesDefinition) {
+        Builder withSpacesDefinition(Map<String, Double> spacesDefinition) {
             this.spacesDefinition = spacesDefinition;
             return this;
         }
 
-        public Builder withDescription(String description) {
+        Builder withDescription(String description) {
             this.description = description;
             return this;
         }
 
-        public HotelRoom build() {
+        HotelRoom build() {
             return new HotelRoom(hotelId, number, spaces(), description);
         }
 

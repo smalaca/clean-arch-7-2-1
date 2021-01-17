@@ -1,6 +1,8 @@
 package com.smalaca.rentalapplication.domain.booking;
 
 import com.smalaca.rentalapplication.domain.period.Period;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -76,5 +78,39 @@ public class Booking {
 
     public RentalPlaceIdentifier rentalPlaceIdentifier() {
         return new RentalPlaceIdentifier(rentalType, rentalPlaceId);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Booking booking = (Booking) o;
+
+        if (!days.containsAll(booking.days)) {
+            return false;
+        }
+
+        return new EqualsBuilder()
+                .append(rentalType, booking.rentalType)
+                .append(rentalPlaceId, booking.rentalPlaceId)
+                .append(tenantId, booking.tenantId)
+                .isEquals();
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(rentalType)
+                .append(rentalPlaceId)
+                .append(tenantId)
+                .append(days)
+                .toHashCode();
     }
 }

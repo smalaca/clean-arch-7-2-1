@@ -8,9 +8,10 @@ import static com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer
 public final class HotelRoomOfferTestFactory {
     private HotelRoomOfferTestFactory() {}
 
-    public static HotelRoomOffer create(String hotelRoomId, BigDecimal price, LocalDate start, LocalDate end) {
+    public static HotelRoomOffer create(String hotelId, int hotelRoomNumber, BigDecimal price, LocalDate start, LocalDate end) {
         return hotelRoomOffer()
-                .withHotelRoomId(hotelRoomId)
+                .withHotelId(hotelId)
+                .withHotelRoomNumber(hotelRoomNumber)
                 .withPrice(price)
                 .withAvailability(start, end)
                 .build();

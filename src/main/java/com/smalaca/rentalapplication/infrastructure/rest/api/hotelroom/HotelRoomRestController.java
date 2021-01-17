@@ -29,13 +29,14 @@ public class HotelRoomRestController {
 
     @PostMapping
     public ResponseEntity<String> add(@RequestBody HotelRoomDto hotelRoomDto) {
-        String id = hotelApplicationService.add(hotelRoomDto);
+        hotelApplicationService.add(hotelRoomDto);
+        URI uri = URI.create("/hotelroom/" + hotelRoomDto.getHotelId() + "/" + hotelRoomDto.getNumber());
 
-        return ResponseEntity.created(URI.create("/hotelroom/" + id)).build();
+        return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping("/book/{id}")
-    public ResponseEntity<String> book(@PathVariable String id, @RequestBody HotelRoomBookingDto hotelRoomBookingDto) {
+    @PutMapping("/book")
+    public ResponseEntity<String> book(@RequestBody HotelRoomBookingDto hotelRoomBookingDto) {
         String bookingId = hotelApplicationService.book(hotelRoomBookingDto);
 
         return ResponseEntity.created(URI.create("/booking/" + bookingId)).build();

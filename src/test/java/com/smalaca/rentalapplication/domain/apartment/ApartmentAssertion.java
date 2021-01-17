@@ -19,28 +19,8 @@ public class ApartmentAssertion {
     }
 
 
-    public ApartmentAssertion hasOwnerIdEqualsTo(String ownerId) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("ownerId", ownerId);
-        return this;
-    }
-
     public ApartmentAssertion hasDescriptionEqualsTo(String description) {
         Assertions.assertThat(actual).hasFieldOrPropertyWithValue("description", description);
-        return this;
-    }
-
-    public ApartmentAssertion hasAddressEqualsTo(
-            String street, String postalCode, String houseNumber, String apartmentNumber, String city, String country) {
-        Assertions.assertThat(actual)
-                .hasFieldOrPropertyWithValue("apartmentNumber", apartmentNumber);
-
-        Assertions.assertThat(actual).extracting("address")
-                .hasFieldOrPropertyWithValue("street", street)
-                .hasFieldOrPropertyWithValue("postalCode", postalCode)
-                .hasFieldOrPropertyWithValue("buildingNumber", houseNumber)
-                .hasFieldOrPropertyWithValue("city", city)
-                .hasFieldOrPropertyWithValue("country", country);
-
         return this;
     }
 
@@ -51,6 +31,11 @@ public class ApartmentAssertion {
                     .hasAllSpacesFrom(expected);
         });
 
+        return this;
+    }
+
+    public ApartmentAssertion isEqualTo(ApartmentRequirements requirements) {
+        Assertions.assertThat(actual).isEqualTo(requirements.get());
         return this;
     }
 }

@@ -1,6 +1,8 @@
 package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
 
 import com.smalaca.rentalapplication.domain.period.Period;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
@@ -35,5 +37,26 @@ public class ApartmentBookingHistory {
 
     private void add(ApartmentBooking apartmentBooking) {
         bookings.add(apartmentBooking);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ApartmentBookingHistory that = (ApartmentBookingHistory) o;
+
+        return new EqualsBuilder().append(apartmentId, that.apartmentId).isEquals();
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(apartmentId).toHashCode();
     }
 }

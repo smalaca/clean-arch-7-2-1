@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomAssertion;
+import com.smalaca.rentalapplication.domain.hotel.HotelRoomRequirements;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -46,9 +48,9 @@ class JpaHotelRepositoryIntegrationTest {
     void shouldSaveHotel() {
         hotelId = hotelRepository.save(givenHotel());
 
-        assertThat(findBy(hotelId))
-                .hasNameEqualsTo(NAME)
-                .hasAddressEqualsTo(STREET, POSTAL_CODE, BUILDING_NUMBER, CITY, COUNTRY);
+        Hotel actual = findBy(hotelId);
+
+        Assertions.assertThat(actual).isEqualTo(expectedHotel());
     }
 
     @Test
@@ -60,23 +62,38 @@ class JpaHotelRepositoryIntegrationTest {
 
         hotelRepository.save(hotel);
 
-        assertThat(findBy(hotelId))
-                .hasNameEqualsTo(NAME)
-                .hasAddressEqualsTo(STREET, POSTAL_CODE, BUILDING_NUMBER, CITY, COUNTRY)
+        Hotel actual = findBy(hotelId);
+        Assertions.assertThat(actual).isEqualTo(expectedHotel());
+        assertThat(actual)
                 .hasHotelRooms(2)
                 .hasHotelRoom(hotelRoom -> {
                     HotelRoomAssertion.assertThat(hotelRoom)
-                            .hasRoomNumberEqualTo(ROOM_NUMBER_1)
+                            .isEqualTo(HotelRoomRequirements.hotelRoom()
+                                    .withRoomNumber(ROOM_NUMBER_1)
+                                    .withHotelId(UUID.fromString(hotelId)))
                             .hasSpacesDefinitionEqualTo(SPACES_DEFINITION_1)
                             .hasDescriptionEqualTo(DESCRIPTION_1);
                 })
                 .hasHotelRoom(hotelRoom -> {
                     HotelRoomAssertion.assertThat(hotelRoom)
-                            .hasRoomNumberEqualTo(ROOM_NUMBER_2)
+                            .isEqualTo(HotelRoomRequirements.hotelRoom()
+                                    .withRoomNumber(ROOM_NUMBER_2)
+                                    .withHotelId(UUID.fromString(hotelId)))
                             .hasSpacesDefinitionEqualTo(SPACES_DEFINITION_2)
                             .hasDescriptionEqualTo(DESCRIPTION_2);
                 })
         ;
+    }
+
+    private Hotel expectedHotel() {
+        return hotel()
+                .withName(NAME)
+                .withStreet(STREET)
+                .withPostalCode(POSTAL_CODE)
+                .withBuildingNumber(BUILDING_NUMBER)
+                .withCity(CITY)
+                .withCountry(COUNTRY)
+                .build();
     }
 
     private Hotel givenExistingHotel() {

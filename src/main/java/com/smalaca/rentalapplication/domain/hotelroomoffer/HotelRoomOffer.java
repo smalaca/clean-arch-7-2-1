@@ -1,5 +1,8 @@
 package com.smalaca.rentalapplication.domain.hotelroomoffer;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +17,11 @@ public class HotelRoomOffer {
     @Id
     @GeneratedValue
     private UUID id;
-    private String hotelRoomId;
+
+    private String hotelId;
+
+    private int hotelRoomNumber;
+
     @Embedded
     private Money money;
     @Embedded
@@ -22,8 +29,9 @@ public class HotelRoomOffer {
 
     private HotelRoomOffer() {}
 
-    private HotelRoomOffer(String hotelRoomId, Money money, HotelRoomAvailability availability) {
-        this.hotelRoomId = hotelRoomId;
+    private HotelRoomOffer(String hotelId, int hotelRoomNumber, Money money, HotelRoomAvailability availability) {
+        this.hotelId = hotelId;
+        this.hotelRoomNumber = hotelRoomNumber;
         this.money = money;
         this.availability = availability;
     }
@@ -32,10 +40,32 @@ public class HotelRoomOffer {
         return id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        HotelRoomOffer that = (HotelRoomOffer) o;
+
+        return new EqualsBuilder().append(hotelRoomNumber, that.hotelRoomNumber).append(hotelId, that.hotelId).isEquals();
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(hotelId).append(hotelRoomNumber).toHashCode();
+    }
+
     static class Builder {
         private static final LocalDate NO_END_DATE = null;
 
-        private String hotelRoomId;
+        private String hotelId;
+        private int hotelRoomNumber;
         private BigDecimal price;
         private LocalDate start;
         private LocalDate end;
@@ -46,8 +76,13 @@ public class HotelRoomOffer {
             return new Builder();
         }
 
-        Builder withHotelRoomId(String hotelRoomId) {
-            this.hotelRoomId = hotelRoomId;
+        Builder withHotelId(String hotelId) {
+            this.hotelId = hotelId;
+            return this;
+        }
+
+        Builder withHotelRoomNumber(int hotelRoomNumber) {
+            this.hotelRoomNumber = hotelRoomNumber;
             return this;
         }
 
@@ -63,7 +98,7 @@ public class HotelRoomOffer {
         }
 
         HotelRoomOffer build() {
-            return new HotelRoomOffer(hotelRoomId, money(), hotelRoomAvailability());
+            return new HotelRoomOffer(hotelId, hotelRoomNumber, money(), hotelRoomAvailability());
         }
 
         private HotelRoomAvailability hotelRoomAvailability() {

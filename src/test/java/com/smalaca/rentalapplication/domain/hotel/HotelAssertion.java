@@ -16,21 +16,6 @@ public class HotelAssertion {
         return new HotelAssertion(actual);
     }
 
-    public HotelAssertion hasNameEqualsTo(String name) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("name", name);
-        return this;
-    }
-
-    public HotelAssertion hasAddressEqualsTo(String street, String postalCode, String buildingNumber, String city, String country) {
-        Assertions.assertThat(actual).extracting("address")
-                .hasFieldOrPropertyWithValue("street", street)
-                .hasFieldOrPropertyWithValue("postalCode", postalCode)
-                .hasFieldOrPropertyWithValue("buildingNumber", buildingNumber)
-                .hasFieldOrPropertyWithValue("city", city)
-                .hasFieldOrPropertyWithValue("country", country);
-        return this;
-    }
-
     public HotelAssertion hasOnlyOneHotelRoom(Consumer<HotelRoom> requirements) {
         hasHotelRooms(1);
         return hasHotelRoom(requirements);

@@ -22,8 +22,13 @@ public class HotelRoomOfferAssertion {
         return this;
     }
 
-    public HotelRoomOfferAssertion hasHotelRoomEqualTo(String expected) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("hotelRoomId", expected);
+    public HotelRoomOfferAssertion hasHotelIdEqualTo(String expected) {
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("hotelId", expected);
+        return this;
+    }
+
+    public HotelRoomOfferAssertion hasHotelRoomNumberEqualTo(int expected) {
+        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("hotelRoomNumber", expected);
         return this;
     }
 

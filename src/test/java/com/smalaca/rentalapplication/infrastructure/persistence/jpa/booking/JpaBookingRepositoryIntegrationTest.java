@@ -45,10 +45,7 @@ class JpaBookingRepositoryIntegrationTest {
 
         assertThat(actual)
                 .isOpen()
-                .isHotelRoom()
-                .hasRentalPlaceIdEqualTo(rentalPlaceId)
-                .hasTenantIdEqualTo(TENANT_ID)
-                .containsAllDays(DAYS);
+                .isEqualToBookingHotelRoom(rentalPlaceId, TENANT_ID, DAYS);
     }
 
     @Test

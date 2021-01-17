@@ -10,6 +10,7 @@ import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomBookedTestFactory;
 import com.smalaca.rentalapplication.domain.period.Period;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -28,7 +29,7 @@ class SpringEventChannelTest {
     private static final String APARTMENT_ID = UUID.randomUUID().toString();
     private static final String OWNER_ID = UUID.randomUUID().toString();
     private static final String TENANT_ID = UUID.randomUUID().toString();
-    private static final String HOTEL_ROOM_ID = UUID.randomUUID().toString();
+    private static final int HOTEL_ROOM_NUMBER = RandomUtils.nextInt();
     private static final String HOTEL_ID = UUID.randomUUID().toString();
     private static final Period PERIOD = new Period(LocalDate.now(), LocalDate.now().plusDays(10));
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
@@ -49,7 +50,7 @@ class SpringEventChannelTest {
 
     @Test
     void shouldPublishHotelRoomBooked() {
-        HotelRoomBooked event = HotelRoomBookedTestFactory.create(EVENT_ID, EVENT_CREATION_DATE_TIME, HOTEL_ROOM_ID, HOTEL_ID, TENANT_ID, DAYS);
+        HotelRoomBooked event = HotelRoomBookedTestFactory.create(EVENT_ID, EVENT_CREATION_DATE_TIME, HOTEL_ID, HOTEL_ROOM_NUMBER, TENANT_ID, DAYS);
 
         channel.publish(event);
 

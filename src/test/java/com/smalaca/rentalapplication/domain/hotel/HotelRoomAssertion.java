@@ -6,7 +6,6 @@ import org.assertj.core.api.Assertions;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class HotelRoomAssertion {
     private final HotelRoom actual;
@@ -17,16 +16,6 @@ public class HotelRoomAssertion {
 
     public static HotelRoomAssertion assertThat(HotelRoom actual) {
         return new HotelRoomAssertion(actual);
-    }
-
-    public HotelRoomAssertion hasHotelIdEqualTo(String expected) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("hotelId", UUID.fromString(expected));
-        return this;
-    }
-
-    public HotelRoomAssertion hasRoomNumberEqualTo(int expected) {
-        Assertions.assertThat(actual).hasFieldOrPropertyWithValue("number", expected);
-        return this;
     }
 
     public HotelRoomAssertion hasSpacesDefinitionEqualTo(Map<String, Double> expected) {
@@ -41,6 +30,11 @@ public class HotelRoomAssertion {
 
     public HotelRoomAssertion hasDescriptionEqualTo(String expected) {
         Assertions.assertThat(actual).hasFieldOrPropertyWithValue("description", expected);
+        return this;
+    }
+
+    public HotelRoomAssertion isEqualTo(HotelRoomRequirements requirements) {
+        Assertions.assertThat(actual).isEqualTo(requirements.get());
         return this;
     }
 }
