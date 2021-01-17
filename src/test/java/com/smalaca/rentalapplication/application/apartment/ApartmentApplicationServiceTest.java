@@ -43,6 +43,7 @@ class ApartmentApplicationServiceTest {
     private static final LocalDate MIDDLE = LocalDate.of(2020, 3, 5);
     private static final LocalDate END = LocalDate.of(2020, 3, 6);
     private static final String BOOKING_ID = "8394234";
+    private static final String NO_ID = null;
 
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
     private final EventChannel eventChannel = mock(EventChannel.class);
@@ -89,7 +90,7 @@ class ApartmentApplicationServiceTest {
 
         then(bookingRepository).should().save(captor.capture());
         BookingAssertion.assertThat(captor.getValue())
-                .isEqualToBookingApartment(APARTMENT_ID, TENANT_ID, new Period(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
     }
 
     @Test
