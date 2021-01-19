@@ -6,13 +6,15 @@ import com.smalaca.usermanagement.domain.user.UserRepository;
 
 public class UserApplicationService {
     private final UserRepository userRepository;
+    private final UserFactory userFactory;
 
-    public UserApplicationService(UserRepository userRepository) {
+    UserApplicationService(UserRepository userRepository, UserFactory userFactory) {
         this.userRepository = userRepository;
+        this.userFactory = userFactory;
     }
 
     public void register(UserDto userDto) {
-        User user = new UserFactory(userRepository).create(userDto.getLogin(), userDto.getName(), userDto.getLastName());
+        User user = userFactory.create(userDto.getLogin(), userDto.getName(), userDto.getLastName());
 
         userRepository.save(user);
     }
