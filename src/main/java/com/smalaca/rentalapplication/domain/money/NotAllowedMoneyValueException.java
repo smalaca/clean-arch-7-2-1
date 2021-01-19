@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.hotelroomoffer;
+package com.smalaca.rentalapplication.domain.money;
 
 import java.math.BigDecimal;
 

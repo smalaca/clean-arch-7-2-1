@@ -1,11 +1,11 @@
-package com.smalaca.rentalapplication.domain.hotelroomoffer;
+package com.smalaca.rentalapplication.domain.money;
 
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 
 @Embeddable
 @SuppressWarnings("PMD.UnusedPrivateField")
-class Money {
+public class Money {
     private BigDecimal value;
 
     private Money() {}
@@ -14,7 +14,7 @@ class Money {
         this.value = value;
     }
 
-    static Money of(BigDecimal price) {
+    public static Money of(BigDecimal price) {
         if (price.compareTo(BigDecimal.ZERO) > 0) {
             return new Money(price);
         }

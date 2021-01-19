@@ -6,7 +6,7 @@ import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentAvailability
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferAssertion;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
-import com.smalaca.rentalapplication.domain.apartmentoffer.NotAllowedMoneyValueException;
+import com.smalaca.rentalapplication.domain.money.NotAllowedMoneyValueException;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -57,17 +57,13 @@ class ApartmentOfferApplicationServiceTest {
     }
 
     @Test
-    void shouldCreateApartmentOfferWithZeroPrice() {
+    void shouldRecognizePriceIsNotGreaterThanZero() {
         givenExistingApartment();
-        ArgumentCaptor<ApartmentOffer> captor = ArgumentCaptor.forClass(ApartmentOffer.class);
+        ApartmentOfferDto dto = new ApartmentOfferDto(APARTMENT_ID, BigDecimal.ZERO, START, END);
 
-        service.add(new ApartmentOfferDto(APARTMENT_ID, BigDecimal.ZERO, START, END));
+        NotAllowedMoneyValueException actual = assertThrows(NotAllowedMoneyValueException.class, () -> service.add(dto));
 
-        then(apartmentOfferRepository).should().save(captor.capture());
-        ApartmentOfferAssertion.assertThat(captor.getValue())
-                .hasApartmentIdEqualTo(APARTMENT_ID)
-                .hasPriceEqualTo(BigDecimal.ZERO)
-                .hasAvailabilityEqualTo(START, END);
+        assertThat(actual).hasMessage("Price 0 is not greater than zero.");
     }
 
     @Test
@@ -77,16 +73,6 @@ class ApartmentOfferApplicationServiceTest {
         ApartmentNotFoundException actual = assertThrows(ApartmentNotFoundException.class, () -> service.add(givenApartmentOfferDto()));
 
         assertThat(actual).hasMessage("Apartment with id: " + APARTMENT_ID + " does not exist.");
-    }
-
-    @Test
-    void shouldRecognizePriceLowerThanZero() {
-        givenExistingApartment();
-        ApartmentOfferDto dto = new ApartmentOfferDto(APARTMENT_ID, BigDecimal.valueOf(-13), START, END);
-
-        NotAllowedMoneyValueException actual = assertThrows(NotAllowedMoneyValueException.class, () -> service.add(dto));
-
-        assertThat(actual).hasMessage("Price -13 is lower than zero.");
     }
 
     @Test
