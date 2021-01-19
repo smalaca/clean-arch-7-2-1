@@ -12,6 +12,7 @@ import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomAssertion;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomRequirements;
+import com.smalaca.rentalapplication.domain.space.SquareMeterException;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,10 +26,13 @@ import java.util.Map;
 
 import static com.smalaca.rentalapplication.domain.hotel.Hotel.Builder.hotel;
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 
 class HotelApplicationServiceTest {
     private static final String NAME = "Great hotel";
@@ -103,7 +107,33 @@ class HotelApplicationServiceTest {
     }
 
     private HotelRoomDto givenHotelRoomDto() {
-        return new HotelRoomDto(HOTEL_ID, ROOM_NUMBER, SPACES_DEFINITION, DESCRIPTION);
+        return givenHotelRoomDtoWith(SPACES_DEFINITION);
+    }
+
+    @Test
+    void shouldNotAllowToCreateApartmentWithAtLeastOneSpaceThatHaveSquareMeterEqualZero() {
+        givenExistingHotel();
+        HotelRoomDto hotelRoomDto = givenHotelRoomDtoWith(ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0, "Room", 0.0));
+
+        SquareMeterException actual = assertThrows(SquareMeterException.class, () -> service.add(hotelRoomDto));
+
+        assertThat(actual).hasMessage("Square meter cannot be lower or equal zero.");
+        then(hotelRepository).should(never()).save(any());
+    }
+
+    @Test
+    void shouldNotAllowToCreateApartmentWithAtLeastOneSpaceThatHaveSquareMeterLowerThanZero() {
+        givenExistingHotel();
+        HotelRoomDto hotelRoomDto = givenHotelRoomDtoWith(ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0, "Room", -13.0));
+
+        SquareMeterException actual = assertThrows(SquareMeterException.class, () -> service.add(hotelRoomDto));
+
+        assertThat(actual).hasMessage("Square meter cannot be lower or equal zero.");
+        then(hotelRepository).should(never()).save(any());
+    }
+
+    private HotelRoomDto givenHotelRoomDtoWith(Map<String, Double> spacesDefinition) {
+        return new HotelRoomDto(HOTEL_ID, ROOM_NUMBER, spacesDefinition, DESCRIPTION);
     }
 
     @Test
