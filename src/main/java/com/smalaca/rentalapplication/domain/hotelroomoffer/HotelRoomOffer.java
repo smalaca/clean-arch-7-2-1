@@ -1,6 +1,7 @@
 package com.smalaca.rentalapplication.domain.hotelroomoffer;
 
 import com.smalaca.rentalapplication.domain.money.Money;
+import com.smalaca.rentalapplication.domain.offeravailability.OfferAvailability;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -26,11 +27,11 @@ public class HotelRoomOffer {
     @Embedded
     private Money money;
     @Embedded
-    private HotelRoomAvailability availability;
+    private OfferAvailability availability;
 
     private HotelRoomOffer() {}
 
-    private HotelRoomOffer(String hotelId, int hotelRoomNumber, Money money, HotelRoomAvailability availability) {
+    private HotelRoomOffer(String hotelId, int hotelRoomNumber, Money money, OfferAvailability availability) {
         this.hotelId = hotelId;
         this.hotelRoomNumber = hotelRoomNumber;
         this.money = money;
@@ -102,12 +103,12 @@ public class HotelRoomOffer {
             return new HotelRoomOffer(hotelId, hotelRoomNumber, money(), hotelRoomAvailability());
         }
 
-        private HotelRoomAvailability hotelRoomAvailability() {
+        private OfferAvailability hotelRoomAvailability() {
             if (end == NO_END_DATE) {
-                return HotelRoomAvailability.fromStart(start);
+                return OfferAvailability.fromStart(start);
             }
 
-            return HotelRoomAvailability.from(start, end);
+            return OfferAvailability.from(start, end);
         }
 
         private Money money() {
