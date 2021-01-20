@@ -51,13 +51,13 @@ class JpaApartmentBookingHistoryRepositoryIntegrationTest {
     @Transactional
     void shouldFindExistingApartmentBookingHistory() {
         apartmentId = randomId();
-        LocalDate start = LocalDate.of(2020, 1, 1);
-        LocalDate end = LocalDate.of(2020, 1, 10);
+        LocalDate start = LocalDate.of(2040, 1, 1);
+        LocalDate end = LocalDate.of(2040, 1, 10);
         LocalDateTime eventCreationDate = LocalDateTime.now();
         String ownerId = randomId();
         String tenantId = randomId();
         ApartmentBookingHistory apartmentBookingHistory = new ApartmentBookingHistory(apartmentId);
-        apartmentBookingHistory.addBookingStart(eventCreationDate, ownerId, tenantId, new Period(start, end));
+        apartmentBookingHistory.addBookingStart(eventCreationDate, ownerId, tenantId, Period.from(start, end));
         repository.save(apartmentBookingHistory);
 
         ApartmentBookingHistory actual = repository.findFor(apartmentId);

@@ -25,7 +25,7 @@ import static java.util.Arrays.asList;
 class JpaBookingRepositoryIntegrationTest {
     private static final List<LocalDate> DAYS = asList(LocalDate.of(2020, 6, 1), LocalDate.of(2020, 6, 2), LocalDate.of(2020, 6, 4));
     private static final String TENANT_ID = randomId();
-    private static final Period PERIOD = new Period(LocalDate.now(), LocalDate.now().plusDays(1));
+    private static final Period PERIOD = Period.from(LocalDate.now(), LocalDate.now().plusDays(1));
 
     @Autowired private JpaBookingRepository repository;
     @Autowired private SpringJpaBookingRepository jpaRepository;

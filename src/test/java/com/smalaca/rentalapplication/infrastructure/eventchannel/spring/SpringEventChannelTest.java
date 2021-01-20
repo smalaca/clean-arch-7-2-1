@@ -34,7 +34,7 @@ class SpringEventChannelTest {
     private static final String TENANT_ID = UUID.randomUUID().toString();
     private static final int HOTEL_ROOM_NUMBER = RandomUtils.nextInt();
     private static final String HOTEL_ID = UUID.randomUUID().toString();
-    private static final Period PERIOD = new Period(LocalDate.now(), LocalDate.now().plusDays(10));
+    private static final Period PERIOD = Period.from(LocalDate.now(), LocalDate.now().plusDays(10));
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
     private static final String RENTAL_TYPE = "HOTEL_ROOM";
     private static final String RENTAL_PLACE_ID = UUID.randomUUID().toString();

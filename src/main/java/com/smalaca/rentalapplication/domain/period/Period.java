@@ -17,7 +17,7 @@ public class Period {
 
     private Period() {}
 
-    public Period(LocalDate periodStart, LocalDate periodEnd) {
+    private Period(LocalDate periodStart, LocalDate periodEnd) {
         this.periodStart = periodStart;
         this.periodEnd = periodEnd;
     }

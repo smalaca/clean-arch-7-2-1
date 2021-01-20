@@ -22,9 +22,9 @@ class ApartmentBookingHistoryEventListenerTest {
     private static final String APARTMENT_ID = "1234";
     private static final String OWNER_ID = "5678";
     private static final String TENANT_ID = "8989";
-    private static final LocalDate START = LocalDate.of(2020, 10, 11);
-    private static final LocalDate END = LocalDate.of(2020, 10, 12);
-    private static final Period PERIOD = new Period(START, END);
+    private static final LocalDate START = LocalDate.of(2040, 10, 11);
+    private static final LocalDate END = LocalDate.of(2040, 10, 12);
+    private static final Period PERIOD = Period.from(START, END);
     private static final int FIRST_BOOKING = 1;
     private static final int NEXT_BOOKING = 2;
 
@@ -76,7 +76,7 @@ class ApartmentBookingHistoryEventListenerTest {
     private ApartmentBookingHistory getApartmentBookingHistory() {
         ApartmentBookingHistory apartmentBookingHistory = new ApartmentBookingHistory(APARTMENT_ID);
         apartmentBookingHistory.addBookingStart(
-                LocalDateTime.now(), OWNER_ID, "9807", new Period(LocalDate.now(), LocalDate.now().plusDays(1)));
+                LocalDateTime.now(), OWNER_ID, "9807", Period.from(LocalDate.now(), LocalDate.now().plusDays(1)));
         return apartmentBookingHistory;
     }
 

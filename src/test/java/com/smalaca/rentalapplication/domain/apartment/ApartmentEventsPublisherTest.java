@@ -23,9 +23,9 @@ class ApartmentEventsPublisherTest {
         String apartmentId = "123123";
         String ownerId = "7686";
         String tenantId = "68678";
-        LocalDate periodStart = LocalDate.of(2020, 10, 11);
-        LocalDate periodEnd = LocalDate.of(2020, 10, 18);
-        Period period = new Period(periodStart, periodEnd);
+        LocalDate periodStart = LocalDate.of(2040, 10, 11);
+        LocalDate periodEnd = LocalDate.of(2040, 10, 18);
+        Period period = Period.from(periodStart, periodEnd);
 
         publisher.publishApartmentBooked(apartmentId, ownerId, tenantId, period);
 
