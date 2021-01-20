@@ -27,6 +27,10 @@ public class Period {
             throw PeriodException.startDateFromPast(start);
         }
 
+        if (start.isAfter(end)) {
+            throw PeriodException.startAfterEnd(start, end);
+        }
+
         return new Period(start, end);
     }
 
