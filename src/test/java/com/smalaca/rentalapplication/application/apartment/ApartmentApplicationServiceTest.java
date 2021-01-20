@@ -36,7 +36,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
-import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static com.smalaca.rentalapplication.domain.apartment.ApartmentTestBuilder.apartment;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;

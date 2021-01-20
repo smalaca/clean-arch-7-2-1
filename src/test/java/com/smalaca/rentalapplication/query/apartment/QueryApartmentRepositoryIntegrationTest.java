@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static com.smalaca.rentalapplication.domain.apartment.ApartmentTestBuilder.apartment;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 

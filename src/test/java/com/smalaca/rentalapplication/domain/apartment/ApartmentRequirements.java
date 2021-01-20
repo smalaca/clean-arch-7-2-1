@@ -7,14 +7,14 @@ import java.util.Map;
 public class ApartmentRequirements {
     private static final Map<String, Double> SPACES_TO_FULFIL_CONTRACT = ImmutableMap.of("RoomXYZ", 123.45);
 
-    private final Apartment.Builder apartment;
+    private final ApartmentTestBuilder apartment;
 
-    private ApartmentRequirements(Apartment.Builder apartment) {
+    private ApartmentRequirements(ApartmentTestBuilder apartment) {
         this.apartment = apartment;
     }
     
     public static ApartmentRequirements apartment() {
-        return new ApartmentRequirements(Apartment.Builder.apartment());
+        return new ApartmentRequirements(ApartmentTestBuilder.apartment());
     }
 
     public ApartmentRequirements withOwnerId(String ownerId) {
