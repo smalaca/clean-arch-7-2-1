@@ -13,10 +13,12 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -42,10 +44,10 @@ class ApartmentTest {
     private static final Map<String, Double> SPACES_DEFINITION_2 = ImmutableMap.of("Toilet", 15.0, "RoomOne", 20.0, "RoomTwo", 25.0);
     private static final String TENANT_ID = "137";
     private static final LocalDate START = LocalDate.of(2020, 3, 4);
-    private static final LocalDate MIDDLE = LocalDate.of(2020, 3, 5);
     private static final LocalDate END = LocalDate.of(2020, 3, 6);
     private static final Period PERIOD = new Period(START, END);
     private static final String NO_ID = null;
+    private static final List<Booking> NO_BOOKINGS = emptyList();
 
     private final ApartmentEventsPublisher apartmentEventsPublisher = Mockito.mock(ApartmentEventsPublisher.class);
 
@@ -84,7 +86,7 @@ class ApartmentTest {
     void shouldCreateBookingOnceBooked() {
         Apartment apartment = createApartment1();
 
-        Booking actual = apartment.book(TENANT_ID, PERIOD, apartmentEventsPublisher);
+        Booking actual = apartment.book(NO_BOOKINGS, TENANT_ID, PERIOD, apartmentEventsPublisher);
 
         BookingAssertion.assertThat(actual)
                 .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
@@ -94,7 +96,7 @@ class ApartmentTest {
     void shouldPublishApartmentBooked() {
         Apartment apartment = createApartment1();
 
-        apartment.book(TENANT_ID, PERIOD, apartmentEventsPublisher);
+        apartment.book(NO_BOOKINGS, TENANT_ID, PERIOD, apartmentEventsPublisher);
 
         BDDMockito.then(apartmentEventsPublisher).should().publishApartmentBooked(any(), eq(OWNER_ID_1), eq(TENANT_ID), eq(new Period(START, END)));
     }

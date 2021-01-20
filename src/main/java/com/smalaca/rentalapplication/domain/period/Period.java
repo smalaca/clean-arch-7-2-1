@@ -22,6 +22,18 @@ public class Period {
         this.periodEnd = periodEnd;
     }
 
+    public static Period from(LocalDate start, LocalDate end) {
+        if (start.isBefore(LocalDate.now())) {
+            throw PeriodException.startDateFromPast(start);
+        }
+
+        if (start.isAfter(end)) {
+            throw PeriodException.startAfterEnd(start, end);
+        }
+
+        return new Period(start, end);
+    }
+
     public List<LocalDate> asDays() {
         List<LocalDate> dates = periodStart.datesUntil(periodEnd).collect(toList());
         dates.add(periodEnd);
@@ -64,5 +76,9 @@ public class Period {
     @SuppressWarnings("checkstyle:MagicNumber")
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(periodStart).append(periodEnd).toHashCode();
+    }
+
+    public boolean contains(LocalDate day) {
+        return asDays().contains(day);
     }
 }

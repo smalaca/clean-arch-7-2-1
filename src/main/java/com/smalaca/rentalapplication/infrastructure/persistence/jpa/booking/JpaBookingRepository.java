@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Collections.emptyList;
+
 @Repository
 class JpaBookingRepository implements BookingRepository {
     private final SpringJpaBookingRepository springJpaBookingRepository;
@@ -29,5 +31,10 @@ class JpaBookingRepository implements BookingRepository {
     @Override
     public List<Booking> findAllBy(RentalPlaceIdentifier identifier) {
         return springJpaBookingRepository.findAllByRentalTypeAndRentalPlaceId(identifier.getRentalType(), identifier.getRentalPlaceId());
+    }
+
+    @Override
+    public List<Booking> findAllAcceptedBy(RentalPlaceIdentifier identifier) {
+        return emptyList();
     }
 }

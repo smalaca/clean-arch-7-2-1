@@ -113,4 +113,8 @@ public class Booking {
                 .append(days)
                 .toHashCode();
     }
+
+    public boolean isFor(Period period) {
+        return days.stream().anyMatch(period::contains);
+    }
 }
