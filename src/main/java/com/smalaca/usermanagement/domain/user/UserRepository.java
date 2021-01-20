@@ -1,7 +1,9 @@
 package com.smalaca.usermanagement.domain.user;
 
+import java.util.UUID;
+
 public interface UserRepository {
-    void save(User user);
+    UUID save(User user);
 
     boolean existsWithLogin(String login);
 }
