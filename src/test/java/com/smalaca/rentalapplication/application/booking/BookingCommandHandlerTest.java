@@ -9,8 +9,10 @@ import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingEventsPublisher;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
+import com.smalaca.rentalapplication.domain.booking.RentalType;
 import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
@@ -23,7 +25,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.smalaca.rentalapplication.domain.booking.RentalType.APARTMENT;
+import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -126,7 +128,7 @@ class BookingCommandHandlerTest {
     }
 
     private void givenBookings(List<Booking> bookings) {
-        RentalPlaceIdentifier identifier = new RentalPlaceIdentifier(APARTMENT, RENTAL_PLACE_ID);
+        RentalPlaceIdentifier identifier = new RentalPlaceIdentifier(RentalType.APARTMENT, RENTAL_PLACE_ID);
         given(bookingRepository.findAllBy(identifier)).willReturn(bookings);
     }
 

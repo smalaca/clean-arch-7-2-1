@@ -1,8 +1,8 @@
 package com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking;
 
 import com.smalaca.rentalapplication.domain.booking.Booking;
-import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.period.Period;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.smalaca.rentalapplication.domain.booking.BookingAssertion.assertThat;
+import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 
 @SpringBootTest
@@ -72,7 +73,7 @@ class JpaBookingRepositoryIntegrationTest {
 
     @Test
     void shouldFindNoAcceptedBookingsByRentalPlaceIdentifier() {
-        repository.findAllAcceptedBy(RentalPlaceIdentifier.apartment(randomId()));
+        repository.findAllAcceptedBy(new RentalPlaceIdentifier(APARTMENT, randomId()));
     }
 
     private String save(Booking booking) {

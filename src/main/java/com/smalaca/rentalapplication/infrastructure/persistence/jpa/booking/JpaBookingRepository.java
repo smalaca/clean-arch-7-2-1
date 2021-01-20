@@ -2,7 +2,7 @@ package com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking;
 
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
-import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

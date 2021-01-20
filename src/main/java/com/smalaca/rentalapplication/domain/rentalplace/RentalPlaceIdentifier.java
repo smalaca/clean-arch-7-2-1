@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.booking;
+package com.smalaca.rentalapplication.domain.rentalplace;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -12,9 +12,5 @@ public class RentalPlaceIdentifier {
     public RentalPlaceIdentifier(RentalType rentalType, String rentalPlaceId) {
         this.rentalType = rentalType;
         this.rentalPlaceId = rentalPlaceId;
-    }
-
-    public static RentalPlaceIdentifier apartment(String id) {
-        return new RentalPlaceIdentifier(RentalType.APARTMENT, id);
     }
 }

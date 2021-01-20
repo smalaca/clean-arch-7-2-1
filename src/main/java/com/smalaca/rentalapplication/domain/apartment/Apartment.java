@@ -2,9 +2,9 @@ package com.smalaca.rentalapplication.domain.apartment;
 
 import com.smalaca.rentalapplication.domain.address.Address;
 import com.smalaca.rentalapplication.domain.booking.Booking;
-import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.space.Space;
 import com.smalaca.rentalapplication.domain.space.SpacesFactory;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 
 @Entity
 @Table(name = "APARTMENT")
@@ -90,7 +92,7 @@ public class Apartment {
     }
 
     RentalPlaceIdentifier rentalPlaceIdentifier() {
-        return RentalPlaceIdentifier.apartment(id());
+        return new RentalPlaceIdentifier(APARTMENT, id());
     }
 
     public String id() {

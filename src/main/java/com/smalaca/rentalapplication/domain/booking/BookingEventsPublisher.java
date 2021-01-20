@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.booking;
 import com.smalaca.rentalapplication.domain.clock.Clock;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalType;
 
 import java.time.LocalDate;
 import java.util.List;

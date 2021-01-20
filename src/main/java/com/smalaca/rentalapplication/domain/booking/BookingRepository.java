@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.booking;
 
+import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
+
 import java.util.List;
 
 public interface BookingRepository {
