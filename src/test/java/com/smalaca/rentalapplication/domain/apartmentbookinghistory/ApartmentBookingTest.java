@@ -1,7 +1,6 @@
 package com.smalaca.rentalapplication.domain.apartmentbookinghistory;
 
 import com.smalaca.rentalapplication.domain.period.Period;
-import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -27,10 +26,5 @@ class ApartmentBookingTest {
                 .hasOwnerIdEqualTo(ownerId)
                 .hasTenantIdEqualTo(tenantId)
                 .hasPeriodThatHas(start, end);
-    }
-
-    @Test
-    void shouldVerifyEqualsAndHashCode() {
-        EqualsVerifier.simple().forClass(ApartmentBooking.class).verify();
     }
 }
