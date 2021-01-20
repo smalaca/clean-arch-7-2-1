@@ -4,11 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomNotFoundException;
-import com.smalaca.rentalapplication.domain.offeravailability.OfferAvailabilityException;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferAssertion;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferRepository;
 import com.smalaca.rentalapplication.domain.money.NotAllowedMoneyValueException;
+import com.smalaca.rentalapplication.domain.period.PeriodException;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -88,9 +88,9 @@ class HotelRoomOfferApplicationServiceTest {
         HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ID, ROOM_NUMBER, PRICE, END, START);
         givenExistingHotelRoom();
 
-        OfferAvailabilityException actual = assertThrows(OfferAvailabilityException.class, () -> service.add(dto));
+        PeriodException actual = assertThrows(PeriodException.class, () -> service.add(dto));
 
-        assertThat(actual).hasMessage("Start date: 2041-12-20 of availability is after end date: 2040-12-10.");
+        assertThat(actual).hasMessage("Start date: 2041-12-20 of period is after end date: 2040-12-10.");
     }
 
     @Test
@@ -98,7 +98,7 @@ class HotelRoomOfferApplicationServiceTest {
         HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ID, ROOM_NUMBER, PRICE, LocalDate.of(2020, 10, 10), END);
         givenExistingHotelRoom();
 
-        OfferAvailabilityException actual = assertThrows(OfferAvailabilityException.class, () -> service.add(dto));
+        PeriodException actual = assertThrows(PeriodException.class, () -> service.add(dto));
 
         assertThat(actual).hasMessage("Start date: 2020-10-10 is past date.");
     }
@@ -108,7 +108,7 @@ class HotelRoomOfferApplicationServiceTest {
         HotelRoomOfferDto dto = new HotelRoomOfferDto(HOTEL_ID, ROOM_NUMBER, PRICE, LocalDate.of(2020, 10, 10), NO_DATE);
         givenExistingHotelRoom();
 
-        OfferAvailabilityException actual = assertThrows(OfferAvailabilityException.class, () -> service.add(dto));
+        PeriodException actual = assertThrows(PeriodException.class, () -> service.add(dto));
 
         assertThat(actual).hasMessage("Start date: 2020-10-10 is past date.");
     }

@@ -1,10 +1,13 @@
 package com.smalaca.rentalapplication.domain.hotelroomoffer;
 
 import com.smalaca.rentalapplication.domain.money.Money;
-import com.smalaca.rentalapplication.domain.offeravailability.OfferAvailability;
+import com.smalaca.rentalapplication.domain.period.Period;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,12 +29,17 @@ public class HotelRoomOffer {
 
     @Embedded
     private Money money;
+
     @Embedded
-    private OfferAvailability availability;
+    @AttributeOverrides({
+            @AttributeOverride(name = "periodStart", column = @Column(name = "start")),
+            @AttributeOverride(name = "periodEnd", column = @Column(name = "end"))
+    })
+    private Period availability;
 
     private HotelRoomOffer() {}
 
-    private HotelRoomOffer(String hotelId, int hotelRoomNumber, Money money, OfferAvailability availability) {
+    private HotelRoomOffer(String hotelId, int hotelRoomNumber, Money money, Period availability) {
         this.hotelId = hotelId;
         this.hotelRoomNumber = hotelRoomNumber;
         this.money = money;
@@ -103,12 +111,12 @@ public class HotelRoomOffer {
             return new HotelRoomOffer(hotelId, hotelRoomNumber, money(), hotelRoomAvailability());
         }
 
-        private OfferAvailability hotelRoomAvailability() {
+        private Period hotelRoomAvailability() {
             if (end == NO_END_DATE) {
-                return OfferAvailability.fromStart(start);
+                return Period.fromStart(start);
             }
 
-            return OfferAvailability.from(start, end);
+            return Period.from(start, end);
         }
 
         private Money money() {

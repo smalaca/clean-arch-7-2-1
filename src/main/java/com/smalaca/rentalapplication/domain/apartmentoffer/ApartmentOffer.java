@@ -1,11 +1,13 @@
 package com.smalaca.rentalapplication.domain.apartmentoffer;
 
 import com.smalaca.rentalapplication.domain.money.Money;
-import com.smalaca.rentalapplication.domain.offeravailability.OfferAvailability;
 import com.smalaca.rentalapplication.domain.period.Period;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,12 +25,17 @@ public class ApartmentOffer {
     private String apartmentId;
     @Embedded
     private Money money;
+
     @Embedded
-    private OfferAvailability availability;
+    @AttributeOverrides({
+            @AttributeOverride(name = "periodStart", column = @Column(name = "start")),
+            @AttributeOverride(name = "periodEnd", column = @Column(name = "end"))
+    })
+    private Period availability;
 
     private ApartmentOffer() {}
 
-    private ApartmentOffer(String apartmentId, Money money, OfferAvailability availability) {
+    private ApartmentOffer(String apartmentId, Money money, Period availability) {
         this.apartmentId = apartmentId;
         this.money = money;
         this.availability = availability;
@@ -99,8 +106,8 @@ public class ApartmentOffer {
             return new ApartmentOffer(apartmentId, money(), availability());
         }
 
-        private OfferAvailability availability() {
-            return OfferAvailability.from(start, end);
+        private Period availability() {
+            return Period.from(start, end);
         }
 
         private Money money() {

@@ -22,6 +22,10 @@ public class Period {
         this.periodEnd = periodEnd;
     }
 
+    public static Period fromStart(LocalDate start) {
+        return from(start, start.plusYears(1));
+    }
+
     public static Period from(LocalDate start, LocalDate end) {
         if (start.isBefore(LocalDate.now())) {
             throw PeriodException.startDateFromPast(start);
