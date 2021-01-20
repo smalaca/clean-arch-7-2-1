@@ -63,13 +63,17 @@ public class Apartment {
     }
 
     Booking book(List<Booking> bookings, String tenantId, Period period, ApartmentEventsPublisher apartmentEventsPublisher) {
-        if (bookings.isEmpty()) {
+        if (areNotInGivenPeriod(bookings, period)) {
             apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);
 
             return Booking.apartment(id(), tenantId, period);
         } else {
             throw new ApartmentBookingException();
         }
+    }
+
+    private boolean areNotInGivenPeriod(List<Booking> bookings, Period period) {
+        return bookings.stream().noneMatch(booking -> booking.isFor(period));
     }
 
     RentalPlaceIdentifier rentalPlaceIdentifier() {

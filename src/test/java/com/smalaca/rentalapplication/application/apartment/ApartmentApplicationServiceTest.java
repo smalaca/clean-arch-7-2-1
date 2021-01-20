@@ -156,6 +156,24 @@ class ApartmentApplicationServiceTest {
     }
 
     @Test
+    void shouldAllowToBookApartmentWhenFoundAcceptedBookingsInDifferentPeriod() {
+        givenExistingApartment();
+        givenExistingTenant();
+        givenAcceptedBookingsInDifferentPeriod();
+        ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
+
+        service.book(givenBookApartmentDto());
+
+        then(bookingRepository).should().save(captor.capture());
+        BookingAssertion.assertThat(captor.getValue())
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
+    }
+
+    private void givenAcceptedBookingsInDifferentPeriod() {
+        givenAcceptedBookingItPeriod(BEFORE_START.minusDays(10), BEFORE_START);
+    }
+
+    @Test
     void shouldReturnIdOfBooking() {
         givenExistingTenantAndApartmentWithNoBookings();
         given(bookingRepository.save(any())).willReturn(BOOKING_ID);
@@ -229,7 +247,11 @@ class ApartmentApplicationServiceTest {
     }
 
     private void givenAcceptedBookingsInGivenPeriod() {
-        Booking acceptedBooking = Booking.apartment(APARTMENT_ID, TENANT_ID, new Period(BEFORE_START, AFTER_START));
+        givenAcceptedBookingItPeriod(BEFORE_START, AFTER_START);
+    }
+
+    private void givenAcceptedBookingItPeriod(LocalDate periodStart, LocalDate periodEnd) {
+        Booking acceptedBooking = Booking.apartment(APARTMENT_ID, TENANT_ID, new Period(periodStart, periodEnd));
         given(bookingRepository.findAllAcceptedBy(getRentalPlaceIdentifier())).willReturn(asList(acceptedBooking));
     }
 

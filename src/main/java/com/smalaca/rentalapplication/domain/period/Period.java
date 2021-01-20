@@ -65,4 +65,8 @@ public class Period {
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(periodStart).append(periodEnd).toHashCode();
     }
+
+    public boolean contains(LocalDate day) {
+        return asDays().contains(day);
+    }
 }
