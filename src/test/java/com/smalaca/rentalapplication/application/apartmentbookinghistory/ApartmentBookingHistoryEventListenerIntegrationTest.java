@@ -54,8 +54,8 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
     @Transactional
     void shouldUpdateApartmentBookingHistory() {
         String tenantId = "11223344";
-        LocalDate start = LocalDate.of(2020, 1, 13);
-        LocalDate end = LocalDate.of(2020, 1, 14);
+        LocalDate start = LocalDate.of(2040, 1, 13);
+        LocalDate end = LocalDate.of(2040, 1, 14);
         givenExistingApartment();
         ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, tenantId, start, end);
 
