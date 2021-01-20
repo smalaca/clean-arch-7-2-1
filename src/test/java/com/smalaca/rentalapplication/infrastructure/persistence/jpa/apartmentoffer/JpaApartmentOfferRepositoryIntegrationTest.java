@@ -19,8 +19,8 @@ import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer
 class JpaApartmentOfferRepositoryIntegrationTest {
     private static final String APARTMENT_ID = "1234";
     private static final BigDecimal PRICE = BigDecimal.valueOf(123.45);
-    private static final LocalDate START = LocalDate.of(2020, 10, 11);
-    private static final LocalDate END = LocalDate.of(2020, 10, 20);
+    private static final LocalDate START = LocalDate.of(2040, 10, 11);
+    private static final LocalDate END = LocalDate.of(2040, 10, 20);
 
     @Autowired private JpaApartmentOfferRepository jpaApartmentOfferRepository;
     @Autowired private SpringJpaApartmentOfferRepository springJpaApartmentOfferRepository;
