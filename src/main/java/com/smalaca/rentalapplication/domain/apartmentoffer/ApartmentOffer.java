@@ -67,7 +67,7 @@ public class ApartmentOffer {
         return availability.coversAllDaysWithin(period);
     }
 
-    public static class Builder {
+    static class Builder {
         private String apartmentId;
         private BigDecimal price;
         private LocalDate start;
@@ -75,27 +75,27 @@ public class ApartmentOffer {
 
         private Builder() {}
         
-        public static Builder apartmentOffer() {
+        static Builder apartmentOffer() {
             return new Builder();
         }
 
-        public Builder withApartmentId(String apartmentId) {
+        Builder withApartmentId(String apartmentId) {
             this.apartmentId = apartmentId;
             return this;
         }
 
-        public Builder withPrice(BigDecimal price) {
+        Builder withPrice(BigDecimal price) {
             this.price = price;
             return this;
         }
 
-        public Builder withAvailability(LocalDate start, LocalDate end) {
+        Builder withAvailability(LocalDate start, LocalDate end) {
             this.start = start;
             this.end = end;
             return this;
         }
 
-        public ApartmentOffer build() {
+        ApartmentOffer build() {
             return new ApartmentOffer(apartmentId, money(), availability());
         }
 
