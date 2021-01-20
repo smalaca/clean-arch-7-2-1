@@ -114,48 +114,6 @@ class ApartmentApplicationServiceTest {
         return new ApartmentDto(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, spacesDefinition);
     }
 
-    @Test
-    void shouldCreateBookingForApartment() {
-        givenOwnerExists();
-        givenApartment();
-        ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
-
-        service.book(givenBookApartmentDto());
-
-        then(bookingRepository).should().save(captor.capture());
-        BookingAssertion.assertThat(captor.getValue())
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
-    }
-
-    @Test
-    void shouldReturnIdOfBooking() {
-        givenOwnerExists();
-        givenApartment();
-        given(bookingRepository.save(any())).willReturn(BOOKING_ID);
-
-        String actual = service.book(givenBookApartmentDto());
-
-        Assertions.assertThat(actual).isEqualTo(BOOKING_ID);
-    }
-
-    @Test
-    void shouldPublishApartmentBookedEvent() {
-        givenOwnerExists();
-        givenApartment();
-        ArgumentCaptor<ApartmentBooked> captor = ArgumentCaptor.forClass(ApartmentBooked.class);
-
-        service.book(givenBookApartmentDto());
-
-        then(eventChannel).should().publish(captor.capture());
-        ApartmentBooked actual = captor.getValue();
-        assertThat(actual.getEventId()).isEqualTo(FakeEventIdFactory.UUID);
-        assertThat(actual.getEventCreationDateTime()).isEqualTo(FakeClock.NOW);
-        assertThat(actual.getOwnerId()).isEqualTo(OWNER_ID);
-        assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
-        assertThat(actual.getPeriodStart()).isEqualTo(START);
-        assertThat(actual.getPeriodEnd()).isEqualTo(END);
-    }
-
     private void givenOwnerExists() {
         given(ownerRepository.exists(OWNER_ID)).willReturn(true);
     }
@@ -172,6 +130,45 @@ class ApartmentApplicationServiceTest {
 
     private void givenOwnerDoesNotExist() {
         given(ownerRepository.exists(OWNER_ID)).willReturn(false);
+    }
+
+    @Test
+    void shouldCreateBookingForApartment() {
+        givenApartment();
+        ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
+
+        service.book(givenBookApartmentDto());
+
+        then(bookingRepository).should().save(captor.capture());
+        BookingAssertion.assertThat(captor.getValue())
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
+    }
+
+    @Test
+    void shouldReturnIdOfBooking() {
+        givenApartment();
+        given(bookingRepository.save(any())).willReturn(BOOKING_ID);
+
+        String actual = service.book(givenBookApartmentDto());
+
+        Assertions.assertThat(actual).isEqualTo(BOOKING_ID);
+    }
+
+    @Test
+    void shouldPublishApartmentBookedEvent() {
+        givenApartment();
+        ArgumentCaptor<ApartmentBooked> captor = ArgumentCaptor.forClass(ApartmentBooked.class);
+
+        service.book(givenBookApartmentDto());
+
+        then(eventChannel).should().publish(captor.capture());
+        ApartmentBooked actual = captor.getValue();
+        assertThat(actual.getEventId()).isEqualTo(FakeEventIdFactory.UUID);
+        assertThat(actual.getEventCreationDateTime()).isEqualTo(FakeClock.NOW);
+        assertThat(actual.getOwnerId()).isEqualTo(OWNER_ID);
+        assertThat(actual.getTenantId()).isEqualTo(TENANT_ID);
+        assertThat(actual.getPeriodStart()).isEqualTo(START);
+        assertThat(actual.getPeriodEnd()).isEqualTo(END);
     }
 
     private ApartmentBookingDto givenBookApartmentDto() {
