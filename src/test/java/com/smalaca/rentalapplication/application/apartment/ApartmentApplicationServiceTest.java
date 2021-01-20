@@ -18,6 +18,7 @@ import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.owner.OwnerRepository;
 import com.smalaca.rentalapplication.domain.period.Period;
+import com.smalaca.rentalapplication.domain.period.PeriodException;
 import com.smalaca.rentalapplication.domain.space.SquareMeterException;
 import com.smalaca.rentalapplication.domain.tenant.TenantNotFoundException;
 import com.smalaca.rentalapplication.domain.tenant.TenantRepository;
@@ -52,8 +53,8 @@ class ApartmentApplicationServiceTest {
     private static final String DESCRIPTION = "Nice place to stay";
     private static final Map<String, Double> SPACES_DEFINITION = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
     private static final String TENANT_ID = "137";
-    private static final LocalDate START = LocalDate.of(2020, 3, 4);
-    private static final LocalDate END = LocalDate.of(2020, 3, 6);
+    private static final LocalDate START = LocalDate.of(2040, 3, 4);
+    private static final LocalDate END = LocalDate.of(2040, 3, 6);
     private static final String BOOKING_ID = "8394234";
     private static final String NO_ID = null;
     private static final LocalDate BEFORE_START = START.minusDays(1);
@@ -200,12 +201,6 @@ class ApartmentApplicationServiceTest {
         assertThat(actual.getPeriodEnd()).isEqualTo(END);
     }
 
-    private void givenExistingTenantAndApartmentWithNoBookings() {
-        givenExistingApartment();
-        givenExistingTenant();
-        givenNoBookings();
-    }
-
     @Test
     void shouldRecognizeApartmentDoesNotExistWhenBooking() {
         givenNonExistingApartment();
@@ -234,8 +229,12 @@ class ApartmentApplicationServiceTest {
         thenBookingWasNotCreated();
     }
 
+    private void givenNonExistingTenant() {
+        given(tenantRepository.existById(TENANT_ID)).willReturn(false);
+    }
+
     @Test
-    void shouldRecognizeWhenHaveBookingsWithinGivenPeriod() {
+    void shouldRecognizeWhenHaveBookingsWithinGivenPeriodWhenBooking() {
         givenExistingApartment();
         givenExistingTenant();
         givenAcceptedBookingsInGivenPeriod();
@@ -255,8 +254,21 @@ class ApartmentApplicationServiceTest {
         given(bookingRepository.findAllAcceptedBy(getRentalPlaceIdentifier())).willReturn(asList(acceptedBooking));
     }
 
-    private void givenNonExistingTenant() {
-        given(tenantRepository.existById(TENANT_ID)).willReturn(false);
+    @Test
+    void shouldRecognizeWhenStartDateIsFromPastWhenBooking() {
+        givenExistingTenantAndApartmentWithNoBookings();
+        ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(APARTMENT_ID, TENANT_ID, LocalDate.of(2020, 10, 10), END);
+
+        PeriodException actual = assertThrows(PeriodException.class, () -> service.book(apartmentBookingDto));
+
+        assertThat(actual).hasMessage("Start date: 2020-10-10 is past date.");
+        thenBookingWasNotCreated();
+    }
+
+    private void givenExistingTenantAndApartmentWithNoBookings() {
+        givenExistingApartment();
+        givenExistingTenant();
+        givenNoBookings();
     }
 
     private void givenNoBookings() {

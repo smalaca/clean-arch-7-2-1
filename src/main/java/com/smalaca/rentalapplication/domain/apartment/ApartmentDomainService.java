@@ -28,7 +28,7 @@ public class ApartmentDomainService {
             if (tenantRepository.existById(newApartmentBookingDto.getTenantId())) {
                 Apartment apartment = apartmentRepository.findById(newApartmentBookingDto.getApartmentId());
                 List<Booking> bookings = bookingRepository.findAllAcceptedBy(apartment.rentalPlaceIdentifier());
-                Period period = new Period(newApartmentBookingDto.getStart(), newApartmentBookingDto.getEnd());
+                Period period = Period.from(newApartmentBookingDto.getStart(), newApartmentBookingDto.getEnd());
 
                 return apartment.book(bookings, newApartmentBookingDto.getTenantId(), period, apartmentEventsPublisher);
             } else {

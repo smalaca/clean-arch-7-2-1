@@ -22,6 +22,14 @@ public class Period {
         this.periodEnd = periodEnd;
     }
 
+    public static Period from(LocalDate start, LocalDate end) {
+        if (start.isBefore(LocalDate.now())) {
+            throw PeriodException.startDateFromPast(start);
+        }
+
+        return new Period(start, end);
+    }
+
     public List<LocalDate> asDays() {
         List<LocalDate> dates = periodStart.datesUntil(periodEnd).collect(toList());
         dates.add(periodEnd);
