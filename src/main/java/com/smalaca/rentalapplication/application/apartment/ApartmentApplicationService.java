@@ -1,12 +1,12 @@
 package com.smalaca.rentalapplication.application.apartment;
 
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
+import com.smalaca.rentalapplication.domain.apartment.ApartmentDomainService;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentEventsPublisher;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentFactory;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
-import com.smalaca.rentalapplication.domain.period.Period;
 
 public class ApartmentApplicationService {
     private final ApartmentRepository apartmentRepository;
@@ -29,10 +29,7 @@ public class ApartmentApplicationService {
     }
 
     public String book(ApartmentBookingDto apartmentBookingDto) {
-        Apartment apartment = apartmentRepository.findById(apartmentBookingDto.getApartmentId());
-        Period period = new Period(apartmentBookingDto.getStart(), apartmentBookingDto.getEnd());
-
-        Booking booking = apartment.book(apartmentBookingDto.getTenantId(), period, apartmentEventsPublisher);
+        Booking booking = new ApartmentDomainService(apartmentRepository, apartmentEventsPublisher).book(apartmentBookingDto.asNewApartmentBookingDto());
 
         return bookingRepository.save(booking);
     }
