@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.domain.apartment;
 
 import com.smalaca.rentalapplication.domain.address.Address;
 import com.smalaca.rentalapplication.domain.booking.Booking;
+import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.space.Space;
 import com.smalaca.rentalapplication.domain.space.SpacesFactory;
@@ -61,10 +62,18 @@ public class Apartment {
         this.description = description;
     }
 
-    public Booking book(String tenantId, Period period, ApartmentEventsPublisher apartmentEventsPublisher) {
-        apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);
+    Booking book(List<Booking> bookings, String tenantId, Period period, ApartmentEventsPublisher apartmentEventsPublisher) {
+        if (bookings.isEmpty()) {
+            apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);
 
-        return Booking.apartment(id(), tenantId, period);
+            return Booking.apartment(id(), tenantId, period);
+        } else {
+            throw new ApartmentBookingException();
+        }
+    }
+
+    RentalPlaceIdentifier rentalPlaceIdentifier() {
+        return RentalPlaceIdentifier.apartment(id());
     }
 
     public String id() {
