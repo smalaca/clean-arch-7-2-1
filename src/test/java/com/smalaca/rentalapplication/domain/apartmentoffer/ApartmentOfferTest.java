@@ -14,12 +14,12 @@ import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer
 class ApartmentOfferTest {
     private static final String APARTMENT_ID_1 = "1234";
     private static final BigDecimal PRICE_1 = BigDecimal.valueOf(123.45);
-    private static final LocalDate START_1 = LocalDate.of(2020, 10, 11);
-    private static final LocalDate END_1 = LocalDate.of(2020, 10, 20);
+    private static final LocalDate START_1 = LocalDate.of(2040, 10, 11);
+    private static final LocalDate END_1 = LocalDate.of(2040, 10, 20);
     private static final String APARTMENT_ID_2 = "3453";
     private static final BigDecimal PRICE_2 = BigDecimal.valueOf(678.91);
-    private static final LocalDate START_2 = LocalDate.of(2020, 10, 30);
-    private static final LocalDate END_2 = LocalDate.of(2020, 11, 21);
+    private static final LocalDate START_2 = LocalDate.of(2040, 10, 30);
+    private static final LocalDate END_2 = LocalDate.of(2040, 11, 21);
 
     @Test
     void shouldRecognizeTheSameInstanceAsTheSameAggregate() {

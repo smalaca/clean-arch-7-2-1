@@ -1,6 +1,7 @@
 package com.smalaca.rentalapplication.domain.apartmentoffer;
 
 import com.smalaca.rentalapplication.domain.money.Money;
+import com.smalaca.rentalapplication.domain.offeravailability.OfferAvailability;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -22,11 +23,11 @@ public class ApartmentOffer {
     @Embedded
     private Money money;
     @Embedded
-    private ApartmentAvailability availability;
+    private OfferAvailability availability;
 
     private ApartmentOffer() {}
 
-    private ApartmentOffer(String apartmentId, Money money, ApartmentAvailability availability) {
+    private ApartmentOffer(String apartmentId, Money money, OfferAvailability availability) {
         this.apartmentId = apartmentId;
         this.money = money;
         this.availability = availability;
@@ -89,8 +90,8 @@ public class ApartmentOffer {
             return new ApartmentOffer(apartmentId, money(), availability());
         }
 
-        private ApartmentAvailability availability() {
-            return ApartmentAvailability.of(start, end);
+        private OfferAvailability availability() {
+            return OfferAvailability.from(start, end);
         }
 
         private Money money() {
