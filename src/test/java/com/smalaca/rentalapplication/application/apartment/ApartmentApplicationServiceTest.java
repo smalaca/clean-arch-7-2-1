@@ -14,6 +14,7 @@ import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.owner.OwnerRepository;
 import com.smalaca.rentalapplication.domain.period.Period;
+import com.smalaca.rentalapplication.domain.space.SquareMeterException;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,6 @@ class ApartmentApplicationServiceTest {
     private static final Map<String, Double> SPACES_DEFINITION = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
     private static final String TENANT_ID = "137";
     private static final LocalDate START = LocalDate.of(2020, 3, 4);
-    private static final LocalDate MIDDLE = LocalDate.of(2020, 3, 5);
     private static final LocalDate END = LocalDate.of(2020, 3, 6);
     private static final String BOOKING_ID = "8394234";
     private static final String NO_ID = null;
@@ -85,7 +85,33 @@ class ApartmentApplicationServiceTest {
     }
 
     private ApartmentDto givenApartmentDto() {
-        return new ApartmentDto(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, SPACES_DEFINITION);
+        return givenApartmentDtoWith(SPACES_DEFINITION);
+    }
+
+    @Test
+    void shouldNotAllowToCreateApartmentWithAtLeastOneSpaceThatHaveSquareMeterEqualZero() {
+        givenOwnerExists();
+        ApartmentDto apartmentDto = givenApartmentDtoWith(ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0, "Room", 0.0));
+
+        SquareMeterException actual = assertThrows(SquareMeterException.class, () -> service.add(apartmentDto));
+
+        assertThat(actual).hasMessage("Square meter cannot be lower or equal zero.");
+        then(apartmentRepository).should(never()).save(any());
+    }
+
+    @Test
+    void shouldNotAllowToCreateApartmentWithAtLeastOneSpaceThatHaveSquareMeterLowerThanZero() {
+        givenOwnerExists();
+        ApartmentDto apartmentDto = givenApartmentDtoWith(ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0, "Room", -13.0));
+
+        SquareMeterException actual = assertThrows(SquareMeterException.class, () -> service.add(apartmentDto));
+
+        assertThat(actual).hasMessage("Square meter cannot be lower or equal zero.");
+        then(apartmentRepository).should(never()).save(any());
+    }
+
+    private ApartmentDto givenApartmentDtoWith(Map<String, Double> spacesDefinition) {
+        return new ApartmentDto(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, spacesDefinition);
     }
 
     @Test

@@ -9,8 +9,16 @@ class SquareMeter {
 
     private SquareMeter() {}
 
-    SquareMeter(Double value) {
+    private SquareMeter(Double value) {
         this.value = value;
+    }
+
+    static SquareMeter of(Double value) {
+        if (value <= 0) {
+            throw new SquareMeterException();
+        }
+
+        return new SquareMeter(value);
     }
 
     private Double getValue() {
