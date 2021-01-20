@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.hotelroomoffer;
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomNotFoundException;
+import com.smalaca.rentalapplication.domain.money.NotAllowedMoneyValueException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 

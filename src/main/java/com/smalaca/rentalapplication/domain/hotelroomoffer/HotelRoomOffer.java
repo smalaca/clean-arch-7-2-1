@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.domain.hotelroomoffer;
 
+import com.smalaca.rentalapplication.domain.money.Money;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 

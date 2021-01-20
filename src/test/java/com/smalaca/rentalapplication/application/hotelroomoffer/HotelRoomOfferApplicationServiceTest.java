@@ -8,7 +8,7 @@ import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomAvailability
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOffer;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferAssertion;
 import com.smalaca.rentalapplication.domain.hotelroomoffer.HotelRoomOfferRepository;
-import com.smalaca.rentalapplication.domain.hotelroomoffer.NotAllowedMoneyValueException;
+import com.smalaca.rentalapplication.domain.money.NotAllowedMoneyValueException;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
