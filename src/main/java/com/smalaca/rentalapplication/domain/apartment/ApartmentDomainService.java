@@ -13,9 +13,13 @@ public class ApartmentDomainService {
     }
 
     public Booking book(NewApartmentBookingDto newApartmentBookingDto) {
-        Apartment apartment = apartmentRepository.findById(newApartmentBookingDto.getApartmentId());
-        Period period = new Period(newApartmentBookingDto.getStart(), newApartmentBookingDto.getEnd());
+        if (apartmentRepository.existById(newApartmentBookingDto.getApartmentId())) {
+            Apartment apartment = apartmentRepository.findById(newApartmentBookingDto.getApartmentId());
+            Period period = new Period(newApartmentBookingDto.getStart(), newApartmentBookingDto.getEnd());
 
-        return apartment.book(newApartmentBookingDto.getTenantId(), period, apartmentEventsPublisher);
+            return apartment.book(newApartmentBookingDto.getTenantId(), period, apartmentEventsPublisher);
+        } else {
+            throw new ApartmentNotFoundException(newApartmentBookingDto.getApartmentId());
+        }
     }
 }
