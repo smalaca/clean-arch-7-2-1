@@ -1,9 +1,12 @@
 package com.smalaca.rentalapplication.domain.money;
 
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 
 @Embeddable
+@EqualsAndHashCode
 @SuppressWarnings("PMD.UnusedPrivateField")
 public class Money {
     private BigDecimal value;

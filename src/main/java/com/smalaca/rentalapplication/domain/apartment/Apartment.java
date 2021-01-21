@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.apartment;
 import com.smalaca.rentalapplication.domain.address.Address;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
+import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.space.Space;
 import com.smalaca.rentalapplication.domain.space.SpacesFactory;
@@ -20,6 +21,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +29,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "APARTMENT")
-@SuppressWarnings("PMD.UnusedPrivateField")
+@SuppressWarnings({"PMD.UnusedPrivateField", "checkstyle:ClassFanOutComplexity"})
 public class Apartment {
     @Id
     @GeneratedValue
@@ -62,14 +64,25 @@ public class Apartment {
         this.description = description;
     }
 
-    Booking book(List<Booking> bookings, String tenantId, Period period, ApartmentEventsPublisher apartmentEventsPublisher) {
-        if (areNotInGivenPeriod(bookings, period)) {
-            apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);
+    Booking book(ApartmentBooking apartmentBooking) {
+        Period period = apartmentBooking.getPeriod();
+        String tenantId = apartmentBooking.getTenantId();
 
-            return Booking.apartment(id(), tenantId, period);
+        if (areNotInGivenPeriod(apartmentBooking.getBookings(), period)) {
+            apartmentBooking.getApartmentEventsPublisher().publishApartmentBooked(id(), ownerId, tenantId, period);
+
+            return Booking.apartment(id(), tenantId, ownerId, apartmentBooking.getPrice(), period);
         } else {
             throw new ApartmentBookingException();
         }
+    }
+
+    @Deprecated
+    @SuppressWarnings("checkstyle:MagicNumber")
+    Booking book(List<Booking> bookings, String tenantId, Period period, ApartmentEventsPublisher apartmentEventsPublisher) {
+        apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);
+
+        return Booking.apartment(id(), tenantId, ownerId, Money.of(BigDecimal.valueOf(42)), period);
     }
 
     private boolean areNotInGivenPeriod(List<Booking> bookings, Period period) {

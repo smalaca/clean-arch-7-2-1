@@ -18,4 +18,14 @@ class JpaApartmentOfferRepository implements ApartmentOfferRepository {
     public UUID save(ApartmentOffer apartmentOffer) {
         return repository.save(apartmentOffer).id();
     }
+
+    @Override
+    public boolean existByApartmentId(String apartmentId) {
+        return repository.existsByApartmentId(apartmentId);
+    }
+
+    @Override
+    public ApartmentOffer findByApartmentId(String apartmentId) {
+        return repository.findByApartmentId(apartmentId);
+    }
 }

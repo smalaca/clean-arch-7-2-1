@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.domain.booking;
 
+import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import org.assertj.core.api.Assertions;
 
@@ -41,11 +42,18 @@ public class BookingAssertion {
         return this;
     }
 
+    @Deprecated
     public BookingAssertion isEqualToBookingApartment(String rentalPlaceId, String tenantId, Period period) {
         Assertions.assertThat(actual).isEqualTo(Booking.apartment(rentalPlaceId, tenantId, period));
         return this;
     }
 
+    public BookingAssertion isEqualToBookingApartment(String rentalPlaceId, String tenantId, String ownerId, Money price, Period period) {
+        Assertions.assertThat(actual).isEqualTo(Booking.apartment(rentalPlaceId, tenantId, ownerId, price, period));
+        return this;
+    }
+
+    @Deprecated
     public BookingAssertion isEqualToBookingHotelRoom(String rentalPlaceId, String tenantId, List<LocalDate> days) {
         Assertions.assertThat(actual).isEqualTo(Booking.hotelRoom(rentalPlaceId, tenantId, days));
         return this;

@@ -9,13 +9,15 @@ import com.smalaca.rentalapplication.domain.apartment.ApartmentNotFoundException
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRequirements;
 import com.smalaca.rentalapplication.domain.apartment.OwnerDoesNotExistException;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
 import com.smalaca.rentalapplication.domain.booking.Booking;
-import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
+import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.owner.OwnerRepository;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.period.PeriodException;
@@ -27,6 +29,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -59,14 +62,16 @@ class ApartmentApplicationServiceTest {
     private static final String NO_ID = null;
     private static final LocalDate BEFORE_START = START.minusDays(1);
     private static final LocalDate AFTER_START = START.plusDays(1);
+    private static final BigDecimal PRICE = BigDecimal.valueOf(42);
 
     private final OwnerRepository ownerRepository = mock(OwnerRepository.class);
     private final TenantRepository tenantRepository = mock(TenantRepository.class);
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
+    private final ApartmentOfferRepository apartmentOfferRepository = mock(ApartmentOfferRepository.class);
     private final EventChannel eventChannel = mock(EventChannel.class);
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
     private final ApartmentApplicationService service = new ApartmentApplicationServiceFactory()
-            .apartmentApplicationService(apartmentRepository, bookingRepository, ownerRepository, tenantRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
+            .apartmentApplicationService(apartmentRepository, bookingRepository, ownerRepository, tenantRepository, apartmentOfferRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
     void shouldAddNewApartment() {
@@ -153,7 +158,7 @@ class ApartmentApplicationServiceTest {
 
         then(bookingRepository).should().save(captor.capture());
         BookingAssertion.assertThat(captor.getValue())
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, Money.of(PRICE), new Period(START, END));
     }
 
     @Test
@@ -161,13 +166,14 @@ class ApartmentApplicationServiceTest {
         givenExistingApartment();
         givenExistingTenant();
         givenAcceptedBookingsInDifferentPeriod();
+        givenExistingApartmentOffer();
         ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
 
         service.book(givenBookApartmentDto());
 
         then(bookingRepository).should().save(captor.capture());
         BookingAssertion.assertThat(captor.getValue())
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, Money.of(PRICE), new Period(START, END));
     }
 
     private void givenAcceptedBookingsInDifferentPeriod() {
@@ -238,6 +244,7 @@ class ApartmentApplicationServiceTest {
         givenExistingApartment();
         givenExistingTenant();
         givenAcceptedBookingsInGivenPeriod();
+        givenExistingApartmentOffer();
 
         ApartmentBookingException actual = assertThrows(ApartmentBookingException.class, () -> service.book(givenBookApartmentDto()));
 
@@ -280,6 +287,16 @@ class ApartmentApplicationServiceTest {
         givenExistingApartment();
         givenExistingTenant();
         givenNoBookings();
+        givenExistingApartmentOffer();
+    }
+
+    private void givenExistingApartmentOffer() {
+        given(apartmentOfferRepository.existByApartmentId(APARTMENT_ID)).willReturn(true);
+        ApartmentOffer apartmentOffer = ApartmentOffer.Builder.apartmentOffer()
+                .withApartmentId(APARTMENT_ID)
+                .withPrice(PRICE)
+                .withAvailability(BEFORE_START, END.plusDays(10)).build();
+        given(apartmentOfferRepository.findByApartmentId(APARTMENT_ID)).willReturn(apartmentOffer);
     }
 
     private void givenNoBookings() {
@@ -292,7 +309,7 @@ class ApartmentApplicationServiceTest {
 
     private void thenBookingWasNotCreated() {
         then(bookingRepository).should(never()).save(any());
-        then(eventChannel).should(never()).publish(any(BookingAccepted.class));
+        then(eventChannel).should(never()).publish(any(ApartmentBooked.class));
     }
 
     private ApartmentBookingDto givenBookApartmentDto() {
