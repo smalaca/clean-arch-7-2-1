@@ -10,7 +10,6 @@ import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRequirements;
 import com.smalaca.rentalapplication.domain.apartment.OwnerDoesNotExistException;
 import com.smalaca.rentalapplication.domain.booking.Booking;
-import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
@@ -292,7 +291,7 @@ class ApartmentApplicationServiceTest {
 
     private void thenBookingWasNotCreated() {
         then(bookingRepository).should(never()).save(any());
-        then(eventChannel).should(never()).publish(any(BookingAccepted.class));
+        then(eventChannel).should(never()).publish(any(ApartmentBooked.class));
     }
 
     private ApartmentBookingDto givenBookApartmentDto() {
