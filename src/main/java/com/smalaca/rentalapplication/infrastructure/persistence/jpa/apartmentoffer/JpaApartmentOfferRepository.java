@@ -21,11 +21,11 @@ class JpaApartmentOfferRepository implements ApartmentOfferRepository {
 
     @Override
     public boolean existByApartmentId(String apartmentId) {
-        return false;
+        return repository.existsByApartmentId(apartmentId);
     }
 
     @Override
     public ApartmentOffer findByApartmentId(String apartmentId) {
-        return null;
+        return repository.findByApartmentId(apartmentId);
     }
 }
