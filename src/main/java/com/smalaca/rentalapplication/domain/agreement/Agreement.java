@@ -76,6 +76,10 @@ public class Agreement {
                 .toHashCode();
     }
 
+    public void accept(AgreementEventsPublisher agreementEventsPublisher) {
+        agreementEventsPublisher.agreementAccepted(rentalType, rentalPlaceId, ownerId, tenantId, days, price);
+    }
+
     public static class Builder {
         private RentalType rentalType;
         private String rentalPlaceId;

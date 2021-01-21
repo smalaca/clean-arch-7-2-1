@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.domain.eventchannel;
 
+import com.smalaca.rentalapplication.domain.agreement.AgreementAccepted;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
 import com.smalaca.rentalapplication.domain.booking.BookingRejected;
@@ -13,4 +14,6 @@ public interface EventChannel {
     void publish(BookingAccepted bookingAccepted);
 
     void publish(BookingRejected bookingRejected);
+
+    void publish(AgreementAccepted agreementAccepted);
 }
