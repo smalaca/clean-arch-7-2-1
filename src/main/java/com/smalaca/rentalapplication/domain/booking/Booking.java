@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.domain.booking;
 
-import com.smalaca.rentalapplication.domain.aggrement.Aggrement;
+import com.smalaca.rentalapplication.domain.aggrement.Agreement;
 import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static com.smalaca.rentalapplication.domain.aggrement.Agreement.Builder.agreement;
 import static com.smalaca.rentalapplication.domain.booking.BookingStatus.ACCEPTED;
 import static com.smalaca.rentalapplication.domain.booking.BookingStatus.REJECTED;
 
@@ -82,11 +83,18 @@ public class Booking {
         bookingEventsPublisher.bookingRejected(rentalType, rentalPlaceId, tenantId, days);
     }
 
-    public Aggrement accept(BookingEventsPublisher bookingEventsPublisher) {
+    public Agreement accept(BookingEventsPublisher bookingEventsPublisher) {
         bookingStatus = bookingStatus.moveTo(ACCEPTED);
 
         bookingEventsPublisher.bookingAccepted(rentalType, rentalPlaceId, tenantId, days);
-        return new Aggrement();
+        return agreement()
+                .withRentalType(rentalType)
+                .withRentalPlaceId(rentalPlaceId)
+                .withOwnerId(ownerId)
+                .withTenantId(tenantId)
+                .withDays(days)
+                .withPrice(price)
+                .build();
     }
 
     public String id() {

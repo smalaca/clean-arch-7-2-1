@@ -1,6 +1,7 @@
 package com.smalaca.rentalapplication.domain.booking;
 
-import com.smalaca.rentalapplication.domain.aggrement.Aggrement;
+import com.smalaca.rentalapplication.domain.aggrement.Agreement;
+import com.smalaca.rentalapplication.domain.aggrement.AgreementAssertion;
 import com.smalaca.rentalapplication.domain.clock.Clock;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.smalaca.rentalapplication.domain.booking.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.mockito.Mockito.mock;
@@ -26,7 +28,7 @@ class BookingDomainServiceTest {
     private static final String TENANT_ID_1 = "5678";
     private static final String TENANT_ID_2 = "123456";
     public static final LocalDate TODAY = LocalDate.now();
-    private static final List<LocalDate> DAYS = asList(TODAY, LocalDate.now().plusDays(1));
+    private static final List<LocalDate> DAYS = asList(TODAY, TODAY.plusDays(1));
     private static final Period PERIOD = Period.from(TODAY, TODAY.plusDays(1));
     private static final Period PERIOD_WITH_COLLISION = Period.from(TODAY, TODAY.plusDays(10));
     private static final Period PERIOD_WITHOUT_COLLISION = Period.from(TODAY.plusDays(10), TODAY.plusDays(20));
@@ -43,19 +45,19 @@ class BookingDomainServiceTest {
     void shouldAcceptBookingWhenNoOtherBookingsFound() {
         Booking booking = givenApartmentBooking();
 
-        Aggrement actual = service.accept(booking, emptyList()).get();
+        Agreement actual = service.accept(booking, emptyList()).get();
 
         BookingAssertion.assertThat(booking).isAccepted();
-//        AgreementAssertion.assertThat(actual)
-//                .isEqualToAgreement(APARTMENT, RENTAL_PLACE_ID, OWNER_ID, TENANT_ID, DAYS, PRICE);
+        thenExpectedAgreementWasCreated(actual);
     }
 
     @Test
     void shouldPublishBookingAcceptedEventWhenBookingIsAccepted() {
         ArgumentCaptor<BookingAccepted> captor = ArgumentCaptor.forClass(BookingAccepted.class);
 
-        Aggrement actual = service.accept(givenApartmentBooking(), NO_BOOKINGS_FOUND).get();
+        Agreement actual = service.accept(givenApartmentBooking(), NO_BOOKINGS_FOUND).get();
 
+        thenExpectedAgreementWasCreated(actual);
         BDDMockito.then(eventChannel).should().publish(captor.capture());
         BookingAccepted actualEvent = captor.getValue();
         Assertions.assertThat(actualEvent.getRentalType()).isEqualTo("APARTMENT");
@@ -68,7 +70,7 @@ class BookingDomainServiceTest {
     void shouldRejectBookingWhenOtherWithDaysCollisionFound() {
         Booking booking = givenApartmentBooking();
 
-        Optional<Aggrement> actual = service.accept(booking, asList(givenAcceptedBookingWithDaysCollision()));
+        Optional<Agreement> actual = service.accept(booking, asList(givenAcceptedBookingWithDaysCollision()));
 
         Assertions.assertThat(actual).isEmpty();
         BookingAssertion.assertThat(booking).isRejected();
@@ -79,7 +81,7 @@ class BookingDomainServiceTest {
         ArgumentCaptor<BookingRejected> captor = ArgumentCaptor.forClass(BookingRejected.class);
         Booking booking = givenApartmentBooking();
 
-        Optional<Aggrement> actual = service.accept(booking, asList(givenAcceptedBookingWithDaysCollision()));
+        Optional<Agreement> actual = service.accept(booking, asList(givenAcceptedBookingWithDaysCollision()));
 
         Assertions.assertThat(actual).isEmpty();
         BDDMockito.then(eventChannel).should().publish(captor.capture());
@@ -94,8 +96,9 @@ class BookingDomainServiceTest {
     void shouldAcceptBookingWhenOtherWithoutDaysCollisionFound() {
         Booking booking = givenApartmentBooking();
 
-        Aggrement actual = service.accept(booking, asList(givenAcceptedBookingWithoutDaysCollision())).get();
+        Agreement actual = service.accept(booking, asList(givenAcceptedBookingWithoutDaysCollision())).get();
 
+        thenExpectedAgreementWasCreated(actual);
         BookingAssertion.assertThat(booking).isAccepted();
     }
 
@@ -103,8 +106,9 @@ class BookingDomainServiceTest {
     void shouldAcceptBookingWhenOtherWithDaysCollisionButNotAcceptedFound() {
         Booking booking = givenApartmentBooking();
 
-        Aggrement actual = service.accept(booking, asList(givenOpenBookingWithDaysCollision())).get();
+        Agreement actual = service.accept(booking, asList(givenOpenBookingWithDaysCollision())).get();
 
+        thenExpectedAgreementWasCreated(actual);
         BookingAssertion.assertThat(booking).isAccepted();
     }
 
@@ -112,8 +116,9 @@ class BookingDomainServiceTest {
     void shouldAcceptBookingWhenFoundOnlyItself() {
         Booking booking = givenApartmentBooking();
 
-        Aggrement actual = service.accept(booking, asList(booking)).get();
+        Agreement actual = service.accept(booking, asList(booking)).get();
 
+        thenExpectedAgreementWasCreated(actual);
         BookingAssertion.assertThat(booking).isAccepted();
     }
 
@@ -123,8 +128,9 @@ class BookingDomainServiceTest {
         List<Booking> bookings = asList(
                 givenOpenBookingWithDaysCollision(), givenRejectedBookingWithDaysCollision(), givenAcceptedBookingWithoutDaysCollision());
 
-        Aggrement actual = service.accept(booking, bookings).get();
+        Agreement actual = service.accept(booking, bookings).get();
 
+        thenExpectedAgreementWasCreated(actual);
         BookingAssertion.assertThat(booking).isAccepted();
     }
 
@@ -135,7 +141,7 @@ class BookingDomainServiceTest {
                 givenOpenBookingWithDaysCollision(), givenRejectedBookingWithDaysCollision(),
                 givenAcceptedBookingWithoutDaysCollision(), givenAcceptedBookingWithDaysCollision());
 
-        Optional<Aggrement> actual = service.accept(booking, bookings);
+        Optional<Agreement> actual = service.accept(booking, bookings);
 
         Assertions.assertThat(actual).isEmpty();
         BookingAssertion.assertThat(booking).isRejected();
@@ -167,5 +173,10 @@ class BookingDomainServiceTest {
 
     private Booking givenApartmentBooking() {
         return Booking.apartment(RENTAL_PLACE_ID, TENANT_ID_1, OWNER_ID, PRICE, PERIOD);
+    }
+
+    private void thenExpectedAgreementWasCreated(Agreement actual) {
+        AgreementAssertion.assertThat(actual)
+                .isEqualToAgreement(APARTMENT, RENTAL_PLACE_ID, OWNER_ID, TENANT_ID_1, DAYS, PRICE);
     }
 }

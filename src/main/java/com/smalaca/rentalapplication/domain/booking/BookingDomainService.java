@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.domain.booking;
 
-import com.smalaca.rentalapplication.domain.aggrement.Aggrement;
+import com.smalaca.rentalapplication.domain.aggrement.Agreement;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,10 +12,10 @@ public class BookingDomainService {
         this.bookingEventsPublisher = bookingEventsPublisher;
     }
 
-    public Optional<Aggrement> accept(Booking booking, List<Booking> bookings) {
+    public Optional<Agreement> accept(Booking booking, List<Booking> bookings) {
         if (hasNoCollisions(booking, bookings)) {
-            Aggrement aggrement = booking.accept(bookingEventsPublisher);
-            return Optional.of(aggrement);
+            Agreement agreement = booking.accept(bookingEventsPublisher);
+            return Optional.of(agreement);
         } else {
             booking.reject(bookingEventsPublisher);
         }
