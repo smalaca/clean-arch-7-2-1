@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.application.apartment;
 
+import com.smalaca.rentalapplication.domain.address.AddressCatalogue;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentDomainService;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentEventsPublisher;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentFactory;
@@ -20,9 +21,9 @@ class ApartmentApplicationServiceFactory {
     @SuppressWarnings("checkstyle:ParameterNumber")
     ApartmentApplicationService apartmentApplicationService(
             ApartmentRepository apartmentRepository, BookingRepository bookingRepository, OwnerRepository ownerRepository,
-            TenantRepository tenantRepository, ApartmentOfferRepository apartmentOfferRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
+            TenantRepository tenantRepository, ApartmentOfferRepository apartmentOfferRepository, AddressCatalogue addressCatalogue, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
         ApartmentEventsPublisher apartmentEventsPublisher = new ApartmentEventsPublisher(eventIdFactory, clock, eventChannel);
-        ApartmentFactory apartmentFactory = new ApartmentFactory(ownerRepository);
+        ApartmentFactory apartmentFactory = new ApartmentFactory(ownerRepository, addressCatalogue);
         ApartmentDomainService apartmentDomainService = new ApartmentDomainService(
                 apartmentRepository, apartmentOfferRepository, bookingRepository, tenantRepository, apartmentEventsPublisher);
 

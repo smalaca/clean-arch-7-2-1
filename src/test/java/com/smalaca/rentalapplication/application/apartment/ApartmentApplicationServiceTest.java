@@ -1,6 +1,9 @@
 package com.smalaca.rentalapplication.application.apartment;
 
 import com.google.common.collect.ImmutableMap;
+import com.smalaca.rentalapplication.domain.address.AddressCatalogue;
+import com.smalaca.rentalapplication.domain.address.AddressDto;
+import com.smalaca.rentalapplication.domain.address.AddressException;
 import com.smalaca.rentalapplication.domain.apartment.Apartment;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentAssertion;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
@@ -68,14 +71,17 @@ class ApartmentApplicationServiceTest {
     private final TenantRepository tenantRepository = mock(TenantRepository.class);
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
     private final ApartmentOfferRepository apartmentOfferRepository = mock(ApartmentOfferRepository.class);
+    private final AddressCatalogue addressCatalogue = mock(AddressCatalogue.class);
     private final EventChannel eventChannel = mock(EventChannel.class);
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
-    private final ApartmentApplicationService service = new ApartmentApplicationServiceFactory()
-            .apartmentApplicationService(apartmentRepository, bookingRepository, ownerRepository, tenantRepository, apartmentOfferRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
+    private final ApartmentApplicationService service = new ApartmentApplicationServiceFactory().apartmentApplicationService(
+            apartmentRepository, bookingRepository, ownerRepository, tenantRepository, apartmentOfferRepository, addressCatalogue,
+            new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
     void shouldAddNewApartment() {
         givenOwnerExists();
+        givenExistingAddress();
         ArgumentCaptor<Apartment> captor = ArgumentCaptor.forClass(Apartment.class);
 
         service.add(givenApartmentDto());
@@ -94,6 +100,7 @@ class ApartmentApplicationServiceTest {
     @Test
     void shouldReturnIdOfNewApartment() {
         givenOwnerExists();
+        givenExistingAddress();
         given(apartmentRepository.save(any())).willReturn(APARTMENT_ID);
 
         String actual = service.add(givenApartmentDto());
@@ -108,6 +115,7 @@ class ApartmentApplicationServiceTest {
     @Test
     void shouldNotAllowToCreateApartmentWithAtLeastOneSpaceThatHaveSquareMeterEqualZero() {
         givenOwnerExists();
+        givenExistingAddress();
         ApartmentDto apartmentDto = givenApartmentDtoWith(ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0, "Room", 0.0));
 
         SquareMeterException actual = assertThrows(SquareMeterException.class, () -> service.add(apartmentDto));
@@ -119,6 +127,7 @@ class ApartmentApplicationServiceTest {
     @Test
     void shouldNotAllowToCreateApartmentWithAtLeastOneSpaceThatHaveSquareMeterLowerThanZero() {
         givenOwnerExists();
+        givenExistingAddress();
         ApartmentDto apartmentDto = givenApartmentDtoWith(ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0, "Room", -13.0));
 
         SquareMeterException actual = assertThrows(SquareMeterException.class, () -> service.add(apartmentDto));
@@ -135,9 +144,35 @@ class ApartmentApplicationServiceTest {
         given(ownerRepository.exists(OWNER_ID)).willReturn(true);
     }
 
+    private void givenExistingAddress() {
+        given(addressCatalogue.exists(addressDto())).willReturn(true);
+    }
+
     @Test
     void shouldRecognizeOwnerDoesNotExist() {
+        givenOwnerExists();
+        givenNotExistingAddress();
+
+        AddressException actual = assertThrows(AddressException.class, () -> service.add(givenApartmentDto()));
+
+        assertThat(actual).hasMessage(
+                "Address: street: " + STREET + ", postalCode: " + POSTAL_CODE + ", buildingNumber: " + HOUSE_NUMBER + ", city: " + CITY +
+                ", country: " + COUNTRY + "  does not exist.");
+        then(apartmentRepository).should(never()).save(any());
+    }
+
+    private void givenNotExistingAddress() {
+        given(addressCatalogue.exists(addressDto())).willReturn(false);
+    }
+
+    private AddressDto addressDto() {
+        return new AddressDto(STREET, POSTAL_CODE, HOUSE_NUMBER, CITY, COUNTRY);
+    }
+
+    @Test
+    void shouldRecognizeAddressDoesNotExist() {
         givenOwnerDoesNotExist();
+        givenExistingAddress();
 
         OwnerDoesNotExistException actual = assertThrows(OwnerDoesNotExistException.class, () -> service.add(givenApartmentDto()));
 
