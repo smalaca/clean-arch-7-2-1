@@ -40,6 +40,7 @@ public class Booking {
 
     private Booking() {}
 
+    @Deprecated
     private Booking(RentalType rentalType, String rentalPlaceId, String tenantId, List<LocalDate> days) {
         this.rentalType = rentalType;
         this.rentalPlaceId = rentalPlaceId;
@@ -62,12 +63,14 @@ public class Booking {
         return new Booking(RentalType.APARTMENT, rentalPlaceId, tenantId, ownerId, price, days);
     }
 
+    @Deprecated
     public static Booking apartment(String rentalPlaceId, String tenantId, Period period) {
         List<LocalDate> days = period.asDays();
 
         return new Booking(RentalType.APARTMENT, rentalPlaceId, tenantId, days);
     }
 
+    @Deprecated
     public static Booking hotelRoom(String rentalPlaceId, String tenantId, List<LocalDate> days) {
         return new Booking(RentalType.HOTEL_ROOM, rentalPlaceId, tenantId, days);
     }

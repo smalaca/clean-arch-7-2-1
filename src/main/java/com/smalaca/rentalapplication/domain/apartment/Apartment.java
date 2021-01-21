@@ -64,6 +64,20 @@ public class Apartment {
         this.description = description;
     }
 
+    Booking book(ApartmentBooking apartmentBooking) {
+        Period period = apartmentBooking.getPeriod();
+        String tenantId = apartmentBooking.getTenantId();
+
+        if (areNotInGivenPeriod(apartmentBooking.getBookings(), period)) {
+            apartmentBooking.getApartmentEventsPublisher().publishApartmentBooked(id(), ownerId, tenantId, period);
+
+            return Booking.apartment(id(), tenantId, ownerId, apartmentBooking.getPrice(), period);
+        } else {
+            throw new ApartmentBookingException();
+        }
+    }
+
+    @Deprecated
     Booking book(List<Booking> bookings, String tenantId, Period period, ApartmentEventsPublisher apartmentEventsPublisher) {
         if (areNotInGivenPeriod(bookings, period)) {
             apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);

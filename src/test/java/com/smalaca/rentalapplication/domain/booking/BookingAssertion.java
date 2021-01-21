@@ -42,6 +42,7 @@ public class BookingAssertion {
         return this;
     }
 
+    @Deprecated
     public BookingAssertion isEqualToBookingApartment(String rentalPlaceId, String tenantId, Period period) {
         Assertions.assertThat(actual).isEqualTo(Booking.apartment(rentalPlaceId, tenantId, period));
         return this;
@@ -52,6 +53,7 @@ public class BookingAssertion {
         return this;
     }
 
+    @Deprecated
     public BookingAssertion isEqualToBookingHotelRoom(String rentalPlaceId, String tenantId, List<LocalDate> days) {
         Assertions.assertThat(actual).isEqualTo(Booking.hotelRoom(rentalPlaceId, tenantId, days));
         return this;
