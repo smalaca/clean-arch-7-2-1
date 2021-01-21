@@ -28,8 +28,8 @@ class BookingDomainServiceTest {
     private static final String TENANT_ID_1 = "5678";
     private static final String TENANT_ID_2 = "123456";
     public static final LocalDate TODAY = LocalDate.now();
-    private static final List<LocalDate> DAYS = asList(TODAY, TODAY.plusDays(1));
     private static final Period PERIOD = Period.from(TODAY, TODAY.plusDays(1));
+    private static final List<LocalDate> DAYS = asList(TODAY, TODAY.plusDays(1));
     private static final Period PERIOD_WITH_COLLISION = Period.from(TODAY, TODAY.plusDays(10));
     private static final Period PERIOD_WITHOUT_COLLISION = Period.from(TODAY.plusDays(10), TODAY.plusDays(20));
     private static final List<Booking> NO_BOOKINGS_FOUND = emptyList();

@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.application.booking;
 
+import com.smalaca.rentalapplication.domain.aggrement.AgreementRepository;
 import com.smalaca.rentalapplication.domain.booking.BookingDomainService;
 import com.smalaca.rentalapplication.domain.booking.BookingDomainServiceFactory;
 import com.smalaca.rentalapplication.domain.booking.BookingEventsPublisher;
@@ -14,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 class BookingCommandHandlerFactory {
     @Bean
     BookingCommandHandler bookingCommandHandler(
-            BookingRepository bookingRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
+            BookingRepository bookingRepository, AgreementRepository agreementRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
         BookingDomainService bookingDomainService = new BookingDomainServiceFactory().create(eventIdFactory, clock, eventChannel);
-        return new BookingCommandHandler(bookingRepository, bookingDomainService, new BookingEventsPublisher(eventIdFactory, clock, eventChannel));
+        return new BookingCommandHandler(bookingRepository, agreementRepository, bookingDomainService, new BookingEventsPublisher(eventIdFactory, clock, eventChannel));
     }
 }
