@@ -1,10 +1,12 @@
 package com.smalaca.rentalapplication.domain.booking;
 
+import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -28,6 +30,9 @@ public class Booking {
     private RentalType rentalType;
     private String rentalPlaceId;
     private String tenantId;
+    private String ownerId;
+    @Embedded
+    private Money price;
     @ElementCollection
     private List<LocalDate> days;
     @Enumerated(EnumType.STRING)
@@ -40,6 +45,21 @@ public class Booking {
         this.rentalPlaceId = rentalPlaceId;
         this.tenantId = tenantId;
         this.days = days;
+    }
+
+    private Booking(RentalType rentalType, String rentalPlaceId, String tenantId, String ownerId, Money price, List<LocalDate> days) {
+        this.rentalType = rentalType;
+        this.rentalPlaceId = rentalPlaceId;
+        this.tenantId = tenantId;
+        this.ownerId = ownerId;
+        this.price = price;
+        this.days = days;
+    }
+
+    public static Booking apartment(String rentalPlaceId, String tenantId, String ownerId, Money price, Period period) {
+        List<LocalDate> days = period.asDays();
+
+        return new Booking(RentalType.APARTMENT, rentalPlaceId, tenantId, ownerId, price, days);
     }
 
     public static Booking apartment(String rentalPlaceId, String tenantId, Period period) {
@@ -100,6 +120,8 @@ public class Booking {
                 .append(rentalType, booking.rentalType)
                 .append(rentalPlaceId, booking.rentalPlaceId)
                 .append(tenantId, booking.tenantId)
+                .append(ownerId, booking.ownerId)
+                .append(price, booking.price)
                 .isEquals();
     }
 
@@ -110,6 +132,8 @@ public class Booking {
                 .append(rentalType)
                 .append(rentalPlaceId)
                 .append(tenantId)
+                .append(ownerId)
+                .append(price)
                 .append(days)
                 .toHashCode();
     }

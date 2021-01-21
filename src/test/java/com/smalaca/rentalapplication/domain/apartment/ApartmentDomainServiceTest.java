@@ -5,12 +5,14 @@ import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
+import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.period.PeriodException;
 import com.smalaca.rentalapplication.domain.tenant.TenantNotFoundException;
 import com.smalaca.rentalapplication.domain.tenant.TenantRepository;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -43,6 +45,7 @@ class ApartmentDomainServiceTest {
     private static final String NO_ID = null;
     private static final LocalDate BEFORE_START = START.minusDays(1);
     private static final LocalDate AFTER_START = START.plusDays(1);
+    private static final Money PRICE = Money.of(BigDecimal.valueOf(42));
 
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
@@ -58,7 +61,7 @@ class ApartmentDomainServiceTest {
         Booking actual = service.book(givenNewApartmentBookingDto());
 
         BookingAssertion.assertThat(actual)
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, PRICE, new Period(START, END));
     }
 
     @Test
@@ -70,7 +73,7 @@ class ApartmentDomainServiceTest {
         Booking actual = service.book(givenNewApartmentBookingDto());
 
         BookingAssertion.assertThat(actual)
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, new Period(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, PRICE, new Period(START, END));
     }
 
     private void givenAcceptedBookingsInDifferentPeriod() {

@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.apartment;
 import com.smalaca.rentalapplication.domain.address.Address;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
+import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.space.Space;
 import com.smalaca.rentalapplication.domain.space.SpacesFactory;
@@ -20,6 +21,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +68,7 @@ public class Apartment {
         if (areNotInGivenPeriod(bookings, period)) {
             apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);
 
-            return Booking.apartment(id(), tenantId, period);
+            return Booking.apartment(id(), tenantId, ownerId, Money.of(BigDecimal.valueOf(42)), period);
         } else {
             throw new ApartmentBookingException();
         }
