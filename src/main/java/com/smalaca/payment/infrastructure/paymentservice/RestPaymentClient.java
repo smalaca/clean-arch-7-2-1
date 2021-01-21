@@ -3,19 +3,25 @@ package com.smalaca.payment.infrastructure.paymentservice;
 import com.smalaca.payment.domain.payment.PaymentService;
 import com.smalaca.payment.domain.payment.PaymentStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 
 @Component
 public class RestPaymentClient implements PaymentService {
-    private PaymentStatus paymentStatus = PaymentStatus.SUCCESS;
+    private final RestTemplate restTemplate;
+    private final String url;
+
+    RestPaymentClient(RestTemplate restTemplate, String url) {
+        this.restTemplate = restTemplate;
+        this.url = url;
+    }
 
     @Override
     public PaymentStatus transfer(String senderId, String recipientId, BigDecimal amount) {
-        return paymentStatus;
-    }
+        PaymentRequest request = new PaymentRequest(senderId, recipientId, amount);
+        PaymentResponse response = restTemplate.postForObject(url + "/payment", request, PaymentResponse.class);
 
-    public void change(PaymentStatus paymentStatus) {
-        this.paymentStatus = paymentStatus;
+        return response.paymentStatus();
     }
 }
