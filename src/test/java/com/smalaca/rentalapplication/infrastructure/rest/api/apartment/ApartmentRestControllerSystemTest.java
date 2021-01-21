@@ -3,9 +3,11 @@ package com.smalaca.rentalapplication.infrastructure.rest.api.apartment;
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.application.apartment.ApartmentBookingDto;
 import com.smalaca.rentalapplication.application.apartment.ApartmentDto;
+import com.smalaca.rentalapplication.application.apartmentoffer.ApartmentOfferDto;
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentbookinghistory.SpringJpaApartmentBookingHistoryTestRepository;
+import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentoffer.SpringJpaApartmentOfferTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
@@ -18,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,21 +56,29 @@ class ApartmentRestControllerSystemTest {
     private static final String COUNTRY_2 = "Germany";
     private static final String DESCRIPTION_2 = "Lovely place";
     private static final Map<String, Double> SPACES_DEFINITION_2 = ImmutableMap.of("Toilet", 15.0, "RoomOne", 20.0, "RoomTwo", 25.0);
+    private static final BigDecimal PRICE = BigDecimal.valueOf(123);
+    private static final LocalDate START = LocalDate.of(2030, 10, 11);
+    private static final LocalDate END = LocalDate.of(2050, 10, 20);
 
     private final JsonFactory jsonFactory = new JsonFactory();
     private final List<String> apartmentIds = new ArrayList<>();
     private final List<String> apartmentBookingHistoryIds = new ArrayList<>();
     private final List<String> bookingIds = new ArrayList<>();
+    private String apartmentOfferId;
     @Autowired private MockMvc mockMvc;
     @Autowired private SpringJpaApartmentTestRepository apartmentRepository;
     @Autowired private SpringJpaApartmentBookingHistoryTestRepository apartmentBookingHistoryRepository;
     @Autowired private SpringJpaBookingTestRepository bookingRepository;
+    @Autowired private SpringJpaApartmentOfferTestRepository apartmentOfferRepository;
 
     @AfterEach
     void deleteApartments() {
         apartmentRepository.deleteAll(apartmentIds);
         apartmentBookingHistoryRepository.deleteAll(apartmentBookingHistoryIds);
         bookingRepository.deleteAll(bookingIds);
+        if (apartmentOfferId != null) {
+            apartmentOfferRepository.deleteById(apartmentOfferId);
+        }
     }
 
     @Test
@@ -104,6 +115,7 @@ class ApartmentRestControllerSystemTest {
     void shouldBookApartment() throws Exception {
         String url = save(givenApartment1()).getResponse().getRedirectedUrl();
         String apartmentId = url.replace("/apartment/", "");
+        givenApartmentOfferFor(apartmentId);
         apartmentBookingHistoryIds.add(apartmentId);
         ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, "1357", LocalDate.of(2040, 11, 12), LocalDate.of(2040, 12, 1));
 
@@ -118,6 +130,12 @@ class ApartmentRestControllerSystemTest {
                 .andExpect(jsonPath("$.bookingHistory.bookings.[0].tenantId").value("1357"))
                 .andExpect(jsonPath("$.bookingHistory.bookings.[0].periodStart").value("2040-11-12"))
                 .andExpect(jsonPath("$.bookingHistory.bookings.[0].periodEnd").value("2040-12-01"));
+    }
+
+    private void givenApartmentOfferFor(String apartmentId) throws Exception {
+        ApartmentOfferDto dto = new ApartmentOfferDto(apartmentId, PRICE, START, END);
+
+        mockMvc.perform(post("/apartmentoffer").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(dto)));
     }
 
     @Test
