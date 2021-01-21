@@ -29,7 +29,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "APARTMENT")
-@SuppressWarnings("PMD.UnusedPrivateField")
+@SuppressWarnings({"PMD.UnusedPrivateField", "checkstyle:ClassFanOutComplexity"})
 public class Apartment {
     @Id
     @GeneratedValue
@@ -78,14 +78,11 @@ public class Apartment {
     }
 
     @Deprecated
+    @SuppressWarnings("checkstyle:MagicNumber")
     Booking book(List<Booking> bookings, String tenantId, Period period, ApartmentEventsPublisher apartmentEventsPublisher) {
-        if (areNotInGivenPeriod(bookings, period)) {
-            apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);
+        apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);
 
-            return Booking.apartment(id(), tenantId, ownerId, Money.of(BigDecimal.valueOf(42)), period);
-        } else {
-            throw new ApartmentBookingException();
-        }
+        return Booking.apartment(id(), tenantId, ownerId, Money.of(BigDecimal.valueOf(42)), period);
     }
 
     private boolean areNotInGivenPeriod(List<Booking> bookings, Period period) {

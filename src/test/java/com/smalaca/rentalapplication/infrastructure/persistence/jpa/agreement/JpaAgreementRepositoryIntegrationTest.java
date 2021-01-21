@@ -1,6 +1,6 @@
-package com.smalaca.rentalapplication.infrastructure.persistence.jpa.aggrement;
+package com.smalaca.rentalapplication.infrastructure.persistence.jpa.agreement;
 
-import com.smalaca.rentalapplication.domain.aggrement.Agreement;
+import com.smalaca.rentalapplication.domain.agreement.Agreement;
 import com.smalaca.rentalapplication.domain.money.Money;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.smalaca.rentalapplication.domain.aggrement.Agreement.Builder.agreement;
+import static com.smalaca.rentalapplication.domain.agreement.Agreement.Builder.agreement;
 import static com.smalaca.rentalapplication.domain.booking.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 

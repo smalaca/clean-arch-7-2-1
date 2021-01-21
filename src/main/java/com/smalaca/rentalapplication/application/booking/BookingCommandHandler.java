@@ -1,7 +1,7 @@
 package com.smalaca.rentalapplication.application.booking;
 
-import com.smalaca.rentalapplication.domain.aggrement.Agreement;
-import com.smalaca.rentalapplication.domain.aggrement.AgreementRepository;
+import com.smalaca.rentalapplication.domain.agreement.Agreement;
+import com.smalaca.rentalapplication.domain.agreement.AgreementRepository;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingDomainService;
 import com.smalaca.rentalapplication.domain.booking.BookingEventsPublisher;
@@ -18,7 +18,8 @@ public class BookingCommandHandler {
     private final BookingEventsPublisher bookingEventsPublisher;
 
     BookingCommandHandler(
-            BookingRepository bookingRepository, AgreementRepository agreementRepository, BookingDomainService bookingDomainService, BookingEventsPublisher bookingEventsPublisher) {
+            BookingRepository bookingRepository, AgreementRepository agreementRepository, BookingDomainService bookingDomainService,
+            BookingEventsPublisher bookingEventsPublisher) {
         this.bookingRepository = bookingRepository;
         this.agreementRepository = agreementRepository;
         this.bookingDomainService = bookingDomainService;

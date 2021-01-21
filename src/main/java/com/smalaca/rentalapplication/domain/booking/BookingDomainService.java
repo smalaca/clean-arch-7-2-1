@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.domain.booking;
 
-import com.smalaca.rentalapplication.domain.aggrement.Agreement;
+import com.smalaca.rentalapplication.domain.agreement.Agreement;
 
 import java.util.List;
 import java.util.Optional;

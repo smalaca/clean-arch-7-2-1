@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.aggrement;
+package com.smalaca.rentalapplication.domain.agreement;
 
 import com.smalaca.rentalapplication.domain.booking.RentalType;
 import com.smalaca.rentalapplication.domain.money.Money;
@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.smalaca.rentalapplication.domain.aggrement.Agreement.Builder.agreement;
+import static com.smalaca.rentalapplication.domain.agreement.Agreement.Builder.agreement;
 
 public class AgreementAssertion {
     private final Agreement actual;

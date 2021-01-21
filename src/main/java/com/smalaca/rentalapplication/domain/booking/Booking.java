@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.domain.booking;
 
-import com.smalaca.rentalapplication.domain.aggrement.Agreement;
+import com.smalaca.rentalapplication.domain.agreement.Agreement;
 import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import static com.smalaca.rentalapplication.domain.aggrement.Agreement.Builder.agreement;
+import static com.smalaca.rentalapplication.domain.agreement.Agreement.Builder.agreement;
 import static com.smalaca.rentalapplication.domain.booking.BookingStatus.ACCEPTED;
 import static com.smalaca.rentalapplication.domain.booking.BookingStatus.REJECTED;
 
@@ -59,6 +59,7 @@ public class Booking {
         this.days = days;
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public static Booking apartment(String rentalPlaceId, String tenantId, String ownerId, Money price, Period period) {
         List<LocalDate> days = period.asDays();
 

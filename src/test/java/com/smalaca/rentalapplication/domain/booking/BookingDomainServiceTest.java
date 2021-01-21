@@ -1,7 +1,7 @@
 package com.smalaca.rentalapplication.domain.booking;
 
-import com.smalaca.rentalapplication.domain.aggrement.Agreement;
-import com.smalaca.rentalapplication.domain.aggrement.AgreementAssertion;
+import com.smalaca.rentalapplication.domain.agreement.Agreement;
+import com.smalaca.rentalapplication.domain.agreement.AgreementAssertion;
 import com.smalaca.rentalapplication.domain.clock.Clock;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;

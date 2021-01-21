@@ -1,8 +1,8 @@
 package com.smalaca.rentalapplication.application.booking;
 
-import com.smalaca.rentalapplication.domain.aggrement.Agreement;
-import com.smalaca.rentalapplication.domain.aggrement.AgreementAssertion;
-import com.smalaca.rentalapplication.domain.aggrement.AgreementRepository;
+import com.smalaca.rentalapplication.domain.agreement.Agreement;
+import com.smalaca.rentalapplication.domain.agreement.AgreementAssertion;
+import com.smalaca.rentalapplication.domain.agreement.AgreementRepository;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;

@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.aggrement;
+package com.smalaca.rentalapplication.domain.agreement;
 
 import com.smalaca.rentalapplication.domain.booking.RentalType;
 import com.smalaca.rentalapplication.domain.money.Money;
@@ -15,17 +15,18 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Agreement {
-    @Id 
+    @Id
     @GeneratedValue
     private UUID id;
-    
-    private RentalType rentalType; 
-    private String rentalPlaceId; 
-    private String ownerId; 
+
+    private RentalType rentalType;
+    private String rentalPlaceId;
+    private String ownerId;
     private String tenantId;
     @ElementCollection
-    private List<LocalDate> days; 
+    private List<LocalDate> days;
     @Embedded
     private Money price;
 
@@ -52,13 +53,27 @@ public class Agreement {
 
         Agreement agreement = (Agreement) o;
 
-        return new EqualsBuilder().append(rentalType, agreement.rentalType).append(rentalPlaceId, agreement.rentalPlaceId).append(ownerId, agreement.ownerId).append(tenantId, agreement.tenantId).append(days, agreement.days).append(price, agreement.price).isEquals();
+        return new EqualsBuilder()
+                .append(rentalType, agreement.rentalType)
+                .append(rentalPlaceId, agreement.rentalPlaceId)
+                .append(ownerId, agreement.ownerId)
+                .append(tenantId, agreement.tenantId)
+                .append(days, agreement.days)
+                .append(price, agreement.price)
+                .isEquals();
     }
 
     @Override
     @SuppressWarnings("checkstyle:MagicNumber")
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(rentalType).append(rentalPlaceId).append(ownerId).append(tenantId).append(days).append(price).toHashCode();
+        return new HashCodeBuilder(17, 37)
+                .append(rentalType)
+                .append(rentalPlaceId)
+                .append(ownerId)
+                .append(tenantId)
+                .append(days)
+                .append(price)
+                .toHashCode();
     }
 
     public static class Builder {
@@ -70,7 +85,7 @@ public class Agreement {
         private List<LocalDate> days;
 
         private Builder() {}
-        
+
         public static Builder agreement() {
             return new Builder();
         }
