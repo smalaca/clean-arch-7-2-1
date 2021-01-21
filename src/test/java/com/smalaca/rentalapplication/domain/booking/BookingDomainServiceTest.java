@@ -43,7 +43,7 @@ class BookingDomainServiceTest {
     void shouldAcceptBookingWhenNoOtherBookingsFound() {
         Booking booking = givenApartmentBooking();
 
-        Optional<Aggrement> actual = service.accept(booking, emptyList());
+        Aggrement actual = service.accept(booking, emptyList()).get();
 
         BookingAssertion.assertThat(booking).isAccepted();
 //        AgreementAssertion.assertThat(actual)
@@ -54,22 +54,23 @@ class BookingDomainServiceTest {
     void shouldPublishBookingAcceptedEventWhenBookingIsAccepted() {
         ArgumentCaptor<BookingAccepted> captor = ArgumentCaptor.forClass(BookingAccepted.class);
 
-        service.accept(givenApartmentBooking(), NO_BOOKINGS_FOUND);
+        Aggrement actual = service.accept(givenApartmentBooking(), NO_BOOKINGS_FOUND).get();
 
         BDDMockito.then(eventChannel).should().publish(captor.capture());
-        BookingAccepted actual = captor.getValue();
-        Assertions.assertThat(actual.getRentalType()).isEqualTo("APARTMENT");
-        Assertions.assertThat(actual.getRentalPlaceId()).isEqualTo(RENTAL_PLACE_ID);
-        Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_ID_1);
-        Assertions.assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
+        BookingAccepted actualEvent = captor.getValue();
+        Assertions.assertThat(actualEvent.getRentalType()).isEqualTo("APARTMENT");
+        Assertions.assertThat(actualEvent.getRentalPlaceId()).isEqualTo(RENTAL_PLACE_ID);
+        Assertions.assertThat(actualEvent.getTenantId()).isEqualTo(TENANT_ID_1);
+        Assertions.assertThat(actualEvent.getDays()).containsExactlyElementsOf(DAYS);
     }
 
     @Test
     void shouldRejectBookingWhenOtherWithDaysCollisionFound() {
         Booking booking = givenApartmentBooking();
 
-        service.accept(booking, asList(givenAcceptedBookingWithDaysCollision()));
+        Optional<Aggrement> actual = service.accept(booking, asList(givenAcceptedBookingWithDaysCollision()));
 
+        Assertions.assertThat(actual).isEmpty();
         BookingAssertion.assertThat(booking).isRejected();
     }
 
@@ -78,21 +79,22 @@ class BookingDomainServiceTest {
         ArgumentCaptor<BookingRejected> captor = ArgumentCaptor.forClass(BookingRejected.class);
         Booking booking = givenApartmentBooking();
 
-        service.accept(booking, asList(givenAcceptedBookingWithDaysCollision()));
+        Optional<Aggrement> actual = service.accept(booking, asList(givenAcceptedBookingWithDaysCollision()));
 
+        Assertions.assertThat(actual).isEmpty();
         BDDMockito.then(eventChannel).should().publish(captor.capture());
-        BookingRejected actual = captor.getValue();
-        Assertions.assertThat(actual.getRentalType()).isEqualTo("APARTMENT");
-        Assertions.assertThat(actual.getRentalPlaceId()).isEqualTo(RENTAL_PLACE_ID);
-        Assertions.assertThat(actual.getTenantId()).isEqualTo(TENANT_ID_1);
-        Assertions.assertThat(actual.getDays()).containsExactlyElementsOf(DAYS);
+        BookingRejected actualEvent = captor.getValue();
+        Assertions.assertThat(actualEvent.getRentalType()).isEqualTo("APARTMENT");
+        Assertions.assertThat(actualEvent.getRentalPlaceId()).isEqualTo(RENTAL_PLACE_ID);
+        Assertions.assertThat(actualEvent.getTenantId()).isEqualTo(TENANT_ID_1);
+        Assertions.assertThat(actualEvent.getDays()).containsExactlyElementsOf(DAYS);
     }
 
     @Test
     void shouldAcceptBookingWhenOtherWithoutDaysCollisionFound() {
         Booking booking = givenApartmentBooking();
 
-        service.accept(booking, asList(givenAcceptedBookingWithoutDaysCollision()));
+        Aggrement actual = service.accept(booking, asList(givenAcceptedBookingWithoutDaysCollision())).get();
 
         BookingAssertion.assertThat(booking).isAccepted();
     }
@@ -101,7 +103,7 @@ class BookingDomainServiceTest {
     void shouldAcceptBookingWhenOtherWithDaysCollisionButNotAcceptedFound() {
         Booking booking = givenApartmentBooking();
 
-        service.accept(booking, asList(givenOpenBookingWithDaysCollision()));
+        Aggrement actual = service.accept(booking, asList(givenOpenBookingWithDaysCollision())).get();
 
         BookingAssertion.assertThat(booking).isAccepted();
     }
@@ -110,7 +112,7 @@ class BookingDomainServiceTest {
     void shouldAcceptBookingWhenFoundOnlyItself() {
         Booking booking = givenApartmentBooking();
 
-        service.accept(booking, asList(booking));
+        Aggrement actual = service.accept(booking, asList(booking)).get();
 
         BookingAssertion.assertThat(booking).isAccepted();
     }
@@ -121,7 +123,7 @@ class BookingDomainServiceTest {
         List<Booking> bookings = asList(
                 givenOpenBookingWithDaysCollision(), givenRejectedBookingWithDaysCollision(), givenAcceptedBookingWithoutDaysCollision());
 
-        service.accept(booking, bookings);
+        Aggrement actual = service.accept(booking, bookings).get();
 
         BookingAssertion.assertThat(booking).isAccepted();
     }
@@ -133,8 +135,9 @@ class BookingDomainServiceTest {
                 givenOpenBookingWithDaysCollision(), givenRejectedBookingWithDaysCollision(),
                 givenAcceptedBookingWithoutDaysCollision(), givenAcceptedBookingWithDaysCollision());
 
-        service.accept(booking, bookings);
+        Optional<Aggrement> actual = service.accept(booking, bookings);
 
+        Assertions.assertThat(actual).isEmpty();
         BookingAssertion.assertThat(booking).isRejected();
     }
 

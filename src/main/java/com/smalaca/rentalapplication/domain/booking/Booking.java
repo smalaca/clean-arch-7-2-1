@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.domain.booking;
 
+import com.smalaca.rentalapplication.domain.aggrement.Aggrement;
 import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -81,10 +82,11 @@ public class Booking {
         bookingEventsPublisher.bookingRejected(rentalType, rentalPlaceId, tenantId, days);
     }
 
-    public void accept(BookingEventsPublisher bookingEventsPublisher) {
+    public Aggrement accept(BookingEventsPublisher bookingEventsPublisher) {
         bookingStatus = bookingStatus.moveTo(ACCEPTED);
 
         bookingEventsPublisher.bookingAccepted(rentalType, rentalPlaceId, tenantId, days);
+        return new Aggrement();
     }
 
     public String id() {
