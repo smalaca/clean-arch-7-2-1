@@ -81,4 +81,8 @@ public class Period {
     public boolean contains(LocalDate day) {
         return asDays().contains(day);
     }
+
+    public boolean isWithin(LocalDate start, LocalDate end) {
+        return !periodStart.isBefore(start) && !periodEnd.isAfter(end);
+    }
 }

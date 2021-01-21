@@ -38,10 +38,15 @@ public class ApartmentDomainService {
         List<Booking> bookings = bookingRepository.findAllAcceptedBy(apartment.rentalPlaceIdentifier());
         ApartmentOffer apartmentOffer = apartmentOfferRepository.findByApartmentId(newApartmentBookingDto.getApartmentId());
         Period period = Period.from(newApartmentBookingDto.getStart(), newApartmentBookingDto.getEnd());
-        ApartmentBooking apartmentBooking = new ApartmentBooking(
-                bookings, newApartmentBookingDto.getTenantId(), period, apartmentOffer.getMoney(), apartmentEventsPublisher);
 
-        return apartment.book(apartmentBooking);
+        if (apartmentOffer.hasAvailabilityWithin(period)) {
+            ApartmentBooking apartmentBooking = new ApartmentBooking(
+                    bookings, newApartmentBookingDto.getTenantId(), period, apartmentOffer.getMoney(), apartmentEventsPublisher);
+
+            return apartment.book(apartmentBooking);
+        } else {
+            throw new AparmentBookingException(newApartmentBookingDto.getStart(), newApartmentBookingDto.getEnd());
+        }
     }
 
     private void verifyExistenceOfAggregates(NewApartmentBookingDto newApartmentBookingDto) {

@@ -2,6 +2,7 @@ package com.smalaca.rentalapplication.domain.apartmentoffer;
 
 import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.offeravailability.OfferAvailability;
+import com.smalaca.rentalapplication.domain.period.Period;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -60,6 +61,10 @@ public class ApartmentOffer {
 
     public Money getMoney() {
         return money;
+    }
+
+    public boolean hasAvailabilityWithin(Period period) {
+        return availability.coversAllDaysWithin(period);
     }
 
     public static class Builder {

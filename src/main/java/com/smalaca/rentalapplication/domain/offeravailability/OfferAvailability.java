@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.domain.offeravailability;
 
+import com.smalaca.rentalapplication.domain.period.Period;
+
 import javax.persistence.Embeddable;
 import java.time.LocalDate;
 
@@ -30,5 +32,9 @@ public class OfferAvailability {
         }
 
         return new OfferAvailability(start, end);
+    }
+
+    public boolean coversAllDaysWithin(Period period) {
+        return period.isWithin(start, end);
     }
 }

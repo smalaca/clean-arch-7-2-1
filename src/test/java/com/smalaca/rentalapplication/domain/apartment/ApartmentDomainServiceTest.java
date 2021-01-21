@@ -14,10 +14,14 @@ import com.smalaca.rentalapplication.domain.period.PeriodException;
 import com.smalaca.rentalapplication.domain.tenant.TenantNotFoundException;
 import com.smalaca.rentalapplication.domain.tenant.TenantRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
 import static java.util.Arrays.asList;
@@ -196,18 +200,46 @@ class ApartmentDomainServiceTest {
         thenApartmentWasNotBooked();
     }
 
+    @ParameterizedTest
+    @MethodSource("apartmentOfferAvailabilities")
+    void shouldRecognizeWhenApartmentOfferIsNotWithingBookingPeriod(LocalDate start, LocalDate end) {
+        givenExistingApartment();
+        givenExistingTenant();
+        givenNoBookings();
+        givenExisting(givenApartmentOffer().withAvailability(start, end));
+
+        AparmentBookingException actual = assertThrows(AparmentBookingException.class, () -> service.book(givenNewApartmentBookingDto()));
+
+        assertThat(actual).hasMessage("Apartment is not available between 2040-03-04 - 2040-03-06");
+        thenApartmentWasNotBooked();
+    }
+
+    private static Stream<Arguments> apartmentOfferAvailabilities() {
+        return Stream.of(
+                Arguments.of(START.plusDays(1), END.plusDays(10)),
+                Arguments.of(START.minusDays(10), END.minusDays(1))
+        );
+    }
+
     private void givenNotExistingApartmentOffer() {
         given(apartmentOfferRepository.existByApartmentId(APARTMENT_ID)).willReturn(false);
     }
 
     private void givenExistingApartmentOffer() {
+        givenExisting(givenApartmentOffer());
+    }
+
+    private void givenExisting(ApartmentOffer.Builder availability) {
         given(apartmentOfferRepository.existByApartmentId(APARTMENT_ID)).willReturn(true);
-        ApartmentOffer apartmentOffer = ApartmentOffer.Builder.apartmentOffer()
+        ApartmentOffer apartmentOffer = availability.build();
+        given(apartmentOfferRepository.findByApartmentId(APARTMENT_ID)).willReturn(apartmentOffer);
+    }
+
+    private ApartmentOffer.Builder givenApartmentOffer() {
+        return ApartmentOffer.Builder.apartmentOffer()
                 .withApartmentId(APARTMENT_ID)
                 .withPrice(PRICE)
-                .withAvailability(START_AVAILABILITY, END_AVAILABILITY)
-                .build();
-        given(apartmentOfferRepository.findByApartmentId(APARTMENT_ID)).willReturn(apartmentOffer);
+                .withAvailability(START_AVAILABILITY, END_AVAILABILITY);
     }
 
     private void givenNoBookings() {
