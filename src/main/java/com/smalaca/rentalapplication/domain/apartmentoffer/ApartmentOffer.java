@@ -58,6 +58,10 @@ public class ApartmentOffer {
         return new HashCodeBuilder(17, 37).append(apartmentId).toHashCode();
     }
 
+    public Money getMoney() {
+        return money;
+    }
+
     public static class Builder {
         private String apartmentId;
         private BigDecimal price;

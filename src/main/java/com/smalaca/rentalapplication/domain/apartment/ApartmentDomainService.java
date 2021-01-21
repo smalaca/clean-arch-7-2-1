@@ -1,15 +1,14 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferNotFoundException;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
-import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.tenant.TenantNotFoundException;
 import com.smalaca.rentalapplication.domain.tenant.TenantRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class ApartmentDomainService {
@@ -37,9 +36,10 @@ public class ApartmentDomainService {
     private Booking bookApartment(NewApartmentBookingDto newApartmentBookingDto) {
         Apartment apartment = apartmentRepository.findById(newApartmentBookingDto.getApartmentId());
         List<Booking> bookings = bookingRepository.findAllAcceptedBy(apartment.rentalPlaceIdentifier());
+        ApartmentOffer apartmentOffer = apartmentOfferRepository.findByApartmentId(newApartmentBookingDto.getApartmentId());
         Period period = Period.from(newApartmentBookingDto.getStart(), newApartmentBookingDto.getEnd());
         ApartmentBooking apartmentBooking = new ApartmentBooking(
-                bookings, newApartmentBookingDto.getTenantId(), period, Money.of(BigDecimal.valueOf(42)), apartmentEventsPublisher);
+                bookings, newApartmentBookingDto.getTenantId(), period, apartmentOffer.getMoney(), apartmentEventsPublisher);
 
         return apartment.book(apartmentBooking);
     }
