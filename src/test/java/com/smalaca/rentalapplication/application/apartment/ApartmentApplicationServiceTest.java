@@ -9,6 +9,7 @@ import com.smalaca.rentalapplication.domain.apartment.ApartmentNotFoundException
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRequirements;
 import com.smalaca.rentalapplication.domain.apartment.OwnerDoesNotExistException;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
@@ -62,10 +63,11 @@ class ApartmentApplicationServiceTest {
     private final OwnerRepository ownerRepository = mock(OwnerRepository.class);
     private final TenantRepository tenantRepository = mock(TenantRepository.class);
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
+    private final ApartmentOfferRepository apartmentOfferRepository = mock(ApartmentOfferRepository.class);
     private final EventChannel eventChannel = mock(EventChannel.class);
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
     private final ApartmentApplicationService service = new ApartmentApplicationServiceFactory()
-            .apartmentApplicationService(apartmentRepository, bookingRepository, ownerRepository, tenantRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
+            .apartmentApplicationService(apartmentRepository, bookingRepository, ownerRepository, tenantRepository, apartmentOfferRepository, new FakeEventIdFactory(), new FakeClock(), eventChannel);
 
     @Test
     void shouldAddNewApartment() {

@@ -4,6 +4,7 @@ import com.smalaca.rentalapplication.domain.apartment.ApartmentDomainService;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentEventsPublisher;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentFactory;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentRepository;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.clock.Clock;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
@@ -19,10 +20,11 @@ class ApartmentApplicationServiceFactory {
     @SuppressWarnings("checkstyle:ParameterNumber")
     ApartmentApplicationService apartmentApplicationService(
             ApartmentRepository apartmentRepository, BookingRepository bookingRepository, OwnerRepository ownerRepository,
-            TenantRepository tenantRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
+            TenantRepository tenantRepository, ApartmentOfferRepository apartmentOfferRepository, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
         ApartmentEventsPublisher apartmentEventsPublisher = new ApartmentEventsPublisher(eventIdFactory, clock, eventChannel);
         ApartmentFactory apartmentFactory = new ApartmentFactory(ownerRepository);
-        ApartmentDomainService apartmentDomainService = new ApartmentDomainService(apartmentRepository, bookingRepository, tenantRepository, apartmentEventsPublisher);
+        ApartmentDomainService apartmentDomainService = new ApartmentDomainService(
+                apartmentRepository, apartmentOfferRepository, bookingRepository, tenantRepository, apartmentEventsPublisher);
 
         return new ApartmentApplicationService(apartmentRepository, bookingRepository, apartmentFactory, apartmentDomainService);
     }

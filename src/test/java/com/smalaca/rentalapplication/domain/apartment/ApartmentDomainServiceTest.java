@@ -1,6 +1,9 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
 import com.google.common.collect.ImmutableMap;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferNotFoundException;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
@@ -45,35 +48,41 @@ class ApartmentDomainServiceTest {
     private static final String NO_ID = null;
     private static final LocalDate BEFORE_START = START.minusDays(1);
     private static final LocalDate AFTER_START = START.plusDays(1);
-    private static final Money PRICE = Money.of(BigDecimal.valueOf(42));
+    private static final BigDecimal PRICE = BigDecimal.valueOf(42);
+    private static final Money PRICE_AS_MONEY = Money.of(PRICE);
+    private static final LocalDate START_AVAILABILITY = START.minusDays(10);
+    private static final LocalDate END_AVAILABILITY = END.plusDays(20);
 
     private final ApartmentRepository apartmentRepository = mock(ApartmentRepository.class);
+    private final ApartmentOfferRepository apartmentOfferRepository = mock(ApartmentOfferRepository.class);
     private final BookingRepository bookingRepository = mock(BookingRepository.class);
     private final TenantRepository tenantRepository = mock(TenantRepository.class);
     private final ApartmentEventsPublisher apartmentEventsPublisher = mock(ApartmentEventsPublisher.class);
 
-    private final ApartmentDomainService service = new ApartmentDomainService(apartmentRepository, bookingRepository, tenantRepository, apartmentEventsPublisher);
+    private final ApartmentDomainService service = new ApartmentDomainService(
+            apartmentRepository, apartmentOfferRepository, bookingRepository, tenantRepository, apartmentEventsPublisher);
 
     @Test
     void shouldCreateBookingForApartment() {
-        givenExistingTenantAndApartmentWithNoBookings();
+        givenExistingTenantAndApartmentWithOfferAndWithoutBookings();
 
         Booking actual = service.book(givenNewApartmentBookingDto());
 
         BookingAssertion.assertThat(actual)
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, PRICE, new Period(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, PRICE_AS_MONEY, new Period(START, END));
     }
 
     @Test
     void shouldAllowToBookApartmentWhenFoundAcceptedBookingsInDifferentPeriod() {
         givenExistingApartment();
         givenExistingTenant();
+        givenExistingApartmentOffer();
         givenAcceptedBookingsInDifferentPeriod();
 
         Booking actual = service.book(givenNewApartmentBookingDto());
 
         BookingAssertion.assertThat(actual)
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, PRICE, new Period(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, PRICE_AS_MONEY, new Period(START, END));
     }
 
     private void givenAcceptedBookingsInDifferentPeriod() {
@@ -82,7 +91,7 @@ class ApartmentDomainServiceTest {
 
     @Test
     void shouldPublishApartmentBookedEvent() {
-        givenExistingTenantAndApartmentWithNoBookings();
+        givenExistingTenantAndApartmentWithOfferAndWithoutBookings();
 
         service.book(givenNewApartmentBookingDto());
 
@@ -94,6 +103,7 @@ class ApartmentDomainServiceTest {
         givenNonExistingApartment();
         givenExistingTenant();
         givenNoBookings();
+        givenExistingApartmentOffer();
 
         ApartmentNotFoundException actual = assertThrows(ApartmentNotFoundException.class, () -> service.book(givenNewApartmentBookingDto()));
 
@@ -110,6 +120,7 @@ class ApartmentDomainServiceTest {
         givenExistingApartment();
         givenNonExistingTenant();
         givenNoBookings();
+        givenExistingApartmentOffer();
 
         TenantNotFoundException actual = assertThrows(TenantNotFoundException.class, () -> service.book(givenNewApartmentBookingDto()));
 
@@ -124,6 +135,7 @@ class ApartmentDomainServiceTest {
     @Test
     void shouldRecognizeWhenHaveBookingsWithinGivenPeriodWhenBooking() {
         givenExistingApartment();
+        givenExistingApartmentOffer();
         givenExistingTenant();
         givenAcceptedBookingsInGivenPeriod();
 
@@ -144,7 +156,7 @@ class ApartmentDomainServiceTest {
 
     @Test
     void shouldRecognizeWhenStartDateIsFromPastWhenBooking() {
-        givenExistingTenantAndApartmentWithNoBookings();
+        givenExistingTenantAndApartmentWithOfferAndWithoutBookings();
         NewApartmentBookingDto dto = new NewApartmentBookingDto(APARTMENT_ID, TENANT_ID, LocalDate.of(2020, 10, 10), END);
 
         PeriodException actual = assertThrows(PeriodException.class, () -> service.book(dto));
@@ -155,7 +167,7 @@ class ApartmentDomainServiceTest {
 
     @Test
     void shouldRecognizeWhenEndDateIsBeforeStartDateWhenBooking() {
-        givenExistingTenantAndApartmentWithNoBookings();
+        givenExistingTenantAndApartmentWithOfferAndWithoutBookings();
         NewApartmentBookingDto dto = new NewApartmentBookingDto(APARTMENT_ID, TENANT_ID, END, START);
 
         PeriodException actual = assertThrows(PeriodException.class, () -> service.book(dto));
@@ -164,10 +176,38 @@ class ApartmentDomainServiceTest {
         thenApartmentWasNotBooked();
     }
 
-    private void givenExistingTenantAndApartmentWithNoBookings() {
+    private void givenExistingTenantAndApartmentWithOfferAndWithoutBookings() {
         givenExistingApartment();
         givenExistingTenant();
         givenNoBookings();
+        givenExistingApartmentOffer();
+    }
+
+    @Test
+    void shouldRecognizeWhenApartmentOfferDoesNotExist() {
+        givenExistingApartment();
+        givenExistingTenant();
+        givenNoBookings();
+        givenNotExistingApartmentOffer();
+
+        ApartmentOfferNotFoundException actual = assertThrows(ApartmentOfferNotFoundException.class, () -> service.book(givenNewApartmentBookingDto()));
+
+        assertThat(actual).hasMessage("Offer for apartment with id: " + APARTMENT_ID + " does not exist.");
+        thenApartmentWasNotBooked();
+    }
+
+    private void givenNotExistingApartmentOffer() {
+        given(apartmentOfferRepository.existByApartmentId(APARTMENT_ID)).willReturn(false);
+    }
+
+    private void givenExistingApartmentOffer() {
+        given(apartmentOfferRepository.existByApartmentId(APARTMENT_ID)).willReturn(true);
+        ApartmentOffer apartmentOffer = ApartmentOffer.Builder.apartmentOffer()
+                .withApartmentId(APARTMENT_ID)
+                .withPrice(PRICE)
+                .withAvailability(START_AVAILABILITY, END_AVAILABILITY)
+                .build();
+        given(apartmentOfferRepository.findByApartmentId(APARTMENT_ID)).willReturn(apartmentOffer);
     }
 
     private void givenNoBookings() {
