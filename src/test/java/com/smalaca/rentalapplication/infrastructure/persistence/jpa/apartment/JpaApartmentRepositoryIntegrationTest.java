@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static com.smalaca.rentalapplication.domain.apartment.ApartmentTestBuilder.apartment;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

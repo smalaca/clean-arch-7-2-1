@@ -3,6 +3,8 @@ package com.smalaca.rentalapplication.domain.booking;
 import com.smalaca.rentalapplication.domain.agreement.Agreement;
 import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 

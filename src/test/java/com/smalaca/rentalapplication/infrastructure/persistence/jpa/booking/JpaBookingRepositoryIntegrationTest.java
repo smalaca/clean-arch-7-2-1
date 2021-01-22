@@ -1,8 +1,8 @@
 package com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking;
 
 import com.smalaca.rentalapplication.domain.booking.Booking;
-import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.period.Period;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.smalaca.rentalapplication.domain.booking.BookingAssertion.assertThat;
+import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 
 @SpringBootTest
@@ -24,7 +25,7 @@ import static java.util.Arrays.asList;
 class JpaBookingRepositoryIntegrationTest {
     private static final List<LocalDate> DAYS = asList(LocalDate.of(2020, 6, 1), LocalDate.of(2020, 6, 2), LocalDate.of(2020, 6, 4));
     private static final String TENANT_ID = randomId();
-    private static final Period PERIOD = new Period(LocalDate.now(), LocalDate.now().plusDays(1));
+    private static final Period PERIOD = Period.from(LocalDate.now(), LocalDate.now().plusDays(1));
 
     @Autowired private JpaBookingRepository repository;
     @Autowired private SpringJpaBookingRepository jpaRepository;
@@ -72,7 +73,7 @@ class JpaBookingRepositoryIntegrationTest {
 
     @Test
     void shouldFindNoAcceptedBookingsByRentalPlaceIdentifier() {
-        repository.findAllAcceptedBy(RentalPlaceIdentifier.apartment(randomId()));
+        repository.findAllAcceptedBy(new RentalPlaceIdentifier(APARTMENT, randomId()));
     }
 
     private String save(Booking booking) {

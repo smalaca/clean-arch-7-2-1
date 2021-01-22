@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.hotel.Hotel;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomNotFoundException;
 import com.smalaca.rentalapplication.domain.money.NotAllowedMoneyValueException;
-import com.smalaca.rentalapplication.domain.offeravailability.OfferAvailabilityException;
+import com.smalaca.rentalapplication.domain.period.PeriodException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -61,9 +61,9 @@ class HotelRoomOfferDomainServiceTest {
         CreateHotelRoomOffer createHotelRoomOffer = new CreateHotelRoomOffer(HOTEL_ID, ROOM_NUMBER, PRICE, END, START);
         Executable executable = () -> service.createOfferForHotelRoom(givenHotelWithRoom(), createHotelRoomOffer);
 
-        OfferAvailabilityException actual = assertThrows(OfferAvailabilityException.class, executable);
+        PeriodException actual = assertThrows(PeriodException.class, executable);
 
-        assertThat(actual).hasMessage("Start date: 2041-12-20 of availability is after end date: 2040-12-10.");
+        assertThat(actual).hasMessage("Start date: 2041-12-20 of period is after end date: 2040-12-10.");
     }
 
     @Test
@@ -71,7 +71,7 @@ class HotelRoomOfferDomainServiceTest {
         CreateHotelRoomOffer createHotelRoomOffer = new CreateHotelRoomOffer(HOTEL_ID, ROOM_NUMBER, PRICE, LocalDate.of(2020, 10, 10), END);
         Executable executable = () -> service.createOfferForHotelRoom(givenHotelWithRoom(), createHotelRoomOffer);
 
-        OfferAvailabilityException actual = assertThrows(OfferAvailabilityException.class, executable);
+        PeriodException actual = assertThrows(PeriodException.class, executable);
 
         assertThat(actual).hasMessage("Start date: 2020-10-10 is past date.");
     }
@@ -81,7 +81,7 @@ class HotelRoomOfferDomainServiceTest {
         CreateHotelRoomOffer createHotelRoomOffer = new CreateHotelRoomOffer(HOTEL_ID, ROOM_NUMBER, PRICE, LocalDate.of(2020, 10, 10), NO_DATE);
         Executable executable = () -> service.createOfferForHotelRoom(givenHotelWithRoom(), createHotelRoomOffer);
 
-        OfferAvailabilityException actual = assertThrows(OfferAvailabilityException.class, executable);
+        PeriodException actual = assertThrows(PeriodException.class, executable);
 
         assertThat(actual).hasMessage("Start date: 2020-10-10 is past date.");
     }

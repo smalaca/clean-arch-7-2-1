@@ -1,7 +1,7 @@
 package com.smalaca.rentalapplication.domain.agreement;
 
-import com.smalaca.rentalapplication.domain.booking.RentalType;
 import com.smalaca.rentalapplication.domain.money.Money;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalType;
 import org.assertj.core.api.Assertions;
 
 import java.time.LocalDate;

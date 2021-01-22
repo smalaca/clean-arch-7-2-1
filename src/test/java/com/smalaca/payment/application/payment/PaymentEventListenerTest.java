@@ -9,7 +9,6 @@ import com.smalaca.payment.domain.payment.PaymentService;
 import com.smalaca.payment.domain.payment.PaymentStatus;
 import com.smalaca.rentalapplication.domain.agreement.AgreementAccepted;
 import com.smalaca.rentalapplication.domain.agreement.AgreementAcceptedTestFactory;
-import com.smalaca.rentalapplication.domain.booking.RentalType;
 import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.junit.jupiter.api.Test;
@@ -20,13 +19,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
 class PaymentEventListenerTest {
-    private static final String RENTAL_TYPE = RentalType.APARTMENT.name();
+    private static final String RENTAL_TYPE = APARTMENT.name();
     private static final String RENTAL_PLACE_ID = "5748";
     private static final String OWNER_ID = "4346";
     private static final String TENANT_ID = "1234";

@@ -4,13 +4,14 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferNotFoundException;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferTestBuilder;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
-import com.smalaca.rentalapplication.domain.booking.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.period.PeriodException;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.tenant.TenantNotFoundException;
 import com.smalaca.rentalapplication.domain.tenant.TenantRepository;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,7 +75,7 @@ class ApartmentDomainServiceTest {
         Booking actual = service.book(givenNewApartmentBookingDto());
 
         BookingAssertion.assertThat(actual)
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, PRICE_AS_MONEY, new Period(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, PRICE_AS_MONEY, Period.from(START, END));
     }
 
     @Test
@@ -86,7 +88,7 @@ class ApartmentDomainServiceTest {
         Booking actual = service.book(givenNewApartmentBookingDto());
 
         BookingAssertion.assertThat(actual)
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, PRICE_AS_MONEY, new Period(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, PRICE_AS_MONEY, Period.from(START, END));
     }
 
     private void givenAcceptedBookingsInDifferentPeriod() {
@@ -99,7 +101,7 @@ class ApartmentDomainServiceTest {
 
         service.book(givenNewApartmentBookingDto());
 
-        then(apartmentEventsPublisher).should().publishApartmentBooked(NO_ID, OWNER_ID, TENANT_ID, new Period(START, END));
+        then(apartmentEventsPublisher).should().publishApartmentBooked(NO_ID, OWNER_ID, TENANT_ID, Period.from(START, END));
     }
 
     @Test
@@ -154,7 +156,7 @@ class ApartmentDomainServiceTest {
     }
 
     private void givenAcceptedBookingItPeriod(LocalDate periodStart, LocalDate periodEnd) {
-        Booking acceptedBooking = Booking.apartment(APARTMENT_ID, TENANT_ID, new Period(periodStart, periodEnd));
+        Booking acceptedBooking = Booking.apartment(APARTMENT_ID, TENANT_ID, Period.from(periodStart, periodEnd));
         given(bookingRepository.findAllAcceptedBy(getRentalPlaceIdentifier())).willReturn(asList(acceptedBooking));
     }
 
@@ -229,14 +231,14 @@ class ApartmentDomainServiceTest {
         givenExisting(givenApartmentOffer());
     }
 
-    private void givenExisting(ApartmentOffer.Builder availability) {
+    private void givenExisting(ApartmentOfferTestBuilder availability) {
         given(apartmentOfferRepository.existByApartmentId(APARTMENT_ID)).willReturn(true);
         ApartmentOffer apartmentOffer = availability.build();
         given(apartmentOfferRepository.findByApartmentId(APARTMENT_ID)).willReturn(apartmentOffer);
     }
 
-    private ApartmentOffer.Builder givenApartmentOffer() {
-        return ApartmentOffer.Builder.apartmentOffer()
+    private ApartmentOfferTestBuilder givenApartmentOffer() {
+        return ApartmentOfferTestBuilder.apartmentOffer()
                 .withApartmentId(APARTMENT_ID)
                 .withPrice(PRICE)
                 .withAvailability(START_AVAILABILITY, END_AVAILABILITY);
@@ -247,7 +249,7 @@ class ApartmentDomainServiceTest {
     }
 
     private RentalPlaceIdentifier getRentalPlaceIdentifier() {
-        return RentalPlaceIdentifier.apartment(NO_ID);
+        return new RentalPlaceIdentifier(APARTMENT, NO_ID);
     }
 
     private void thenApartmentWasNotBooked() {

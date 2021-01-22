@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.smalaca.rentalapplication.domain.agreement.Agreement.Builder.agreement;
-import static com.smalaca.rentalapplication.domain.booking.RentalType.APARTMENT;
+import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 

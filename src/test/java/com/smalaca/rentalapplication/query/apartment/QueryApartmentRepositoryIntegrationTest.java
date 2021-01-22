@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static com.smalaca.rentalapplication.domain.apartment.ApartmentTestBuilder.apartment;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,8 +40,8 @@ class QueryApartmentRepositoryIntegrationTest {
     private static final Map<String, Double> SPACES_DEFINITION_1 = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
     private static final LocalDateTime BOOKING_DATE_TIME_1 = LocalDateTime.of(2020, 12, 10, 11, 12);
     private static final String TENANT_ID_1 = "2468";
-    private static final LocalDate BOOKING_START_1 = LocalDate.of(2020, 12, 11);
-    private static final LocalDate BOOKING_END_1 = LocalDate.of(2020, 12, 14);
+    private static final LocalDate BOOKING_START_1 = LocalDate.of(2040, 12, 11);
+    private static final LocalDate BOOKING_END_1 = LocalDate.of(2040, 12, 14);
     private static final String OWNER_ID_2 = "4321";
     private static final String STREET_2 = "Grodzka";
     private static final String POSTAL_CODE_2 = "54-321";
@@ -76,7 +76,7 @@ class QueryApartmentRepositoryIntegrationTest {
                 .build();
         apartmentId1 = apartmentRepository.save(apartment1);
         ApartmentBookingHistory apartmentBookingHistory = new ApartmentBookingHistory(apartmentId1);
-        apartmentBookingHistory.addBookingStart(BOOKING_DATE_TIME_1, OWNER_ID_1, TENANT_ID_1, new Period(BOOKING_START_1, BOOKING_END_1));
+        apartmentBookingHistory.addBookingStart(BOOKING_DATE_TIME_1, OWNER_ID_1, TENANT_ID_1, Period.from(BOOKING_START_1, BOOKING_END_1));
         apartmentBookingHistoryRepository.save(apartmentBookingHistory);
 
         Apartment apartment2 = apartment()

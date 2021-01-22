@@ -17,9 +17,13 @@ public class Period {
 
     private Period() {}
 
-    public Period(LocalDate periodStart, LocalDate periodEnd) {
+    private Period(LocalDate periodStart, LocalDate periodEnd) {
         this.periodStart = periodStart;
         this.periodEnd = periodEnd;
+    }
+
+    public static Period fromStart(LocalDate start) {
+        return from(start, start.plusYears(1));
     }
 
     public static Period from(LocalDate start, LocalDate end) {
@@ -82,7 +86,7 @@ public class Period {
         return asDays().contains(day);
     }
 
-    public boolean isWithin(LocalDate start, LocalDate end) {
-        return !periodStart.isBefore(start) && !periodEnd.isAfter(end);
+    public boolean coversAllDaysWithin(Period period) {
+        return !period.periodStart.isBefore(periodStart) && !period.periodEnd.isAfter(periodEnd);
     }
 }

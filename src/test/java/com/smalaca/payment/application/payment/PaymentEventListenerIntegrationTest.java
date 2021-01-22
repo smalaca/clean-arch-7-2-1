@@ -8,7 +8,6 @@ import com.smalaca.payment.domain.payment.PaymentFailedAssertion;
 import com.smalaca.payment.infrastructure.paymentservice.FakePaymentService;
 import com.smalaca.rentalapplication.domain.agreement.AgreementAccepted;
 import com.smalaca.rentalapplication.domain.agreement.AgreementAcceptedTestFactory;
-import com.smalaca.rentalapplication.domain.booking.RentalType;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,7 @@ import java.util.List;
 
 import static com.smalaca.payment.domain.payment.PaymentStatus.NOT_ENOUGH_MONEY;
 import static com.smalaca.payment.domain.payment.PaymentStatus.SUCCESS;
+import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.then;
 
@@ -34,7 +34,7 @@ import static org.mockito.BDDMockito.then;
 class PaymentEventListenerIntegrationTest {
     private static final String EVENT_ID = "213213";
     private static final LocalDateTime CREATION_TIME = LocalDateTime.now();
-    private static final String RENTAL_TYPE = RentalType.APARTMENT.name();
+    private static final String RENTAL_TYPE = APARTMENT.name();
     private static final String RENTAL_PLACE_ID = "5748";
     private static final String OWNER_ID = "4346";
     private static final String TENANT_ID = "1234";

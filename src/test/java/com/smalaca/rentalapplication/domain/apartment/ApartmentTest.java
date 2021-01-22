@@ -45,9 +45,9 @@ class ApartmentTest {
     private static final String DESCRIPTION_2 = "Lovely place";
     private static final Map<String, Double> SPACES_DEFINITION_2 = ImmutableMap.of("Toilet", 15.0, "RoomOne", 20.0, "RoomTwo", 25.0);
     private static final String TENANT_ID = "137";
-    private static final LocalDate START = LocalDate.of(2020, 3, 4);
-    private static final LocalDate END = LocalDate.of(2020, 3, 6);
-    private static final Period PERIOD = new Period(START, END);
+    private static final LocalDate START = LocalDate.of(2040, 3, 4);
+    private static final LocalDate END = LocalDate.of(2040, 3, 6);
+    private static final Period PERIOD = Period.from(START, END);
     private static final String NO_ID = null;
     private static final List<Booking> NO_BOOKINGS = emptyList();
 
@@ -91,7 +91,7 @@ class ApartmentTest {
         Booking actual = apartment.book(NO_BOOKINGS, TENANT_ID, PERIOD, apartmentEventsPublisher);
 
         BookingAssertion.assertThat(actual)
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID_1, Money.of(BigDecimal.valueOf(42)), new Period(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID_1, Money.of(BigDecimal.valueOf(42)), Period.from(START, END));
     }
 
     @Test
@@ -100,7 +100,7 @@ class ApartmentTest {
 
         apartment.book(NO_BOOKINGS, TENANT_ID, PERIOD, apartmentEventsPublisher);
 
-        BDDMockito.then(apartmentEventsPublisher).should().publishApartmentBooked(any(), eq(OWNER_ID_1), eq(TENANT_ID), eq(new Period(START, END)));
+        BDDMockito.then(apartmentEventsPublisher).should().publishApartmentBooked(any(), eq(OWNER_ID_1), eq(TENANT_ID), eq(Period.from(START, END)));
     }
 
     @Test

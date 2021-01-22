@@ -1,10 +1,10 @@
 package com.smalaca.rentalapplication.domain.agreement;
 
-import com.smalaca.rentalapplication.domain.booking.RentalType;
 import com.smalaca.rentalapplication.domain.clock.Clock;
 import com.smalaca.rentalapplication.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.money.Money;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalType;
 
 import java.time.LocalDate;
 import java.util.List;

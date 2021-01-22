@@ -6,7 +6,7 @@ import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferAssertion;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
 import com.smalaca.rentalapplication.domain.money.NotAllowedMoneyValueException;
-import com.smalaca.rentalapplication.domain.offeravailability.OfferAvailabilityException;
+import com.smalaca.rentalapplication.domain.period.PeriodException;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -80,9 +80,9 @@ class ApartmentOfferApplicationServiceTest {
         givenExistingApartment();
         ApartmentOfferDto dto = new ApartmentOfferDto(APARTMENT_ID, PRICE, END, START);
 
-        OfferAvailabilityException actual = assertThrows(OfferAvailabilityException.class, () -> service.add(dto));
+        PeriodException actual = assertThrows(PeriodException.class, () -> service.add(dto));
 
-        assertThat(actual).hasMessage("Start date: 2030-10-20 of availability is after end date: 2030-10-11.");
+        assertThat(actual).hasMessage("Start date: 2030-10-20 of period is after end date: 2030-10-11.");
     }
 
     @Test
@@ -90,7 +90,7 @@ class ApartmentOfferApplicationServiceTest {
         givenExistingApartment();
         ApartmentOfferDto dto = new ApartmentOfferDto(APARTMENT_ID, PRICE, LocalDate.of(2020, 10, 10), END);
 
-        OfferAvailabilityException actual = assertThrows(OfferAvailabilityException.class, () -> service.add(dto));
+        PeriodException actual = assertThrows(PeriodException.class, () -> service.add(dto));
 
         assertThat(actual).hasMessage("Start date: 2020-10-10 is past date.");
     }

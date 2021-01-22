@@ -1,6 +1,7 @@
 package com.smalaca.rentalapplication.domain.booking;
 
 import com.smalaca.rentalapplication.domain.period.Period;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,14 +31,14 @@ class BookingTest {
 
     @Test
     void shouldCreateBookingForApartment() {
-        Period period = new Period(LocalDate.of(2020, 3, 4), LocalDate.of(2020, 3, 6));
+        Period period = Period.from(LocalDate.of(2040, 3, 4), LocalDate.of(2040, 3, 6));
 
         Booking actual = Booking.apartment(RENTAL_PLACE_ID_1, TENANT_ID_1, period);
 
         assertThat(actual)
                 .isOpen()
                 .isEqualToBookingApartment(RENTAL_PLACE_ID_1, TENANT_ID_1, period)
-                .containsAllDays(LocalDate.of(2020, 3, 4), LocalDate.of(2020, 3, 5), LocalDate.of(2020, 3, 6));
+                .containsAllDays(LocalDate.of(2040, 3, 4), LocalDate.of(2040, 3, 5), LocalDate.of(2040, 3, 6));
     }
 
     @Test
@@ -170,7 +171,7 @@ class BookingTest {
                 Booking.hotelRoom(RENTAL_PLACE_ID_2, TENANT_ID_1, DAYS_1),
                 Booking.hotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_2, DAYS_1),
                 Booking.hotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, DAYS_2),
-                Booking.apartment(RENTAL_PLACE_ID_1, TENANT_ID_1, new Period(TODAY, TOMORROW)),
+                Booking.apartment(RENTAL_PLACE_ID_1, TENANT_ID_1, Period.from(TODAY, TOMORROW)),
                 new Object()
         );
     }

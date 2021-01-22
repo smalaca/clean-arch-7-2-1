@@ -26,8 +26,8 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
-import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer.Builder.apartmentOffer;
+import static com.smalaca.rentalapplication.domain.apartment.ApartmentTestBuilder.apartment;
+import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferTestBuilder.apartmentOffer;
 
 @SpringBootTest
 @Tag("IntegrationTest")
