@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.domain.apartment;
 
+import com.smalaca.rentalapplication.domain.address.AddressDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,4 +18,8 @@ public class NewApartmentDto {
     private final String country;
     private final String description;
     private final Map<String, Double> spacesDefinition;
+
+    AddressDto addressDto() {
+        return new AddressDto(street, postalCode, houseNumber, city, country);
+    }
 }
