@@ -24,4 +24,8 @@ public class Money {
 
         throw new NotAllowedMoneyValueException(price);
     }
+
+    public BigDecimal getValue() {
+        return value;
+    }
 }

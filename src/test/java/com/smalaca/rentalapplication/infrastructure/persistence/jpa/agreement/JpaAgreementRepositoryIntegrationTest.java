@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import static com.smalaca.rentalapplication.domain.agreement.Agreement.Builder.agreement;
 import static com.smalaca.rentalapplication.domain.booking.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class JpaAgreementRepositoryIntegrationTest {
     private static final String RENTAL_PLACE_ID = "1234";
@@ -34,5 +36,12 @@ class JpaAgreementRepositoryIntegrationTest {
                 .build();
 
         repository.save(agreement);
+    }
+
+    @Test
+    void shouldFindNothing() {
+        Agreement actual = repository.findById(UUID.randomUUID());
+
+        assertThat(actual).isNull();
     }
 }
