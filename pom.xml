@@ -125,12 +125,12 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.smalaca</groupId>
-            <artifactId>contracts</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.smalaca</groupId>-->
+<!--            <artifactId>contracts</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
