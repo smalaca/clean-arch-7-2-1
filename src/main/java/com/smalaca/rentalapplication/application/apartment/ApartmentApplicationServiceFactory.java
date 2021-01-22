@@ -21,7 +21,8 @@ class ApartmentApplicationServiceFactory {
     @SuppressWarnings("checkstyle:ParameterNumber")
     ApartmentApplicationService apartmentApplicationService(
             ApartmentRepository apartmentRepository, BookingRepository bookingRepository, OwnerRepository ownerRepository,
-            TenantRepository tenantRepository, ApartmentOfferRepository apartmentOfferRepository, AddressCatalogue addressCatalogue, EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
+            TenantRepository tenantRepository, ApartmentOfferRepository apartmentOfferRepository, AddressCatalogue addressCatalogue,
+            EventIdFactory eventIdFactory, Clock clock, EventChannel eventChannel) {
         ApartmentEventsPublisher apartmentEventsPublisher = new ApartmentEventsPublisher(eventIdFactory, clock, eventChannel);
         ApartmentFactory apartmentFactory = new ApartmentFactory(ownerRepository, addressCatalogue);
         ApartmentDomainService apartmentDomainService = new ApartmentDomainService(
