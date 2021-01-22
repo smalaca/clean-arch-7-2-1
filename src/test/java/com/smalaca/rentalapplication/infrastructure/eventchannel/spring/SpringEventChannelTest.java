@@ -1,5 +1,7 @@
 package com.smalaca.rentalapplication.infrastructure.eventchannel.spring;
 
+import com.smalaca.rentalapplication.domain.agreement.AgreementAccepted;
+import com.smalaca.rentalapplication.domain.agreement.AgreementAcceptedTestFactory;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBooked;
 import com.smalaca.rentalapplication.domain.apartment.ApartmentBookedTestFactory;
 import com.smalaca.rentalapplication.domain.booking.BookingAccepted;
@@ -14,6 +16,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,6 +38,7 @@ class SpringEventChannelTest {
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
     private static final String RENTAL_TYPE = "HOTEL_ROOM";
     private static final String RENTAL_PLACE_ID = UUID.randomUUID().toString();
+    private static final BigDecimal PRICE = BigDecimal.valueOf(42.13);
 
     private final ApplicationEventPublisher applicationEventPublisher = mock(ApplicationEventPublisher.class);
     private final EventChannel channel = new SpringEventChannel(applicationEventPublisher);
@@ -69,6 +73,15 @@ class SpringEventChannelTest {
     @Test
     void shouldPublishBookingRejected() {
         BookingRejected event = BookingRejectedTestFactory.create(EVENT_ID, EVENT_CREATION_DATE_TIME, RENTAL_TYPE, RENTAL_PLACE_ID, TENANT_ID, DAYS);
+
+        channel.publish(event);
+
+        then(applicationEventPublisher).should().publishEvent(event);
+    }
+
+    @Test
+    void shouldPublishAgreementAccepted() {
+        AgreementAccepted event = AgreementAcceptedTestFactory.create(EVENT_ID, EVENT_CREATION_DATE_TIME, RENTAL_TYPE, RENTAL_PLACE_ID, OWNER_ID, TENANT_ID, DAYS, PRICE);
 
         channel.publish(event);
 

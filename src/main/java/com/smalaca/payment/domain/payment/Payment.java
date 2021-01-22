@@ -17,18 +17,11 @@ public class Payment {
         this.totalAmount = totalAmount;
     }
 
-    @SuppressWarnings("checkstyle:MissingSwitchDefault")
     public void pay() {
-        PaymentStatus paymentStatus = paymentService.transfer(senderId, recipientId, totalAmount);
-
-        switch (paymentStatus) {
-            case SUCCESS:
-                paymentEventsPublisher.paymentCompleted(senderId, recipientId, totalAmount);
-                break;
-            case NOT_ENOUGH_MONEY:
-                paymentEventsPublisher.paymentFailed(senderId, recipientId, totalAmount);
-                break;
-        }
+        paymentEventsPublisher.publish(paymentStatus(), senderId, recipientId, totalAmount);
     }
 
+    private PaymentStatus paymentStatus() {
+        return paymentService.transfer(senderId, recipientId, totalAmount);
+    }
 }

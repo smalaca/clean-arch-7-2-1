@@ -255,6 +255,14 @@
                                         <include>com/smalaca/rentalapplication/domain/**/*</include>
                                         <include>com/smalaca/rentalapplication/application/**/*</include>
                                         <include>com/smalaca/rentalapplication/infrastructure/persistence/jpa/**/*</include>
+                                        
+                                        <include>com/smalaca/payment/domain/**/*</include>
+                                        <include>com/smalaca/payment/application/**/*</include>
+                                        <include>com/smalaca/payment/infrastructure/persistence/jpa/**/*</include>
+                                        
+                                        <include>com/smalaca/usermanagement/domain/**/*</include>
+                                        <include>com/smalaca/usermanagement/application/**/*</include>
+                                        <include>com/smalaca/usermanagement/infrastructure/persistence/jpa/**/*</include>
                                     </includes>
                                     <rules>
                                         <rule>
@@ -329,15 +337,32 @@
                                 <configuration>
                                     <excludes>
                                         <exclude>com/smalaca/rentalapplication/RentalApplication.class</exclude>
+                                        
                                         <exclude>com/smalaca/rentalapplication/domain/**/*</exclude>
                                         <exclude>com/smalaca/rentalapplication/application/**/*</exclude>
                                         <exclude>com/smalaca/rentalapplication/infrastructure/persistence/jpa/**/*</exclude>
                                         <exclude>com/smalaca/rentalapplication/infrastructure/rest/api/**/*</exclude>
+                                        
+                                        <exclude>com/smalaca/payment/domain/**/*</exclude>
+                                        <exclude>com/smalaca/payment/application/**/*</exclude>
+                                        <exclude>com/smalaca/payment/infrastructure/persistence/jpa/**/*</exclude>
+                                        <exclude>com/smalaca/payment/infrastructure/rest/api/**/*</exclude>
+                                        
+                                        <exclude>com/smalaca/usermanagement/domain/**/*</exclude>
+                                        <exclude>com/smalaca/usermanagement/application/**/*</exclude>
+                                        <exclude>com/smalaca/usermanagement/infrastructure/persistence/jpa/**/*</exclude>
+                                        <exclude>com/smalaca/usermanagement/infrastructure/rest/api/**/*</exclude>
                                     </excludes>
 
                                     <includes>
                                         <include>com/smalaca/rentalapplication/infrastructure/**/*</include>
                                         <include>com/smalaca/rentalapplication/query/**/*</include>
+
+                                        <include>com/smalaca/payment/infrastructure/**/*</include>
+                                        <include>com/smalaca/payment/query/**/*</include>
+
+                                        <include>com/smalaca/usermanagement/infrastructure/**/*</include>
+                                        <include>com/smalaca/usermanagement/query/**/*</include>
                                     </includes>
                                     <rules>
                                         <rule>
@@ -412,6 +437,8 @@
                                 <configuration>
                                     <includes>
                                         <include>com/smalaca/rentalapplication/infrastructure/rest/api/**/*</include>
+                                        <include>com/smalaca/payment/infrastructure/rest/api/**/*</include>
+                                        <include>com/smalaca/usermanagement/infrastructure/rest/api/**/*</include>
                                     </includes>
                                     <rules>
                                         <rule>
