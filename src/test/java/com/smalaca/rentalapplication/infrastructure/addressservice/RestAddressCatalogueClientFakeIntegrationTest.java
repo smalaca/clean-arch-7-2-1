@@ -41,7 +41,7 @@ class RestAddressCatalogueClientFakeIntegrationTest {
     }
 
     @Test
-    void shouldRecognizeAddressAsInalid() {
+    void shouldRecognizeAddressAsInvalid() {
         AddressDto addressDto = new AddressDto(STREET, POSTAL_CODE, BUILDING_NUMBER, CITY, COUNTRY);
         AddressCatalogue addressCatalogue = givenAddressCatalogue(addressDto, "INVALID");
 

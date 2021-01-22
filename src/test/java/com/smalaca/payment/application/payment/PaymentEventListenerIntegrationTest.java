@@ -5,7 +5,7 @@ import com.smalaca.payment.domain.payment.PaymentCompleted;
 import com.smalaca.payment.domain.payment.PaymentCompletedAssertion;
 import com.smalaca.payment.domain.payment.PaymentFailed;
 import com.smalaca.payment.domain.payment.PaymentFailedAssertion;
-import com.smalaca.payment.infrastructure.paymentservice.RestPaymentClient;
+import com.smalaca.payment.infrastructure.paymentservice.FakePaymentService;
 import com.smalaca.rentalapplication.domain.agreement.AgreementAccepted;
 import com.smalaca.rentalapplication.domain.agreement.AgreementAcceptedTestFactory;
 import com.smalaca.rentalapplication.domain.booking.RentalType;
@@ -16,6 +16,7 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,6 +30,7 @@ import static org.mockito.BDDMockito.then;
 
 @SpringBootTest
 @Tag("IntegrationTest")
+@ActiveProfiles("FakePaymentService")
 class PaymentEventListenerIntegrationTest {
     private static final String EVENT_ID = "213213";
     private static final LocalDateTime CREATION_TIME = LocalDateTime.now();
@@ -41,7 +43,7 @@ class PaymentEventListenerIntegrationTest {
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
 
     @Autowired private EventChannel eventChannel;
-    @Autowired private RestPaymentClient restPaymentClient;
+    @Autowired private FakePaymentService restPaymentClient;
     @SpyBean private PaymentEventChannel paymentEventChannel;
 
     @Test
