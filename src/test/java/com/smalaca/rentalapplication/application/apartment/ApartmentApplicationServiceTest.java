@@ -14,6 +14,7 @@ import com.smalaca.rentalapplication.domain.apartment.ApartmentRequirements;
 import com.smalaca.rentalapplication.domain.apartment.OwnerDoesNotExistException;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer;
 import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferRepository;
+import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferTestBuilder;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
@@ -328,7 +329,7 @@ class ApartmentApplicationServiceTest {
 
     private void givenExistingApartmentOffer() {
         given(apartmentOfferRepository.existByApartmentId(APARTMENT_ID)).willReturn(true);
-        ApartmentOffer apartmentOffer = ApartmentOffer.Builder.apartmentOffer()
+        ApartmentOffer apartmentOffer = ApartmentOfferTestBuilder.apartmentOffer()
                 .withApartmentId(APARTMENT_ID)
                 .withPrice(PRICE)
                 .withAvailability(BEFORE_START, END.plusDays(10)).build();

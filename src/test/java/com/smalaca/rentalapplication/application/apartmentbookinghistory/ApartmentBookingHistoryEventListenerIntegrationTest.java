@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.smalaca.rentalapplication.domain.apartment.ApartmentTestBuilder.apartment;
-import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOffer.Builder.apartmentOffer;
+import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferTestBuilder.apartmentOffer;
 
 @SpringBootTest
 @Tag("IntegrationTest")

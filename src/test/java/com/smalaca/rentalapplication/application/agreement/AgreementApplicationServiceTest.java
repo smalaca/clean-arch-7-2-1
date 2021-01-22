@@ -4,10 +4,10 @@ import com.smalaca.rentalapplication.domain.agreement.Agreement;
 import com.smalaca.rentalapplication.domain.agreement.AgreementAccepted;
 import com.smalaca.rentalapplication.domain.agreement.AgreementAcceptedAssertion;
 import com.smalaca.rentalapplication.domain.agreement.AgreementRepository;
-import com.smalaca.rentalapplication.domain.booking.RentalType;
 import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.money.Money;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalType;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -18,13 +18,14 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.smalaca.rentalapplication.domain.agreement.Agreement.Builder.agreement;
+import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
 class AgreementApplicationServiceTest {
-    private static final RentalType RENTAL_TYPE = RentalType.APARTMENT;
+    private static final RentalType RENTAL_TYPE = APARTMENT;
     private static final String RENTAL_PLACE_ID = "5748";
     private static final String OWNER_ID = "4346";
     private static final String TENANT_ID = "1234";

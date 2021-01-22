@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static com.smalaca.rentalapplication.domain.booking.RentalType.APARTMENT;
+import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.mockito.Mockito.mock;
