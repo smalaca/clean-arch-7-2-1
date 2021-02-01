@@ -23,10 +23,12 @@ public class NewBooking {
     private final Money price;
     private final List<LocalDate> days;
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public static NewBooking forApartment(String rentalPlaceId, String tenantId, String ownerId, Money price, Period period) {
         return new NewBooking(APARTMENT, rentalPlaceId, tenantId, ownerId, price, period.asDays());
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public static NewBooking forHotelRoom(String rentalPlaceId, String tenantId, String ownerId, Money price, List<LocalDate> days) {
         return new NewBooking(HOTEL_ROOM, rentalPlaceId, tenantId, ownerId, price, days);
     }
