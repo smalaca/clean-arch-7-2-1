@@ -53,12 +53,15 @@ public class Agreement {
 
         Agreement agreement = (Agreement) o;
 
+        if (!days.containsAll(agreement.days)) {
+            return false;
+        }
+
         return new EqualsBuilder()
                 .append(rentalType, agreement.rentalType)
                 .append(rentalPlaceId, agreement.rentalPlaceId)
                 .append(ownerId, agreement.ownerId)
                 .append(tenantId, agreement.tenantId)
-                .append(days, agreement.days)
                 .append(price, agreement.price)
                 .isEquals();
     }
@@ -78,6 +81,10 @@ public class Agreement {
 
     public void accept(AgreementEventsPublisher agreementEventsPublisher) {
         agreementEventsPublisher.agreementAccepted(rentalType, rentalPlaceId, ownerId, tenantId, days, price);
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public static class Builder {

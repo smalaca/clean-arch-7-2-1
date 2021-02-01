@@ -8,13 +8,19 @@ import java.util.UUID;
 
 @Repository
 class JpaAgreementRepository implements AgreementRepository {
-    @Override
-    public void save(Agreement agreement) {
+    private final SpringJpaAgreementRepository repository;
 
+    JpaAgreementRepository(SpringJpaAgreementRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public UUID save(Agreement agreement) {
+        return repository.save(agreement).getId();
     }
 
     @Override
     public Agreement findById(UUID agreementId) {
-        return null;
+        return repository.findById(agreementId).get();
     }
 }
