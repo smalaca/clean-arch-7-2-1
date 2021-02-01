@@ -13,6 +13,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
@@ -38,7 +39,7 @@ public class Booking {
     private String ownerId;
     @Embedded
     private Money price;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<LocalDate> days;
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus = BookingStatus.OPEN;
