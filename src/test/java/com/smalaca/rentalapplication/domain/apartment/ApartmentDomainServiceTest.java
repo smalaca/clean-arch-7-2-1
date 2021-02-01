@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forApartment;
 import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -156,7 +157,7 @@ class ApartmentDomainServiceTest {
     }
 
     private void givenAcceptedBookingItPeriod(LocalDate periodStart, LocalDate periodEnd) {
-        Booking acceptedBooking = Booking.apartment(APARTMENT_ID, TENANT_ID, Period.from(periodStart, periodEnd));
+        Booking acceptedBooking = new Booking(forApartment(APARTMENT_ID, TENANT_ID, OWNER_ID, PRICE_AS_MONEY, Period.from(periodStart, periodEnd)));
         given(bookingRepository.findAllAcceptedBy(getRentalPlaceIdentifier())).willReturn(asList(acceptedBooking));
     }
 

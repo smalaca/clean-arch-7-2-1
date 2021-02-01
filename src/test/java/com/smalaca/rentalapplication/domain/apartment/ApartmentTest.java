@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forApartment;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -101,7 +102,7 @@ class ApartmentTest {
     @Test
     void shouldBookApartmentWhenBookingsNotForGivenPeriod() {
         Apartment apartment = createApartment1();
-        Booking existingBooking = Booking.apartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID_1, PRICE, Period.from(START.minusDays(10), START.minusDays(5)));
+        Booking existingBooking = new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID_1, PRICE, Period.from(START.minusDays(10), START.minusDays(5))));
 
         Booking actual = apartment.book(givenApartmentBooking(singletonList(existingBooking)));
 
@@ -116,7 +117,7 @@ class ApartmentTest {
     @Test
     void shouldNotAllowForBookingWhenGivenBookingsForGivenPeriod() {
         Apartment apartment = createApartment1();
-        Booking existingBooking = Booking.apartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID_1, PRICE, Period.from(START, START.plusDays(5)));
+        Booking existingBooking = new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID_1, PRICE, Period.from(START, START.plusDays(5))));
 
         ApartmentBookingException actual = assertThrows(ApartmentBookingException.class, () -> apartment.book(givenApartmentBooking(singletonList(existingBooking))));
 

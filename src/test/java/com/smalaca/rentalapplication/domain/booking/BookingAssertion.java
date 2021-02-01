@@ -7,6 +7,8 @@ import org.assertj.core.api.Assertions;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forApartment;
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forHotelRoom;
 import static java.util.Arrays.asList;
 
 public class BookingAssertion {
@@ -43,7 +45,12 @@ public class BookingAssertion {
     }
 
     public BookingAssertion isEqualToBookingApartment(String rentalPlaceId, String tenantId, String ownerId, Money price, Period period) {
-        Assertions.assertThat(actual).isEqualTo(Booking.apartment(rentalPlaceId, tenantId, ownerId, price, period));
+        Assertions.assertThat(actual).isEqualTo(new Booking(forApartment(rentalPlaceId, tenantId, ownerId, price, period)));
+        return this;
+    }
+
+    public BookingAssertion isEqualToBookingHotelRoom(String rentalPlaceId, String tenantId, String ownerId, Money price, List<LocalDate> days) {
+        Assertions.assertThat(actual).isEqualTo(new Booking(forHotelRoom(rentalPlaceId, tenantId, ownerId, price, days)));
         return this;
     }
 

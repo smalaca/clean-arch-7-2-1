@@ -14,22 +14,26 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.booking.BookingAssertion.assertThat;
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forApartment;
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forHotelRoom;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
 class BookingTest {
-    private static final String OWNER_ID = "1234567";
+    private static final String OWNER_ID_1 = "1234567";
     private static final String RENTAL_PLACE_ID_1 = "5748";
     private static final String TENANT_ID_1 = "1234";
     private static final LocalDate TODAY = LocalDate.now();
     private static final LocalDate TOMORROW = LocalDate.now().plusDays(1);
     private static final List<LocalDate> DAYS_1 = asList(TODAY, TOMORROW);
+    private static final String OWNER_ID_2 = "24578";
     private static final String RENTAL_PLACE_ID_2 = "1357";
     private static final String TENANT_ID_2 = "2468";
     private static final List<LocalDate> DAYS_2 = asList(LocalDate.now().minusDays(10), LocalDate.now().plusDays(10));
-    private static final Money PRICE = Money.of(BigDecimal.valueOf(13));
+    private static final Money PRICE_1 = Money.of(BigDecimal.valueOf(13));
+    private static final Money PRICE_2 = Money.of(BigDecimal.valueOf(42));
 
     private final BookingEventsPublisher bookingEventsPublisher = mock(BookingEventsPublisher.class);
 
@@ -37,11 +41,11 @@ class BookingTest {
     void shouldCreateBookingForApartment() {
         Period period = Period.from(LocalDate.of(2040, 3, 4), LocalDate.of(2040, 3, 6));
 
-        Booking actual = Booking.apartment(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID, PRICE, period);
+        Booking actual = new Booking(forApartment(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID_1, PRICE_1, period));
 
         assertThat(actual)
                 .isOpen()
-                .isEqualToBookingApartment(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID, PRICE, period)
+                .isEqualToBookingApartment(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID_1, PRICE_1, period)
                 .containsAllDays(LocalDate.of(2040, 3, 4), LocalDate.of(2040, 3, 5), LocalDate.of(2040, 3, 6));
     }
 
@@ -49,11 +53,11 @@ class BookingTest {
     void shouldCreateBookingForHotelRoom() {
         List<LocalDate> days = asList(LocalDate.of(2020, 6, 1), LocalDate.of(2020, 6, 2), LocalDate.of(2020, 6, 4));
 
-        Booking actual = Booking.hotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, days);
+        Booking actual = new Booking(forHotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID_1, PRICE_1, days));
 
         assertThat(actual)
                 .isOpen()
-                .isEqualToBookingHotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, days);
+                .isEqualToBookingHotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID_1, PRICE_1, days);
     }
 
     @Test
@@ -172,15 +176,17 @@ class BookingTest {
 
     private static Stream<Object> notTeSameBookings() {
         return Stream.of(
-                Booking.hotelRoom(RENTAL_PLACE_ID_2, TENANT_ID_1, DAYS_1),
-                Booking.hotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_2, DAYS_1),
-                Booking.hotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, DAYS_2),
-                Booking.apartment(RENTAL_PLACE_ID_1, TENANT_ID_1, Period.from(TODAY, TOMORROW)),
+                new Booking(forHotelRoom(RENTAL_PLACE_ID_2, TENANT_ID_1, OWNER_ID_1, PRICE_1, DAYS_1)),
+                new Booking(forHotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_2, OWNER_ID_1, PRICE_1, DAYS_1)),
+                new Booking(forHotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID_2, PRICE_1, DAYS_1)),
+                new Booking(forHotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID_1, PRICE_2, DAYS_1)),
+                new Booking(forHotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID_1, PRICE_1, DAYS_2)),
+                new Booking(forApartment(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID_1, PRICE_1, Period.from(TODAY, TOMORROW))),
                 new Object()
         );
     }
 
     private Booking givenBooking() {
-        return Booking.hotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, DAYS_1);
+        return new Booking(forHotelRoom(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID_1, PRICE_1, DAYS_1));
     }
 }

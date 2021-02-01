@@ -45,25 +45,13 @@ public class Booking {
 
     private Booking() {}
 
-    private Booking(NewBooking newBooking) {
+    public Booking(NewBooking newBooking) {
         this.rentalType = newBooking.getRentalType();
         this.rentalPlaceId = newBooking.getRentalPlaceId();
         this.tenantId = newBooking.getTenantId();
         this.ownerId = newBooking.getOwnerId();
         this.price = newBooking.getPrice();
         this.days = newBooking.getDays();
-    }
-
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public static Booking apartment(String rentalPlaceId, String tenantId, String ownerId, Money price, Period period) {
-        NewBooking newBooking = NewBooking.forApartment(rentalPlaceId, tenantId, ownerId, price, period);
-        return new Booking(newBooking);
-    }
-
-    @Deprecated
-    public static Booking apartment(String rentalPlaceId, String tenantId, Period period) {
-        NewBooking newBooking = NewBooking.forApartment(rentalPlaceId, tenantId, "1234", Money.of(BigDecimal.valueOf(123)), period);
-        return new Booking(newBooking);
     }
 
     @Deprecated

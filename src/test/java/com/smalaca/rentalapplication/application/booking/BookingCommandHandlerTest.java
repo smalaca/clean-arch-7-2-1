@@ -10,9 +10,9 @@ import com.smalaca.rentalapplication.domain.booking.BookingEventsPublisher;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
 import com.smalaca.rentalapplication.domain.event.FakeEventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
-import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
+import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forApartment;
 import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
@@ -93,8 +94,8 @@ class BookingCommandHandlerTest {
 
     private void givenBookingsWithoutCollision() {
         givenBookings(asList(
-                Booking.apartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID, PRICE, PERIOD),
-                Booking.apartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID, PRICE, PERIOD)));
+                new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID, PRICE, PERIOD)),
+                new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID, PRICE, PERIOD))));
     }
 
     @Test
@@ -120,9 +121,9 @@ class BookingCommandHandlerTest {
 
 
     private void givenBookingsWithCollision() {
-        Booking booking = Booking.apartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID, PRICE, PERIOD);
+        Booking booking = new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID, PRICE, PERIOD));
         booking.accept(new BookingEventsPublisher(eventIdFactory, clock, eventChannel));
-        givenBookings(asList(booking, Booking.apartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID, PRICE, PERIOD)));
+        givenBookings(asList(booking, new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID, PRICE, PERIOD))));
     }
 
     private void givenBookings(List<Booking> bookings) {
@@ -141,7 +142,7 @@ class BookingCommandHandlerTest {
     }
 
     private void givenOpenBooking() {
-        Booking booking = Booking.apartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID, PRICE, PERIOD);
+        Booking booking = new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID, PRICE, PERIOD));
         given(bookingRepository.findById(BOOKING_ID)).willReturn(booking);
     }
 }
