@@ -49,8 +49,8 @@ public class BookingAssertion {
         return this;
     }
 
-    public BookingAssertion isEqualToBookingHotelRoom(String rentalPlaceId, String tenantId, String ownerId, Money price, List<LocalDate> days) {
-        Assertions.assertThat(actual).isEqualTo(new Booking(forHotelRoom(rentalPlaceId, tenantId, ownerId, price, days)));
+    public BookingAssertion isEqualToBookingHotelRoom(String rentalPlaceId, String tenantId, String hotelId, Money price, List<LocalDate> days) {
+        Assertions.assertThat(actual).isEqualTo(new Booking(forHotelRoom(rentalPlaceId, tenantId, hotelId, price, days)));
         return this;
     }
 

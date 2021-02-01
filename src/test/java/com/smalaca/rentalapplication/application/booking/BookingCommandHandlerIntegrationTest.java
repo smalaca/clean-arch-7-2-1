@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.application.booking;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
 import com.smalaca.rentalapplication.domain.booking.BookingRepository;
+import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
 import com.smalaca.rentalapplication.infrastructure.rest.api.booking.BookingRestController;
 import org.junit.jupiter.api.AfterEach;
@@ -11,8 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forHotelRoom;
 import static java.util.Arrays.asList;
 
 @SpringBootTest
@@ -50,7 +53,7 @@ class BookingCommandHandlerIntegrationTest {
     }
 
     private void givenOpenBooking() {
-        Booking booking = Booking.hotelRoom("1234", "5678", asList(LocalDate.now(), LocalDate.now().plusDays(1)));
+        Booking booking = new Booking(forHotelRoom("1234", "5678", "1111", Money.of(BigDecimal.valueOf(258)), asList(LocalDate.now(), LocalDate.now().plusDays(1))));
         bookingId = bookingRepository.save(booking);
     }
 }

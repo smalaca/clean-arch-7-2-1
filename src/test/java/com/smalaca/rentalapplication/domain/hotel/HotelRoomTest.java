@@ -3,6 +3,7 @@ package com.smalaca.rentalapplication.domain.hotel;
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.domain.booking.Booking;
 import com.smalaca.rentalapplication.domain.booking.BookingAssertion;
+import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.space.NotEnoughSpacesGivenException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.BDDMockito;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +35,7 @@ class HotelRoomTest {
     private static final String TENANT_ID = "325426";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
     private static final String NO_ID = null;
+    private static final Money PRICE = Money.of(BigDecimal.valueOf(9846));
 
     private final HotelEventsPublisher hotelEventsPublisher = mock(HotelEventsPublisher.class);
 
@@ -70,18 +73,22 @@ class HotelRoomTest {
     void shouldCreateBookingOnceBooked() {
         HotelRoom hotelRoom = givenHotelRoom();
 
-        Booking actual = hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
+        Booking actual = hotelRoom.book(givenHotelRoomBooking());
 
-        BookingAssertion.assertThat(actual).isEqualToBookingHotelRoom(NO_ID, TENANT_ID, DAYS);
+        BookingAssertion.assertThat(actual).isEqualToBookingHotelRoom(NO_ID, TENANT_ID, HOTEL_ID_1.toString(), PRICE, DAYS);
     }
 
     @Test
     void shouldPublishHotelRoomBooked() {
         HotelRoom hotelRoom = givenHotelRoom();
 
-        hotelRoom.book(TENANT_ID, DAYS, hotelEventsPublisher);
+        hotelRoom.book(givenHotelRoomBooking());
 
         BDDMockito.then(hotelEventsPublisher).should().publishHotelRoomBooked(HOTEL_ID_1.toString(), ROOM_NUMBER_1, TENANT_ID, DAYS);
+    }
+
+    private HotelRoomBooking givenHotelRoomBooking() {
+        return new HotelRoomBooking(ROOM_NUMBER_1, TENANT_ID, DAYS, PRICE, hotelEventsPublisher);
     }
 
     @Test

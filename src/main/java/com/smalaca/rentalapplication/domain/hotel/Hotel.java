@@ -66,6 +66,10 @@ public class Hotel {
         return getHotelRoom(number).book(tenantId, days, hotelEventsPublisher);
     }
 
+    public Booking bookRoom(HotelRoomBooking hotelRoomBooking) {
+        return getHotelRoom(hotelRoomBooking.getNumber()).book(hotelRoomBooking);
+    }
+
     private HotelRoom getHotelRoom(int number) {
         return hotelRooms.stream()
                 .filter(hotelRoom -> hotelRoom.hasNumberEqualTo(number))
