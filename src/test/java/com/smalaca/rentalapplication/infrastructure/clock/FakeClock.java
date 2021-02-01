@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.infrastructure.clock;
 
-import com.smalaca.rentalapplication.domain.clock.Clock;
+import com.smalaca.sharedkernel.domain.clock.Clock;
 
 import java.time.LocalDateTime;
 

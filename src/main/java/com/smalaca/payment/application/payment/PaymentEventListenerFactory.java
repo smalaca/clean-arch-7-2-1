@@ -4,8 +4,8 @@ import com.smalaca.payment.domain.events.PaymentEventChannel;
 import com.smalaca.payment.domain.payment.PaymentEventsPublisher;
 import com.smalaca.payment.domain.payment.PaymentFactory;
 import com.smalaca.payment.domain.payment.PaymentService;
-import com.smalaca.rentalapplication.domain.clock.Clock;
-import com.smalaca.rentalapplication.domain.event.EventIdFactory;
+import com.smalaca.sharedkernel.domain.clock.Clock;
+import com.smalaca.sharedkernel.domain.event.EventIdFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

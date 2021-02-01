@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.architecture;
+package com.smalaca.architecturetests;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import org.junit.jupiter.api.Tag;
