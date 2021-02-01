@@ -2,8 +2,8 @@ package com.smalaca.rentalapplication.domain.booking;
 
 import com.smalaca.rentalapplication.domain.agreement.Agreement;
 import com.smalaca.rentalapplication.domain.agreement.AgreementAssertion;
-import com.smalaca.rentalapplication.domain.clock.Clock;
-import com.smalaca.rentalapplication.domain.event.EventIdFactory;
+import com.smalaca.sharedkernel.domain.clock.Clock;
+import com.smalaca.sharedkernel.domain.event.EventIdFactory;
 import com.smalaca.rentalapplication.domain.eventchannel.EventChannel;
 import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forApartment;
 import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -148,31 +149,31 @@ class BookingDomainServiceTest {
     }
 
     private Booking givenRejectedBookingWithDaysCollision() {
-        Booking booking = Booking.apartment(RENTAL_PLACE_ID, TENANT_ID_2, OWNER_ID, PRICE, PERIOD_WITH_COLLISION);
+        Booking booking = new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID_2, OWNER_ID, PRICE, PERIOD_WITH_COLLISION));
         booking.reject(bookingEventsPublisher);
 
         return booking;
     }
 
     private Booking givenAcceptedBookingWithoutDaysCollision() {
-        Booking booking = Booking.apartment(RENTAL_PLACE_ID, TENANT_ID_2, OWNER_ID, PRICE, PERIOD_WITHOUT_COLLISION);
+        Booking booking = new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID_2, OWNER_ID, PRICE, PERIOD_WITHOUT_COLLISION));
         booking.accept(bookingEventsPublisher);
 
         return booking;
     }
 
     private Booking givenAcceptedBookingWithDaysCollision() {
-        Booking booking = Booking.apartment(RENTAL_PLACE_ID, TENANT_ID_2, OWNER_ID, PRICE, PERIOD_WITH_COLLISION);
+        Booking booking = new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID_2, OWNER_ID, PRICE, PERIOD_WITH_COLLISION));
         booking.accept(bookingEventsPublisher);
         return booking;
     }
 
     private Booking givenOpenBookingWithDaysCollision() {
-        return Booking.apartment(RENTAL_PLACE_ID, TENANT_ID_2, OWNER_ID, PRICE, PERIOD_WITH_COLLISION);
+        return new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID_2, OWNER_ID, PRICE, PERIOD_WITH_COLLISION));
     }
 
     private Booking givenApartmentBooking() {
-        return Booking.apartment(RENTAL_PLACE_ID, TENANT_ID_1, OWNER_ID, PRICE, PERIOD);
+        return new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID_1, OWNER_ID, PRICE, PERIOD));
     }
 
     private void thenExpectedAgreementWasCreated(Agreement actual) {

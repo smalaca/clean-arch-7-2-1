@@ -43,8 +43,7 @@ public class HotelApplicationService {
     public String book(HotelRoomBookingDto hotelRoomBookingDto) {
         Hotel hotel = hotelRepository.findById(hotelRoomBookingDto.getHotelId());
 
-        Booking booking = hotel.bookRoom(
-                hotelRoomBookingDto.getNumber(), hotelRoomBookingDto.getTenantId(), hotelRoomBookingDto.getDays(), hotelEventsPublisher);
+        Booking booking = hotel.bookRoom(hotelRoomBookingDto.asHotelRoomBooking(hotelEventsPublisher));
 
         return bookingRepository.save(booking);
     }

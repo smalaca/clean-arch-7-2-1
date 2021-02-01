@@ -2,7 +2,7 @@ package com.smalaca.rentalapplication.domain.apartment;
 
 import com.smalaca.rentalapplication.domain.address.Address;
 import com.smalaca.rentalapplication.domain.booking.Booking;
-import com.smalaca.rentalapplication.domain.money.Money;
+import com.smalaca.rentalapplication.domain.booking.NewBooking;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.rentalplace.RentalPlaceIdentifier;
 import com.smalaca.rentalapplication.domain.space.Space;
@@ -21,7 +21,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,7 @@ import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTM
 
 @Entity
 @Table(name = "APARTMENT")
-@SuppressWarnings({"PMD.UnusedPrivateField", "checkstyle:ClassFanOutComplexity"})
+@SuppressWarnings("PMD.UnusedPrivateField")
 public class Apartment {
     @Id
     @GeneratedValue
@@ -73,18 +72,10 @@ public class Apartment {
         if (areNotInGivenPeriod(apartmentBooking.getBookings(), period)) {
             apartmentBooking.getApartmentEventsPublisher().publishApartmentBooked(id(), ownerId, tenantId, period);
 
-            return Booking.apartment(id(), tenantId, ownerId, apartmentBooking.getPrice(), period);
+            return new Booking(NewBooking.forApartment(id(), tenantId, ownerId, apartmentBooking.getPrice(), period));
         } else {
             throw new ApartmentBookingException();
         }
-    }
-
-    @Deprecated
-    @SuppressWarnings("checkstyle:MagicNumber")
-    Booking book(List<Booking> bookings, String tenantId, Period period, ApartmentEventsPublisher apartmentEventsPublisher) {
-        apartmentEventsPublisher.publishApartmentBooked(id(), ownerId, tenantId, period);
-
-        return Booking.apartment(id(), tenantId, ownerId, Money.of(BigDecimal.valueOf(42)), period);
     }
 
     private boolean areNotInGivenPeriod(List<Booking> bookings, Period period) {

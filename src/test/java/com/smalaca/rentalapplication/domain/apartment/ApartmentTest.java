@@ -10,7 +10,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
@@ -20,10 +19,14 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.smalaca.rentalapplication.domain.apartment.Apartment.Builder.apartment;
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forApartment;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
 
 class ApartmentTest {
     private static final String OWNER_ID_1 = "1234";
@@ -50,6 +53,8 @@ class ApartmentTest {
     private static final Period PERIOD = Period.from(START, END);
     private static final String NO_ID = null;
     private static final List<Booking> NO_BOOKINGS = emptyList();
+    private static final Money PRICE = Money.of(BigDecimal.valueOf(42));
+    private static final String RENTAL_PLACE_ID = "123155";
 
     private final ApartmentEventsPublisher apartmentEventsPublisher = Mockito.mock(ApartmentEventsPublisher.class);
 
@@ -85,22 +90,39 @@ class ApartmentTest {
     }
 
     @Test
-    void shouldCreateBookingOnceBooked() {
+    void shouldBookApartmentWhenNoBookingsGiven() {
         Apartment apartment = createApartment1();
 
-        Booking actual = apartment.book(NO_BOOKINGS, TENANT_ID, PERIOD, apartmentEventsPublisher);
+        Booking actual = apartment.book(givenApartmentBooking(NO_BOOKINGS));
 
-        BookingAssertion.assertThat(actual)
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID_1, Money.of(BigDecimal.valueOf(42)), Period.from(START, END));
+        BookingAssertion.assertThat(actual).isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID_1, PRICE, PERIOD);
+        then(apartmentEventsPublisher).should().publishApartmentBooked(NO_ID, OWNER_ID_1, TENANT_ID, PERIOD);
     }
 
     @Test
-    void shouldPublishApartmentBooked() {
+    void shouldBookApartmentWhenBookingsNotForGivenPeriod() {
         Apartment apartment = createApartment1();
+        Booking existingBooking = new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID_1, PRICE, Period.from(START.minusDays(10), START.minusDays(5))));
 
-        apartment.book(NO_BOOKINGS, TENANT_ID, PERIOD, apartmentEventsPublisher);
+        Booking actual = apartment.book(givenApartmentBooking(singletonList(existingBooking)));
 
-        BDDMockito.then(apartmentEventsPublisher).should().publishApartmentBooked(any(), eq(OWNER_ID_1), eq(TENANT_ID), eq(Period.from(START, END)));
+        BookingAssertion.assertThat(actual).isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID_1, PRICE, PERIOD);
+        then(apartmentEventsPublisher).should().publishApartmentBooked(NO_ID, OWNER_ID_1, TENANT_ID, PERIOD);
+    }
+
+    private ApartmentBooking givenApartmentBooking(List<Booking> bookings) {
+        return new ApartmentBooking(bookings, TENANT_ID, PERIOD, PRICE, apartmentEventsPublisher);
+    }
+
+    @Test
+    void shouldNotAllowForBookingWhenGivenBookingsForGivenPeriod() {
+        Apartment apartment = createApartment1();
+        Booking existingBooking = new Booking(forApartment(RENTAL_PLACE_ID, TENANT_ID, OWNER_ID_1, PRICE, Period.from(START, START.plusDays(5))));
+
+        ApartmentBookingException actual = assertThrows(ApartmentBookingException.class, () -> apartment.book(givenApartmentBooking(singletonList(existingBooking))));
+
+        assertThat(actual).hasMessage("There are accepted bookings in given period.");
+        then(apartmentEventsPublisher).should(never()).publishApartmentBooked(any(), any(), any(), any());
     }
 
     @Test

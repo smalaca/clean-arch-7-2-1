@@ -1,6 +1,6 @@
 package com.smalaca.rentalapplication.infrastructure.event;
 
-import com.smalaca.rentalapplication.domain.event.EventIdFactory;
+import com.smalaca.sharedkernel.domain.event.EventIdFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.regex.Pattern;

@@ -38,6 +38,7 @@ import java.time.LocalDate;
 import java.util.Map;
 
 import static com.smalaca.rentalapplication.domain.apartment.ApartmentTestBuilder.apartment;
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forApartment;
 import static com.smalaca.rentalapplication.domain.rentalplace.RentalType.APARTMENT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -68,6 +69,7 @@ class ApartmentApplicationServiceTest {
     private static final LocalDate BEFORE_START = START.minusDays(1);
     private static final LocalDate AFTER_START = START.plusDays(1);
     private static final BigDecimal PRICE = BigDecimal.valueOf(42);
+    private static final Money MONEY_PRICE = Money.of(PRICE);
 
     private final OwnerRepository ownerRepository = mock(OwnerRepository.class);
     private final TenantRepository tenantRepository = mock(TenantRepository.class);
@@ -195,7 +197,7 @@ class ApartmentApplicationServiceTest {
 
         then(bookingRepository).should().save(captor.capture());
         BookingAssertion.assertThat(captor.getValue())
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, Money.of(PRICE), Period.from(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, MONEY_PRICE, Period.from(START, END));
     }
 
     @Test
@@ -210,7 +212,7 @@ class ApartmentApplicationServiceTest {
 
         then(bookingRepository).should().save(captor.capture());
         BookingAssertion.assertThat(captor.getValue())
-                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, Money.of(PRICE), Period.from(START, END));
+                .isEqualToBookingApartment(NO_ID, TENANT_ID, OWNER_ID, MONEY_PRICE, Period.from(START, END));
     }
 
     private void givenAcceptedBookingsInDifferentPeriod() {
@@ -294,7 +296,7 @@ class ApartmentApplicationServiceTest {
     }
 
     private void givenAcceptedBookingItPeriod(LocalDate periodStart, LocalDate periodEnd) {
-        Booking acceptedBooking = Booking.apartment(APARTMENT_ID, TENANT_ID, Period.from(periodStart, periodEnd));
+        Booking acceptedBooking = new Booking(forApartment(APARTMENT_ID, TENANT_ID, OWNER_ID, MONEY_PRICE, Period.from(periodStart, periodEnd)));
         given(bookingRepository.findAllAcceptedBy(getRentalPlaceIdentifier())).willReturn(asList(acceptedBooking));
     }
 

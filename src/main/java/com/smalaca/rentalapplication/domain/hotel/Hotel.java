@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,8 +61,8 @@ public class Hotel {
         hotelRooms.add(hotelRoom);
     }
 
-    public Booking bookRoom(int number, String tenantId, List<LocalDate> days, HotelEventsPublisher hotelEventsPublisher) {
-        return getHotelRoom(number).book(tenantId, days, hotelEventsPublisher);
+    public Booking bookRoom(HotelRoomBooking hotelRoomBooking) {
+        return getHotelRoom(hotelRoomBooking.getNumber()).book(hotelRoomBooking);
     }
 
     private HotelRoom getHotelRoom(int number) {

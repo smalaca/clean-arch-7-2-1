@@ -14,6 +14,9 @@ import com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferReposit
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentbookinghistory.SpringJpaApartmentBookingHistoryTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentoffer.SpringJpaApartmentOfferTestRepository;
+import com.smalaca.usermanagement.domain.user.UserRepository;
+import com.smalaca.usermanagement.domain.user.UserTestFactory;
+import com.smalaca.usermanagement.infrastructure.persistence.jpa.user.SpringJpaUserTestRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -28,11 +31,11 @@ import java.util.UUID;
 
 import static com.smalaca.rentalapplication.domain.apartment.ApartmentTestBuilder.apartment;
 import static com.smalaca.rentalapplication.domain.apartmentoffer.ApartmentOfferTestBuilder.apartmentOffer;
+import static java.util.Arrays.asList;
 
 @SpringBootTest
 @Tag("IntegrationTest")
 class ApartmentBookingHistoryEventListenerIntegrationTest {
-    private static final String OWNER_ID = "1234";
     private static final String STREET = "Florianska";
     private static final String POSTAL_CODE = "12-345";
     private static final String HOUSE_NUMBER = "1";
@@ -52,25 +55,29 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
     @Autowired private SpringJpaApartmentTestRepository springJpaApartmentTestRepository;
     @Autowired private ApartmentOfferRepository apartmentOfferRepository;
     @Autowired private SpringJpaApartmentOfferTestRepository springJpaApartmentOfferTestRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private SpringJpaUserTestRepository springJpaUserTestRepository;
 
     private String apartmentId;
     private UUID apartmentOfferId;
+    private UUID ownerId;
+    private UUID tenantId;
 
     @AfterEach
     void removeApartment() {
         springJpaApartmentTestRepository.deleteById(apartmentId);
         springJpaApartmentBookingHistoryTestRepository.deleteById(apartmentId);
         springJpaApartmentOfferTestRepository.deleteById(apartmentOfferId);
+        springJpaUserTestRepository.deleteAll(asList(tenantId, ownerId));
     }
 
     @Test
     @Transactional
     void shouldUpdateApartmentBookingHistory() {
-        String tenantId = "11223344";
         LocalDate start = LocalDate.of(2040, 1, 13);
         LocalDate end = LocalDate.of(2040, 1, 14);
         givenExistingApartmentWithOffer();
-        ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, tenantId, start, end);
+        ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, tenantId.toString(), start, end);
 
         apartmentApplicationService.book(apartmentBookingDto);
         ApartmentBookingHistory actual = apartmentBookingHistoryRepository.findFor(apartmentId);
@@ -79,13 +86,15 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
                 .hasOneApartmentBooking()
                 .hasApartmentBookingThatSatisfies(actualBooking -> {
                     ApartmentBookingAssertion.assertThat(actualBooking)
-                            .hasOwnerIdEqualTo(OWNER_ID)
-                            .hasTenantIdEqualTo(tenantId)
+                            .hasOwnerIdEqualTo(ownerId.toString())
+                            .hasTenantIdEqualTo(tenantId.toString())
                             .hasPeriodThatHas(start, end);
                 });
     }
 
     private void givenExistingApartmentWithOffer() {
+        ownerId = userRepository.save(UserTestFactory.create("captain-america", "Steve", "Rogers"));
+        tenantId = userRepository.save(UserTestFactory.create("1R0N M4N", "Tony", "Stark"));
         apartmentId = apartmentRepository.save(createApartment());
         apartmentOfferId = apartmentOfferRepository.save(createApartmentOffer());
     }
@@ -100,7 +109,7 @@ class ApartmentBookingHistoryEventListenerIntegrationTest {
 
     private Apartment createApartment() {
         return apartment()
-                .withOwnerId(OWNER_ID)
+                .withOwnerId(ownerId.toString())
                 .withStreet(STREET)
                 .withPostalCode(POSTAL_CODE)
                 .withHouseNumber(HOUSE_NUMBER)

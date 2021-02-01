@@ -2,8 +2,8 @@ package com.smalaca.payment.domain.payment;
 
 import com.google.common.collect.ImmutableMap;
 import com.smalaca.payment.domain.events.PaymentEventChannel;
-import com.smalaca.rentalapplication.domain.clock.Clock;
-import com.smalaca.rentalapplication.domain.event.EventIdFactory;
+import com.smalaca.sharedkernel.domain.clock.Clock;
+import com.smalaca.sharedkernel.domain.event.EventIdFactory;
 
 import java.math.BigDecimal;
 import java.util.Map;

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.smalaca.rentalapplication.domain.booking.NewBooking.forHotelRoom;
+
 @Entity
 @Table(name = "HOTEL_ROOM")
 @SuppressWarnings("PMD.UnusedPrivateField")
@@ -46,10 +48,12 @@ public class HotelRoom {
         this.description = description;
     }
 
-    Booking book(String tenantId, List<LocalDate> days, HotelEventsPublisher hotelEventsPublisher) {
-        hotelEventsPublisher.publishHotelRoomBooked(hotelId(), number, tenantId, days);
+    Booking book(HotelRoomBooking hotelRoomBooking) {
+        String tenantId = hotelRoomBooking.getTenantId();
+        List<LocalDate> days = hotelRoomBooking.getDays();
+        hotelRoomBooking.getHotelEventsPublisher().publishHotelRoomBooked(hotelId(), number, tenantId, days);
 
-        return Booking.hotelRoom(id(), tenantId, days);
+        return new Booking(forHotelRoom(id(), tenantId, hotelId(), hotelRoomBooking.getPrice(), days));
     }
 
     private String hotelId() {

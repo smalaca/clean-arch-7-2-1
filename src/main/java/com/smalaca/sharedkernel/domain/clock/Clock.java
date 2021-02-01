@@ -1,4 +1,4 @@
-package com.smalaca.rentalapplication.domain.clock;
+package com.smalaca.sharedkernel.domain.clock;
 
 import java.time.LocalDateTime;
 

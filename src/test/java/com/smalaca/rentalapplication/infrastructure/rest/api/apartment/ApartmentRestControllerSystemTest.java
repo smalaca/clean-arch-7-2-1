@@ -7,9 +7,11 @@ import com.smalaca.rentalapplication.application.apartmentoffer.ApartmentOfferDt
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentbookinghistory.SpringJpaApartmentBookingHistoryTestRepository;
-import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentoffer.SpringJpaApartmentOfferTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
+import com.smalaca.usermanagement.application.user.UserDto;
+import com.smalaca.usermanagement.infrastructure.persistence.jpa.user.SpringJpaUserTestRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("SystemTest")
 @ActiveProfiles("FakeAddressCatalogue")
 class ApartmentRestControllerSystemTest {
-    private static final String OWNER_ID_1 = "1234";
     private static final String STREET_1 = "Florianska";
     private static final String POSTAL_CODE_1 = "12-345";
     private static final String HOUSE_NUMBER_1 = "1";
@@ -49,7 +50,6 @@ class ApartmentRestControllerSystemTest {
     private static final String COUNTRY_1 = "Poland";
     private static final String DESCRIPTION_1 = "Nice place to stay";
     private static final Map<String, Double> SPACES_DEFINITION_1 = ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0);
-    private static final String OWNER_ID_2 = "4321";
     private static final String STREET_2 = "Grodzka";
     private static final String POSTAL_CODE_2 = "54-321";
     private static final String HOUSE_NUMBER_2 = "13";
@@ -66,21 +66,38 @@ class ApartmentRestControllerSystemTest {
     private final List<String> apartmentIds = new ArrayList<>();
     private final List<String> apartmentBookingHistoryIds = new ArrayList<>();
     private final List<String> bookingIds = new ArrayList<>();
-    private String apartmentOfferId;
+    private String ownerId1;
+    private String ownerId2;
+    private String tenantId;
+
     @Autowired private MockMvc mockMvc;
     @Autowired private SpringJpaApartmentTestRepository apartmentRepository;
     @Autowired private SpringJpaApartmentBookingHistoryTestRepository apartmentBookingHistoryRepository;
     @Autowired private SpringJpaBookingTestRepository bookingRepository;
-    @Autowired private SpringJpaApartmentOfferTestRepository apartmentOfferRepository;
+    @Autowired private SpringJpaUserTestRepository springJpaUserTestRepository;
+
+    @BeforeEach
+    void givenExistingOwner() throws Exception {
+        ownerId1 = givenExistingUser(new UserDto("captain-america", "Steve", "Rogers"));
+        ownerId2 = givenExistingUser(new UserDto("1R0N M4N", "Tony", "Stark"));
+        tenantId = givenExistingUser(new UserDto("scarletwitch", "Wanda", "Maximoff"));
+    }
+
+    private String givenExistingUser(Object userDto) throws Exception {
+        return mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(userDto)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse().getRedirectedUrl().replace("/user/", "");
+    }
 
     @AfterEach
     void deleteApartments() {
         apartmentRepository.deleteAll(apartmentIds);
         apartmentBookingHistoryRepository.deleteAll(apartmentBookingHistoryIds);
         bookingRepository.deleteAll(bookingIds);
-        if (apartmentOfferId != null) {
-            apartmentOfferRepository.deleteById(apartmentOfferId);
-        }
+        springJpaUserTestRepository.deleteById(ownerId1);
+        springJpaUserTestRepository.deleteById(ownerId2);
+        springJpaUserTestRepository.deleteById(tenantId);
     }
 
     @Test
@@ -106,7 +123,7 @@ class ApartmentRestControllerSystemTest {
         apartmentIds.add(getApartmentId(mvcResult));
         mockMvc.perform(get(mvcResult.getResponse().getRedirectedUrl()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.apartment.ownerId").value(OWNER_ID_1))
+                .andExpect(jsonPath("$.apartment.ownerId").value(ownerId1))
                 .andExpect(jsonPath("$.apartment.street").value(STREET_1))
                 .andExpect(jsonPath("$.apartment.postalCode").value(POSTAL_CODE_1))
                 .andExpect(jsonPath("$.apartment.houseNumber").value(HOUSE_NUMBER_1))
@@ -119,7 +136,7 @@ class ApartmentRestControllerSystemTest {
         String apartmentId = url.replace("/apartment/", "");
         givenApartmentOfferFor(apartmentId);
         apartmentBookingHistoryIds.add(apartmentId);
-        ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, "1357", LocalDate.of(2040, 11, 12), LocalDate.of(2040, 12, 1));
+        ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, tenantId, LocalDate.of(2040, 11, 12), LocalDate.of(2040, 12, 1));
 
         MvcResult mvcResult = mockMvc.perform(put(url.replace("apartment/", "apartment/book/")).contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentBookingDto)))
                 .andExpect(status().isCreated())
@@ -129,7 +146,7 @@ class ApartmentRestControllerSystemTest {
         mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bookingHistory.bookings.[*]", hasSize(1)))
-                .andExpect(jsonPath("$.bookingHistory.bookings.[0].tenantId").value("1357"))
+                .andExpect(jsonPath("$.bookingHistory.bookings.[0].tenantId").value(tenantId))
                 .andExpect(jsonPath("$.bookingHistory.bookings.[0].periodStart").value("2040-11-12"))
                 .andExpect(jsonPath("$.bookingHistory.bookings.[0].periodEnd").value("2040-12-01"));
     }
@@ -152,11 +169,11 @@ class ApartmentRestControllerSystemTest {
     }
 
     private ApartmentDto givenApartment1() {
-        return new ApartmentDto(OWNER_ID_1, STREET_1, POSTAL_CODE_1, HOUSE_NUMBER_1, APARTMENT_NUMBER_1, CITY_1, COUNTRY_1, DESCRIPTION_1, SPACES_DEFINITION_1);
+        return new ApartmentDto(ownerId1, STREET_1, POSTAL_CODE_1, HOUSE_NUMBER_1, APARTMENT_NUMBER_1, CITY_1, COUNTRY_1, DESCRIPTION_1, SPACES_DEFINITION_1);
     }
 
     private ApartmentDto givenApartment2() {
-        return new ApartmentDto(OWNER_ID_2, STREET_2, POSTAL_CODE_2, HOUSE_NUMBER_2, APARTMENT_NUMBER_2, CITY_2, COUNTRY_2, DESCRIPTION_2, SPACES_DEFINITION_2);
+        return new ApartmentDto(ownerId2, STREET_2, POSTAL_CODE_2, HOUSE_NUMBER_2, APARTMENT_NUMBER_2, CITY_2, COUNTRY_2, DESCRIPTION_2, SPACES_DEFINITION_2);
     }
 
     private MvcResult save(ApartmentDto apartmentDto) throws Exception {

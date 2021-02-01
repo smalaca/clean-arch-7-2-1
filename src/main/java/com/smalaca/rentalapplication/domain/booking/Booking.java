@@ -13,9 +13,11 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,47 +39,20 @@ public class Booking {
     private String ownerId;
     @Embedded
     private Money price;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<LocalDate> days;
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus = BookingStatus.OPEN;
 
     private Booking() {}
 
-    @Deprecated
-    private Booking(RentalType rentalType, String rentalPlaceId, String tenantId, List<LocalDate> days) {
-        this.rentalType = rentalType;
-        this.rentalPlaceId = rentalPlaceId;
-        this.tenantId = tenantId;
-        this.days = days;
-    }
-
-    private Booking(RentalType rentalType, String rentalPlaceId, String tenantId, String ownerId, Money price, List<LocalDate> days) {
-        this.rentalType = rentalType;
-        this.rentalPlaceId = rentalPlaceId;
-        this.tenantId = tenantId;
-        this.ownerId = ownerId;
-        this.price = price;
-        this.days = days;
-    }
-
-    @SuppressWarnings("checkstyle:ParameterNumber")
-    public static Booking apartment(String rentalPlaceId, String tenantId, String ownerId, Money price, Period period) {
-        List<LocalDate> days = period.asDays();
-
-        return new Booking(RentalType.APARTMENT, rentalPlaceId, tenantId, ownerId, price, days);
-    }
-
-    @Deprecated
-    public static Booking apartment(String rentalPlaceId, String tenantId, Period period) {
-        List<LocalDate> days = period.asDays();
-
-        return new Booking(RentalType.APARTMENT, rentalPlaceId, tenantId, days);
-    }
-
-    @Deprecated
-    public static Booking hotelRoom(String rentalPlaceId, String tenantId, List<LocalDate> days) {
-        return new Booking(RentalType.HOTEL_ROOM, rentalPlaceId, tenantId, days);
+    public Booking(NewBooking newBooking) {
+        this.rentalType = newBooking.getRentalType();
+        this.rentalPlaceId = newBooking.getRentalPlaceId();
+        this.tenantId = newBooking.getTenantId();
+        this.ownerId = newBooking.getOwnerId();
+        this.price = newBooking.getPrice();
+        this.days = newBooking.getDays();
     }
 
     public void reject(BookingEventsPublisher bookingEventsPublisher) {
@@ -95,7 +70,7 @@ public class Booking {
                 .withRentalPlaceId(rentalPlaceId)
                 .withOwnerId(ownerId)
                 .withTenantId(tenantId)
-                .withDays(days)
+                .withDays(new ArrayList<>(days))
                 .withPrice(price)
                 .build();
     }
