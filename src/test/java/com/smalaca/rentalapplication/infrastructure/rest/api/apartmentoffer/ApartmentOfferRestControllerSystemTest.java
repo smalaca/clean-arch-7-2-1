@@ -6,6 +6,8 @@ import com.smalaca.rentalapplication.application.apartmentoffer.ApartmentOfferDt
 import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentoffer.SpringJpaApartmentOfferTestRepository;
+import com.smalaca.usermanagement.application.user.UserDto;
+import com.smalaca.usermanagement.infrastructure.persistence.jpa.user.SpringJpaUserTestRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -37,14 +39,17 @@ class ApartmentOfferRestControllerSystemTest {
     private final JsonFactory jsonFactory = new JsonFactory();
     private final List<String> apartmentIds = new ArrayList<>();
     private final List<String> offerIds = new ArrayList<>();
+    private String ownerId;
     @Autowired private MockMvc mockMvc;
     @Autowired private SpringJpaApartmentTestRepository apartmentRepository;
     @Autowired private SpringJpaApartmentOfferTestRepository apartmentOfferRepository;
+    @Autowired private SpringJpaUserTestRepository springJpaUserTestRepository;
 
     @AfterEach
     void deleteApartmentOffers() {
         apartmentRepository.deleteAll(apartmentIds);
         apartmentOfferRepository.deleteAll(offerIds);
+        springJpaUserTestRepository.deleteById(ownerId);
     }
 
     @Test
@@ -63,12 +68,13 @@ class ApartmentOfferRestControllerSystemTest {
     }
 
     private String givenExistingApartment() throws Exception {
+        givenExistingOwner();
         return save(givenApartment());
     }
 
     private ApartmentDto givenApartment() {
         return new ApartmentDto(
-                "1234", "Florianska", "12-345", "1", "13", "Cracow", "Poland", "Nice place to stay", ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0));
+                ownerId, "Florianska", "12-345", "1", "13", "Cracow", "Poland", "Nice place to stay", ImmutableMap.of("Toilet", 10.0, "Bedroom", 30.0));
     }
 
     private String save(ApartmentDto apartmentDto) throws Exception {
@@ -78,5 +84,16 @@ class ApartmentOfferRestControllerSystemTest {
 
         apartmentIds.add(apartmentId);
         return apartmentId;
+    }
+
+    private void givenExistingOwner() throws Exception {
+        ownerId = givenExistingUser(new UserDto("captain-america", "Steve", "Rogers"));
+    }
+
+    private String givenExistingUser(Object userDto) throws Exception {
+        return mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(userDto)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse().getRedirectedUrl().replace("/user/", "");
     }
 }

@@ -9,6 +9,8 @@ import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.Sp
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentbookinghistory.SpringJpaApartmentBookingHistoryTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentoffer.SpringJpaApartmentOfferTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
+import com.smalaca.usermanagement.application.user.UserDto;
+import com.smalaca.usermanagement.infrastructure.persistence.jpa.user.SpringJpaUserTestRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -35,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("SystemTest")
 @ActiveProfiles("FakeAddressCatalogue")
 class BookingRestControllerSystemTest {
-    private static final String OWNER_ID = "1234";
     private static final String STREET = "Florianska";
     private static final String POSTAL_CODE = "12-345";
     private static final String HOUSE_NUMBER = "1";
@@ -52,23 +53,28 @@ class BookingRestControllerSystemTest {
     private final List<String> apartmentIds = new ArrayList<>();
     private final List<String> bookingIds = new ArrayList<>();
     private String apartmentOfferId;
+    private String ownerId;
+    private String tenantId;
 
     @Autowired private MockMvc mockMvc;
     @Autowired private SpringJpaApartmentTestRepository apartmentRepository;
     @Autowired private SpringJpaApartmentBookingHistoryTestRepository apartmentBookingHistoryRepository;
     @Autowired private SpringJpaBookingTestRepository bookingRepository;
     @Autowired private SpringJpaApartmentOfferTestRepository apartmentOfferRepository;
+    @Autowired private SpringJpaUserTestRepository springJpaUserTestRepository;
 
     @AfterEach
     void deleteBookings() {
         apartmentRepository.deleteAll(apartmentIds);
         apartmentBookingHistoryRepository.deleteAll(apartmentIds);
         bookingRepository.deleteAll(bookingIds);
+        springJpaUserTestRepository.deleteById(ownerId);
+        springJpaUserTestRepository.deleteById(tenantId);
         if (apartmentOfferId != null) {
             apartmentOfferRepository.deleteById(apartmentOfferId);
         }
     }
-    
+
     @Test
     void shouldRejectBooking() throws Exception {
         String url = getUrlToExistingBooking().replace("booking/", "booking/reject/");
@@ -84,17 +90,30 @@ class BookingRestControllerSystemTest {
     }
 
     private String getUrlToExistingBooking() throws Exception {
+        givenExistingOwnerAndTenant();
         String url = save(givenApartment()).getResponse().getRedirectedUrl();
         String apartmentId = url.replace("/apartment/", "");
         givenApartmentOfferFor(apartmentId);
         apartmentIds.add(apartmentId);
-        ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, "1357", LocalDate.of(2040, 11, 12), LocalDate.of(2040, 12, 1));
+        ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, tenantId, LocalDate.of(2040, 11, 12), LocalDate.of(2040, 12, 1));
 
         MvcResult mvcResult = mockMvc.perform(put(url.replace("apartment/", "apartment/book/")).contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentBookingDto)))
                 .andExpect(status().isCreated())
                 .andReturn();
         storeBookingId(mvcResult);
         return mvcResult.getResponse().getRedirectedUrl();
+    }
+
+    private void givenExistingOwnerAndTenant() throws Exception {
+        ownerId = givenExistingUser(new UserDto("captain-america", "Steve", "Rogers"));
+        tenantId = givenExistingUser(new UserDto("scarletwitch", "Wanda", "Maximoff"));
+    }
+
+    private String givenExistingUser(Object userDto) throws Exception {
+        return mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(userDto)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse().getRedirectedUrl().replace("/user/", "");
     }
 
     private void givenApartmentOfferFor(String apartmentId) throws Exception {
@@ -108,7 +127,7 @@ class BookingRestControllerSystemTest {
     }
 
     private ApartmentDto givenApartment() {
-        return new ApartmentDto(OWNER_ID, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, SPACES_DEFINITION);
+        return new ApartmentDto(ownerId, STREET, POSTAL_CODE, HOUSE_NUMBER, APARTMENT_NUMBER, CITY, COUNTRY, DESCRIPTION, SPACES_DEFINITION);
     }
 
     private MvcResult save(ApartmentDto apartmentDto) throws Exception {

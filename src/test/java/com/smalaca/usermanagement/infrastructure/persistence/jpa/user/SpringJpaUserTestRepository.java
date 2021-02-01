@@ -20,4 +20,8 @@ public class SpringJpaUserTestRepository {
     public void deleteAll(List<UUID> ids) {
         ids.forEach(this::deleteById);
     }
+
+    public void deleteById(String userId) {
+        deleteById(UUID.fromString(userId));
+    }
 }

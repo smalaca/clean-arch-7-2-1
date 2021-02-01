@@ -13,8 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.UUID;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,7 +28,7 @@ class UserRestControllerSystemTest {
 
     @AfterEach
     void deleteApartmentOffers() {
-        springJpaUserTestRepository.deleteById(UUID.fromString(userId));
+        springJpaUserTestRepository.deleteById(userId);
     }
 
     @Test

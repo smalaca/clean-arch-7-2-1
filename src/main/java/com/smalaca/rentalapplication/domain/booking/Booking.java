@@ -16,6 +16,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,7 +69,7 @@ public class Booking {
                 .withRentalPlaceId(rentalPlaceId)
                 .withOwnerId(ownerId)
                 .withTenantId(tenantId)
-                .withDays(days)
+                .withDays(new ArrayList<>(days))
                 .withPrice(price)
                 .build();
     }
