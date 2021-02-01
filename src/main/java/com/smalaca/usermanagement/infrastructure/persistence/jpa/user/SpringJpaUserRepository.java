@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
+public
 interface SpringJpaUserRepository extends CrudRepository<User, UUID> {
     boolean existsByLogin(String login);
 }
