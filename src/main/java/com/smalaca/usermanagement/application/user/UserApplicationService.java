@@ -4,6 +4,8 @@ import com.smalaca.usermanagement.domain.user.User;
 import com.smalaca.usermanagement.domain.user.UserFactory;
 import com.smalaca.usermanagement.domain.user.UserRepository;
 
+import java.util.UUID;
+
 public class UserApplicationService {
     private final UserRepository userRepository;
     private final UserFactory userFactory;
@@ -13,9 +15,9 @@ public class UserApplicationService {
         this.userFactory = userFactory;
     }
 
-    public void register(UserDto userDto) {
+    public UUID register(UserDto userDto) {
         User user = userFactory.create(userDto.getLogin(), userDto.getName(), userDto.getLastName());
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }
