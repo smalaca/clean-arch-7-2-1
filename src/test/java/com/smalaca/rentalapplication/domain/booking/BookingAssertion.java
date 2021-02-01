@@ -42,12 +42,6 @@ public class BookingAssertion {
         return this;
     }
 
-    @Deprecated
-    public BookingAssertion isEqualToBookingApartment(String rentalPlaceId, String tenantId, Period period) {
-        Assertions.assertThat(actual).isEqualTo(Booking.apartment(rentalPlaceId, tenantId, period));
-        return this;
-    }
-
     public BookingAssertion isEqualToBookingApartment(String rentalPlaceId, String tenantId, String ownerId, Money price, Period period) {
         Assertions.assertThat(actual).isEqualTo(Booking.apartment(rentalPlaceId, tenantId, ownerId, price, period));
         return this;

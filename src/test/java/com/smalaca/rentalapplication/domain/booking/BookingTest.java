@@ -1,5 +1,6 @@
 package com.smalaca.rentalapplication.domain.booking;
 
+import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.period.Period;
 import com.smalaca.rentalapplication.domain.rentalplace.RentalType;
 import org.assertj.core.api.Assertions;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
@@ -18,6 +20,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 
 class BookingTest {
+    private static final String OWNER_ID = "1234567";
     private static final String RENTAL_PLACE_ID_1 = "5748";
     private static final String TENANT_ID_1 = "1234";
     private static final LocalDate TODAY = LocalDate.now();
@@ -26,6 +29,7 @@ class BookingTest {
     private static final String RENTAL_PLACE_ID_2 = "1357";
     private static final String TENANT_ID_2 = "2468";
     private static final List<LocalDate> DAYS_2 = asList(LocalDate.now().minusDays(10), LocalDate.now().plusDays(10));
+    private static final Money PRICE = Money.of(BigDecimal.valueOf(13));
 
     private final BookingEventsPublisher bookingEventsPublisher = mock(BookingEventsPublisher.class);
 
@@ -33,11 +37,11 @@ class BookingTest {
     void shouldCreateBookingForApartment() {
         Period period = Period.from(LocalDate.of(2040, 3, 4), LocalDate.of(2040, 3, 6));
 
-        Booking actual = Booking.apartment(RENTAL_PLACE_ID_1, TENANT_ID_1, period);
+        Booking actual = Booking.apartment(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID, PRICE, period);
 
         assertThat(actual)
                 .isOpen()
-                .isEqualToBookingApartment(RENTAL_PLACE_ID_1, TENANT_ID_1, period)
+                .isEqualToBookingApartment(RENTAL_PLACE_ID_1, TENANT_ID_1, OWNER_ID, PRICE, period)
                 .containsAllDays(LocalDate.of(2040, 3, 4), LocalDate.of(2040, 3, 5), LocalDate.of(2040, 3, 6));
     }
 
