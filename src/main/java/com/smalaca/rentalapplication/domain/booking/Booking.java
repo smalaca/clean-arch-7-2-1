@@ -15,6 +15,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -44,40 +45,31 @@ public class Booking {
 
     private Booking() {}
 
-    @Deprecated
-    private Booking(RentalType rentalType, String rentalPlaceId, String tenantId, List<LocalDate> days) {
-        this.rentalType = rentalType;
-        this.rentalPlaceId = rentalPlaceId;
-        this.tenantId = tenantId;
-        this.days = days;
-    }
-
-    private Booking(RentalType rentalType, String rentalPlaceId, String tenantId, String ownerId, Money price, List<LocalDate> days) {
-        this.rentalType = rentalType;
-        this.rentalPlaceId = rentalPlaceId;
-        this.tenantId = tenantId;
-        this.ownerId = ownerId;
-        this.price = price;
-        this.days = days;
+    private Booking(NewBooking newBooking) {
+        this.rentalType = newBooking.getRentalType();
+        this.rentalPlaceId = newBooking.getRentalPlaceId();
+        this.tenantId = newBooking.getTenantId();
+        this.ownerId = newBooking.getOwnerId();
+        this.price = newBooking.getPrice();
+        this.days = newBooking.getDays();
     }
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     public static Booking apartment(String rentalPlaceId, String tenantId, String ownerId, Money price, Period period) {
-        List<LocalDate> days = period.asDays();
-
-        return new Booking(RentalType.APARTMENT, rentalPlaceId, tenantId, ownerId, price, days);
+        NewBooking newBooking = NewBooking.forApartment(rentalPlaceId, tenantId, ownerId, price, period);
+        return new Booking(newBooking);
     }
 
     @Deprecated
     public static Booking apartment(String rentalPlaceId, String tenantId, Period period) {
-        List<LocalDate> days = period.asDays();
-
-        return new Booking(RentalType.APARTMENT, rentalPlaceId, tenantId, days);
+        NewBooking newBooking = NewBooking.forApartment(rentalPlaceId, tenantId, "1234", Money.of(BigDecimal.valueOf(123)), period);
+        return new Booking(newBooking);
     }
 
     @Deprecated
     public static Booking hotelRoom(String rentalPlaceId, String tenantId, List<LocalDate> days) {
-        return new Booking(RentalType.HOTEL_ROOM, rentalPlaceId, tenantId, days);
+        NewBooking newBooking = NewBooking.forHotelRoom(rentalPlaceId, tenantId, "2468", Money.of(BigDecimal.valueOf(135)), days);
+        return new Booking(newBooking);
     }
 
     public void reject(BookingEventsPublisher bookingEventsPublisher) {
