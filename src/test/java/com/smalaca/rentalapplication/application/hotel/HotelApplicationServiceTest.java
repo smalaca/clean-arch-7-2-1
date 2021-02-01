@@ -12,6 +12,7 @@ import com.smalaca.rentalapplication.domain.hotel.HotelRepository;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomAssertion;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomBooked;
 import com.smalaca.rentalapplication.domain.hotel.HotelRoomRequirements;
+import com.smalaca.rentalapplication.domain.money.Money;
 import com.smalaca.rentalapplication.domain.space.SquareMeterException;
 import com.smalaca.rentalapplication.infrastructure.clock.FakeClock;
 import org.assertj.core.api.Assertions;
@@ -20,6 +21,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +50,7 @@ class HotelApplicationServiceTest {
     private static final String TENANT_ID = "4321";
     private static final List<LocalDate> DAYS = asList(LocalDate.now(), LocalDate.now().plusDays(1));
     private static final String NO_ID = null;
+    private static final BigDecimal PRICE = BigDecimal.valueOf(123);
 
     private final HotelRepository hotelRepository = mock(HotelRepository.class);
     private final BookingRepository bookingRepository = Mockito.mock(BookingRepository.class);
@@ -163,14 +166,14 @@ class HotelApplicationServiceTest {
     }
 
     private HotelRoomBookingDto givenHotelRoomBookingDto() {
-        return new HotelRoomBookingDto(HOTEL_ID, ROOM_NUMBER, TENANT_ID, DAYS);
+        return new HotelRoomBookingDto(HOTEL_ID, ROOM_NUMBER, TENANT_ID, PRICE, DAYS);
     }
 
     private void thenBookingShouldBeCreated() {
         ArgumentCaptor<Booking> captor = ArgumentCaptor.forClass(Booking.class);
         BDDMockito.then(bookingRepository).should().save(captor.capture());
 
-        BookingAssertion.assertThat(captor.getValue()).isEqualToBookingHotelRoom(NO_ID, TENANT_ID, DAYS);
+        BookingAssertion.assertThat(captor.getValue()).isEqualToBookingHotelRoom(NO_ID, TENANT_ID, NO_ID, Money.of(PRICE), DAYS);
     }
 
     private Hotel givenExistingHotel() {

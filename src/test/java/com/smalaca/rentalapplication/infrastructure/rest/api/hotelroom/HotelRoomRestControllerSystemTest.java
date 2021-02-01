@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ class HotelRoomRestControllerSystemTest {
     private static final int ROOM_NUMBER_2 = 13;
     private static final ImmutableMap<String, Double> SPACES_DEFINITION_2 = ImmutableMap.of("RoomOne", 10.0, "RoomTwo", 25.0);
     private static final String DESCRIPTION_2 = "This is even better place";
+    private static final BigDecimal PRICE = BigDecimal.valueOf(123);
 
     private final JsonFactory jsonFactory = new JsonFactory();
     private final List<String> bookingIds = new ArrayList<>();
@@ -85,7 +87,7 @@ class HotelRoomRestControllerSystemTest {
     void shouldBookHotelRoom() throws Exception {
         save(givenHotelRoom1());
         HotelRoomBookingDto hotelRoomBookingDto = new HotelRoomBookingDto(
-                hotelId, ROOM_NUMBER_1, "1357", asList(LocalDate.of(2020, 11, 12), LocalDate.of(2020, 12, 1)));
+                hotelId, ROOM_NUMBER_1, "1357", PRICE, asList(LocalDate.of(2020, 11, 12), LocalDate.of(2020, 12, 1)));
 
         MvcResult result = mockMvc.perform(put("/hotelroom/book/").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(hotelRoomBookingDto)))
                 .andExpect(status().isCreated())

@@ -56,11 +56,6 @@ public class HotelRoom {
         return new Booking(forHotelRoom(id(), tenantId, hotelId(), hotelRoomBooking.getPrice(), days));
     }
 
-    @Deprecated
-    Booking book(String tenantId, List<LocalDate> days, HotelEventsPublisher hotelEventsPublisher) {
-        return null;
-    }
-
     private String hotelId() {
         return getNullable(hotelId);
     }

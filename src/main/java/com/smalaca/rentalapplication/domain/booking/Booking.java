@@ -15,7 +15,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -52,12 +51,6 @@ public class Booking {
         this.ownerId = newBooking.getOwnerId();
         this.price = newBooking.getPrice();
         this.days = newBooking.getDays();
-    }
-
-    @Deprecated
-    public static Booking hotelRoom(String rentalPlaceId, String tenantId, List<LocalDate> days) {
-        NewBooking newBooking = NewBooking.forHotelRoom(rentalPlaceId, tenantId, "2468", Money.of(BigDecimal.valueOf(135)), days);
-        return new Booking(newBooking);
     }
 
     public void reject(BookingEventsPublisher bookingEventsPublisher) {
