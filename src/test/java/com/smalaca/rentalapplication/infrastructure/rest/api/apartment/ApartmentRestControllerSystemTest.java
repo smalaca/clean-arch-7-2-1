@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.smalaca.rentalapplication.application.apartment.ApartmentBookingDto;
 import com.smalaca.rentalapplication.application.apartment.ApartmentDto;
 import com.smalaca.rentalapplication.application.apartmentoffer.ApartmentOfferDto;
-import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentbookinghistory.SpringJpaApartmentBookingHistoryTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
@@ -18,10 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.math.BigDecimal;
@@ -33,9 +30,6 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,7 +58,6 @@ class ApartmentRestControllerSystemTest {
     private static final LocalDate START = LocalDate.of(2030, 10, 11);
     private static final LocalDate END = LocalDate.of(2050, 10, 20);
 
-    private final JsonFactory jsonFactory = new JsonFactory();
     private final List<String> apartmentIds = new ArrayList<>();
     private final List<String> apartmentBookingHistoryIds = new ArrayList<>();
     private final List<String> bookingIds = new ArrayList<>();
@@ -102,7 +95,7 @@ class ApartmentRestControllerSystemTest {
     void shouldReturnNothingWhenApartmentDoesNotExist() throws Exception {
         String notExistingId = UUID.randomUUID().toString();
 
-        ResultActions actual = mockMvc.perform(get("/apartment/" + notExistingId));
+        ResultActions actual = client.findApartmentById(notExistingId);
 
         actual
                 .andExpect(status().isOk())
@@ -112,14 +105,12 @@ class ApartmentRestControllerSystemTest {
 
     @Test
     void shouldReturnExistingApartment() throws Exception {
-        ApartmentDto apartmentDto = givenApartment1();
+        String apartmentId = client.createAndReturnId(givenApartment1());
+        apartmentIds.add(apartmentId);
 
-        MvcResult mvcResult = mockMvc.perform(post("/apartment").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentDto)))
-                .andExpect(status().isCreated())
-                .andReturn();
+        ResultActions actual = client.findApartmentById(apartmentId);
 
-        apartmentIds.add(getApartmentId(mvcResult));
-        mockMvc.perform(get(mvcResult.getResponse().getRedirectedUrl()))
+        actual
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.apartment.ownerId").value(ownerId1))
                 .andExpect(jsonPath("$.apartment.street").value(STREET_1))
@@ -130,18 +121,14 @@ class ApartmentRestControllerSystemTest {
 
     @Test
     void shouldBookApartment() throws Exception {
-        String url = save(givenApartment1()).getResponse().getRedirectedUrl();
-        String apartmentId = url.replace("/apartment/", "");
-        givenApartmentOfferFor(apartmentId);
+        String apartmentId = client.createAndReturnId(givenApartment1());
+        client.create(new ApartmentOfferDto(apartmentId, PRICE, START, END));
         apartmentBookingHistoryIds.add(apartmentId);
+
         ApartmentBookingDto apartmentBookingDto = new ApartmentBookingDto(apartmentId, tenantId, LocalDate.of(2040, 11, 12), LocalDate.of(2040, 12, 1));
+        bookingIds.add(client.createAndReturnId(apartmentId, apartmentBookingDto));
 
-        MvcResult mvcResult = mockMvc.perform(put(url.replace("apartment/", "apartment/book/")).contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentBookingDto)))
-                .andExpect(status().isCreated())
-                .andReturn();
-
-        bookingIds.add(getBookingId(mvcResult));
-        mockMvc.perform(get(url))
+        client.findApartmentById(apartmentId)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bookingHistory.bookings.[*]", hasSize(1)))
                 .andExpect(jsonPath("$.bookingHistory.bookings.[0].tenantId").value(tenantId))
@@ -149,18 +136,14 @@ class ApartmentRestControllerSystemTest {
                 .andExpect(jsonPath("$.bookingHistory.bookings.[0].periodEnd").value("2040-12-01"));
     }
 
-    private void givenApartmentOfferFor(String apartmentId) throws Exception {
-        ApartmentOfferDto dto = new ApartmentOfferDto(apartmentId, PRICE, START, END);
-
-        mockMvc.perform(post("/apartmentoffer").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(dto)));
-    }
-
     @Test
     void shouldReturnAllApartments() throws Exception {
-        save(givenApartment1());
-        save(givenApartment2());
+        apartmentIds.add(client.createAndReturnId(givenApartment1()));
+        apartmentIds.add(client.createAndReturnId(givenApartment2()));
 
-        mockMvc.perform(get("/apartment"))
+        ResultActions actual = client.findAllApartments();
+
+        actual
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$").isArray());
@@ -170,7 +153,9 @@ class ApartmentRestControllerSystemTest {
     void shouldValidateApartment() throws Exception {
         ApartmentDto apartmentDto = new ApartmentDto(ownerId1, null, "POSTAL_CODE_1", null, null, null, null, DESCRIPTION_1, SPACES_DEFINITION_1);
 
-        mockMvc.perform(post("/apartment").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentDto)))
+        ResultActions actual = client.create(apartmentDto);
+
+        actual
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.country", is("country cannot be empty")))
                 .andExpect(jsonPath("$.city", is("city cannot be empty")))
@@ -186,20 +171,5 @@ class ApartmentRestControllerSystemTest {
 
     private ApartmentDto givenApartment2() {
         return new ApartmentDto(ownerId2, STREET_2, POSTAL_CODE_2, HOUSE_NUMBER_2, APARTMENT_NUMBER_2, CITY_2, COUNTRY_2, DESCRIPTION_2, SPACES_DEFINITION_2);
-    }
-
-    private MvcResult save(ApartmentDto apartmentDto) throws Exception {
-        MvcResult result = mockMvc.perform(post("/apartment").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentDto))).andReturn();
-        apartmentIds.add(getApartmentId(result));
-
-        return result;
-    }
-
-    private String getApartmentId(MvcResult result) {
-        return result.getResponse().getRedirectedUrl().replace("/apartment/", "");
-    }
-
-    private String getBookingId(MvcResult result) {
-        return result.getResponse().getRedirectedUrl().replace("/booking/", "");
     }
 }
