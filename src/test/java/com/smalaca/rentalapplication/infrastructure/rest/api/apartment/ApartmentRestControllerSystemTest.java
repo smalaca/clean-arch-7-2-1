@@ -8,6 +8,7 @@ import com.smalaca.rentalapplication.infrastructure.json.JsonFactory;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartment.SpringJpaApartmentTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.apartmentbookinghistory.SpringJpaApartmentBookingHistoryTestRepository;
 import com.smalaca.rentalapplication.infrastructure.persistence.jpa.booking.SpringJpaBookingTestRepository;
+import com.smalaca.rentalapplication.infrastructure.rest.api.client.RentalApplicationClient;
 import com.smalaca.usermanagement.application.user.UserDto;
 import com.smalaca.usermanagement.infrastructure.persistence.jpa.user.SpringJpaUserTestRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -76,19 +77,15 @@ class ApartmentRestControllerSystemTest {
     @Autowired private SpringJpaApartmentBookingHistoryTestRepository apartmentBookingHistoryRepository;
     @Autowired private SpringJpaBookingTestRepository bookingRepository;
     @Autowired private SpringJpaUserTestRepository springJpaUserTestRepository;
+    private RentalApplicationClient client;
 
     @BeforeEach
-    void givenExistingOwner() throws Exception {
-        ownerId1 = givenExistingUser(new UserDto("captain-america", "Steve", "Rogers"));
-        ownerId2 = givenExistingUser(new UserDto("1R0N M4N", "Tony", "Stark"));
-        tenantId = givenExistingUser(new UserDto("scarletwitch", "Wanda", "Maximoff"));
-    }
+    void givenExistingOwner() {
+        client = RentalApplicationClient.create(mockMvc);
 
-    private String givenExistingUser(Object userDto) throws Exception {
-        return mockMvc.perform(post("/user").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(userDto)))
-                .andExpect(status().isCreated())
-                .andReturn()
-                .getResponse().getRedirectedUrl().replace("/user/", "");
+        ownerId1 = client.createAndReturnId(new UserDto("captain-america", "Steve", "Rogers"));
+        ownerId2 = client.createAndReturnId(new UserDto("1R0N M4N", "Tony", "Stark"));
+        tenantId = client.createAndReturnId(new UserDto("scarletwitch", "Wanda", "Maximoff"));
     }
 
     @AfterEach
