@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -30,7 +31,7 @@ public class ApartmentRestController {
     }
 
     @PostMapping
-    public ResponseEntity<String> add(@RequestBody ApartmentDto apartmentDto) {
+    public ResponseEntity<String> add(@RequestBody @Valid ApartmentDto apartmentDto) {
         String id = apartmentApplicationService.add(apartmentDto);
 
         return ResponseEntity.created(URI.create("/apartment/" + id)).build();

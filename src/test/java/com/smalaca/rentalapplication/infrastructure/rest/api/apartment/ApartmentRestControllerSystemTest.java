@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -166,6 +167,20 @@ class ApartmentRestControllerSystemTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$").isArray());
+    }
+
+    @Test
+    void shouldValidateApartment() throws Exception {
+        ApartmentDto apartmentDto = new ApartmentDto(ownerId1, null, "POSTAL_CODE_1", null, null, null, null, DESCRIPTION_1, SPACES_DEFINITION_1);
+
+        mockMvc.perform(post("/apartment").contentType(MediaType.APPLICATION_JSON).content(jsonFactory.create(apartmentDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.country", is("country cannot be empty")))
+                .andExpect(jsonPath("$.city", is("city cannot be empty")))
+                .andExpect(jsonPath("$.street", is("street cannot be empty")))
+                .andExpect(jsonPath("$.houseNumber", is("house number cannot be empty")))
+                .andExpect(jsonPath("$.apartmentNumber", is("apartment number cannot be empty")))
+                .andExpect(jsonPath("$.postalCode", is("postal code should be in form xx-xxx and contain only numbers")));
     }
 
     private ApartmentDto givenApartment1() {
